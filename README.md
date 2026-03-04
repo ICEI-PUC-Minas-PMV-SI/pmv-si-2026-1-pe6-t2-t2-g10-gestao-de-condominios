@@ -10,7 +10,7 @@ O SmartSíndico é um aplicativo de gestão de condomínios desenvolvido para ot
 
 ## Integrantes
 
-* [Nome completo do aluno 1](docs/atas/aluno1.md)
+* [Fellipe Rodrigues dos Santos](docs/atas/aluno1.md)
 * [Nome completo do aluno 2](docs/atas/aluno2.md)
 * [Leandro Augusto Santos Araújo](docs/atas/aluno3.md)
 

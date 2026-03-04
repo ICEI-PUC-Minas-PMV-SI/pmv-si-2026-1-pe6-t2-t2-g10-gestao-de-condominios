@@ -29,12 +29,16 @@ Como objetivos específicos, destacam-se:
 
 ## Justificativa
 
-Descreva a importância ou a motivação para trabalhar com esta aplicação que você escolheu. Indique as razões pelas quais você escolheu seus objetivos específicos ou as razões para aprofundar em certos aspectos do software.
+A criação do **SmartSíndico** surge da necessidade de modernizar e simplificar a administração condominial por meio da tecnologia. Em muitos condomínios, a gestão ainda é realizada de forma manual ou com o uso de ferramentas pouco integradas, como planilhas, grupos de mensagens e comunicados impressos. Esse modelo tradicional pode gerar falhas na comunicação, retrabalho, desorganização e dificuldade no acompanhamento das informações, impactando diretamente a eficiência da administração e a satisfação dos moradores.
 
-O grupo de trabalho pode fazer uso de questionários, entrevistas e dados estatísticos, que podem ser apresentados, com o objetivo de esclarecer detalhes do problema que será abordado pelo grupo.
+Um dos principais desafios enfrentados está na gestão geral do condomínio. Síndicos e administradores frequentemente acumulam diversas responsabilidades, como controle financeiro, atendimento a moradores, organização de assembleias e acompanhamento de manutenções. Sem uma plataforma centralizada, torna-se mais difícil manter tudo organizado e acessível, aumentando as chances de erros e atrasos.
 
-> **Links Úteis**:
-> - [Como montar a justificativa](https://guiadamonografia.com.br/como-montar-justificativa-do-tcc/)
+Outro problema recorrente envolve as reservas de áreas comuns, como salão de festas, churrasqueira e quadras esportivas. A ausência de um sistema automatizado pode causar conflitos de agendamento, reservas duplicadas, falta de critérios claros e dificuldades no controle de uso. Isso gera insatisfação entre os moradores e desgaste na administração.
+
+Além disso, a prestação de contas é um ponto sensível na gestão condominial. Quando não há transparência ou facilidade de acesso às informações financeiras, podem surgir dúvidas, desconfianças e questionamentos sobre despesas, inadimplência e aplicação dos recursos. A falta de organização nos registros financeiros dificulta a visualização clara das entradas e saídas, comprometendo a credibilidade da gestão.
+
+Diante desse cenário, o SmartSíndico foi idealizado para utilizar a tecnologia como aliada na administração do condomínio. A proposta é oferecer uma plataforma digital que centralize informações, automatize processos e facilite o controle financeiro, a comunicação e as reservas de áreas comuns. Com isso, busca-se promover mais transparência, organização e eficiência, tornando a gestão mais prática, segura e profissional para todos os envolvidos.
+
 
 ## Público-Alvo
 

@@ -6,16 +6,13 @@
 
 `SEMESTRE: 6º`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+O SmartSíndico é um aplicativo de gestão de condomínios desenvolvido para otimizar a administração condominial, facilitando a comunicação entre síndicos, moradores e prestadores de serviço. A plataforma centraliza funções como controle financeiro, gestão de ocorrências, reservas de áreas comuns, avisos e assembleias online.
 
 ## Integrantes
 
 * [Nome completo do aluno 1](docs/atas/aluno1.md)
 * [Nome completo do aluno 2](docs/atas/aluno2.md)
 * [Nome completo do aluno 3](docs/atas/aluno3.md)
-* [Nome completo do aluno 4](docs/atas/aluno4.md)
-* [Nome completo do aluno 5](docs/atas/aluno5.md)
-* [Nome completo do aluno 6](docs/atas/aluno6.md)
 
 ## Orientador
 

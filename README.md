@@ -6,7 +6,7 @@
 
 `SEMESTRE: 6º`
 
-O SmartSíndico é um aplicativo de gestão de condomínios desenvolvido para otimizar a administração condominial, facilitando a comunicação entre síndicos, moradores e prestadores de serviço. A plataforma centraliza funções como controle financeiro, gestão de ocorrências, reservas de áreas comuns, avisos e assembleias online.
+O SmartSíndico é um aplicativo de gestão de condomínios desenvolvido para otimizar a administração condominial, facilitando a comunicação entre síndicos, moradores e prestadores de serviço. A plataforma centraliza funções como gestão de ocorrências, reservas de áreas comuns e avisos.
 
 ## Integrantes
 

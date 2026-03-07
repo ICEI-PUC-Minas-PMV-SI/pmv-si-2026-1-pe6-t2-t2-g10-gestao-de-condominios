@@ -185,9 +185,6 @@ A comunicação entre frontend e backend será realizada por meio de API REST, u
 - Postman  
 - Swagger/OpenAPI  
 
-**Fluxo tecnológico:**  
-Usuário → Navegador → Vue → HTTP → ASP.NET Core API → PostgreSQL → resposta → Vue
-
 ---
 
 # Hospedagem

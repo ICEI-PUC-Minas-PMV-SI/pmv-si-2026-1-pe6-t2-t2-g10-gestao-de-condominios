@@ -55,7 +55,7 @@ Hierarquia: Respondem ao síndico.
 Grupo 3. Síndico e Administração (Gestão): Morador eleito ou indicado. Eles conhecem as regras do condomínio (regimento interno), mas nem sempre possuem facilidade com a tecnologia.
 
 Conhecimentos prévios: Bom conhecimento sobre gestão e softwares de escritório (planilhas/Excel).
-Relação com a tecnologia: Mediana. Estão acostumados com o uso de softwares básicos de escritório, como Excel e Word.
+Relação com a tecnologia: Mediana. Veem a tecnologia como um recurso facilitador de demandas. 
 Hierarquia: São os tomadores de decisão. 
 
 # Especificações do Projeto
@@ -79,7 +79,7 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |ID     | Descrição do Requisito  |Prioridade |
 |-------|-------------------------|----|
 |RNF-001| O sistema deve exigir autenticação (login e senha) para acesso |  ALTA | 
-|RNF-002| O sistema deve ser responsivo para rodar em um dispositivos móvel | MÉDIA | 
+|RNF-002| O sistema deve ser responsivo para rodar em um dispositivos móvel | ALTA | 
 |RNF-003| Deve processar requisições do usuário em no máximo 3s |  BAIXA | 
 
 ## Restrições

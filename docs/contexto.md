@@ -91,21 +91,116 @@ Enumere as restrições à sua solução. Lembre-se de que as restrições geral
 
 # Catálogo de Serviços
 
-Descreva aqui todos os serviços que serão disponibilizados pelo seu projeto, detalhando suas características e funcionalidades.
+O sistema SmartSíndico disponibilizará um conjunto de serviços digitais voltados à modernização da gestão condominial, centralizando processos administrativos, operacionais e de comunicação em uma única plataforma.
+
+## 1. Serviço de Autenticação e Controle de Acesso
+
+Permite que usuários (moradores, porteiros e administradores) acessem o sistema por meio de login e senha. O serviço realiza a validação das credenciais, geração de token JWT e controle de permissões conforme o perfil do usuário. Inclui também funcionalidades de logout e proteção das rotas da aplicação.
+
+## 2. Serviço de Gestão de Moradores
+
+Permite o cadastro, edição, consulta e exclusão de moradores e suas respectivas unidades. Esse serviço serve como base para outras funcionalidades do sistema, como controle de visitantes e registro de ocorrências.
+
+## 3. Serviço de Controle de Visitantes
+
+Permite que a portaria registre a entrada e saída de visitantes, informando dados como nome, documento, unidade visitada e horário de acesso. O sistema mantém um histórico completo para fins de auditoria e segurança.
+
+## 4. Serviço de Reservas de Áreas Comuns
+
+Permite que moradores consultem a disponibilidade e realizem reservas de espaços compartilhados, como salão de festas e churrasqueira. O sistema valida automaticamente conflitos de horário e mantém histórico das reservas realizadas.
+
+## 5. Serviço de Registro de Ocorrências
+
+Permite que moradores registrem reclamações, solicitações ou incidentes relacionados ao condomínio. O sistema possibilita o acompanhamento do status da ocorrência até sua resolução.
+
+## 6. Serviço de Comunicados e Mural Digital
+
+Permite que a administração publique avisos e comunicados oficiais para moradores e funcionários, centralizando a comunicação institucional em um único canal.
+
+## 7. Serviço de Consulta e Acompanhamento
+
+Permite aos usuários consultar reservas, ocorrências, visitantes e comunicados registrados, garantindo maior transparência e organização das informações.
+
+---
 
 # Arquitetura da Solução
 
-Definição de como o software é estruturado em termos dos componentes que fazem parte da solução e do ambiente de hospedagem da aplicação.
+A solução será estruturada em arquitetura distribuída do tipo cliente-servidor, com separação entre frontend e backend.
 
-![arq](https://github.com/user-attachments/assets/b9402e05-8445-47c3-9d47-f11696e38a3d)
+O frontend será desenvolvido em Vue e será responsável pela interface do usuário, incluindo navegação, formulários e consumo dos serviços da aplicação por meio de requisições HTTP.
 
+O backend será desenvolvido em ASP.NET Core Web API, concentrando as regras de negócio, autenticação, validações e acesso ao banco de dados. O backend será estruturado como um monólito modular, organizado internamente em camadas (controllers, services e repositories).
 
-## Tecnologias Utilizadas
+A persistência dos dados será realizada em banco de dados relacional PostgreSQL, responsável pelo armazenamento de informações como usuários, moradores, visitantes, reservas, ocorrências e comunicados.
 
-Descreva aqui qual(is) tecnologias você vai usar para resolver o seu problema, ou seja, implementar a sua solução. Liste todas as tecnologias envolvidas, linguagens a serem utilizadas, serviços web, frameworks, bibliotecas, IDEs de desenvolvimento, e ferramentas.
+Essa arquitetura permite clara separação de responsabilidades entre as camadas, facilita a manutenção e evidencia a comunicação entre componentes distribuídos por meio de rede.
 
-Apresente também uma figura explicando como as tecnologias estão relacionadas ou como uma interação do usuário com o sistema vai ser conduzida, por onde ela passa até retornar uma resposta ao usuário.
+## Componentes da Solução
 
-## Hospedagem
+- Frontend (Vue)  
+- API REST (ASP.NET Core)  
+- Banco de Dados (PostgreSQL)
 
-Explique como a hospedagem e o lançamento da plataforma foi feita.
+## Fluxo de Funcionamento
+
+- O usuário acessa o sistema por meio do navegador.  
+- O frontend envia requisições HTTP para a API.  
+- O backend processa as regras de negócio.  
+- O backend acessa o banco PostgreSQL.  
+- A resposta retorna em formato JSON ao frontend.  
+- O frontend apresenta o resultado ao usuário.  
+
+<img width="1536" height="1024" alt="Arquitetura da Solução" src="https://github.com/user-attachments/assets/b7746934-be30-4932-bbf9-196104c3f918" />
+
+---
+
+# Tecnologias Utilizadas
+
+O desenvolvimento do sistema utilizará tecnologias modernas e gratuitas, adequadas à construção de aplicações web distribuídas.
+
+## Frontend
+
+Será utilizado Vue 3 com JavaScript, responsável pela construção da interface do usuário. O Vue foi escolhido por apresentar curva de aprendizado reduzida, simplicidade de implementação e boa integração com APIs REST.
+
+## Backend
+
+Será utilizado C# com ASP.NET Core Web API, responsável pelas regras de negócio, autenticação, validações e comunicação com o banco de dados.
+
+## Banco de Dados
+
+Será utilizado PostgreSQL, escolhido por ser gratuito, confiável e adequado ao armazenamento estruturado de dados relacionais do sistema.
+
+## Autenticação e Segurança
+
+Será utilizada autenticação baseada em JWT (JSON Web Token), garantindo segurança nas requisições e controle de acesso por perfil.
+
+## Comunicação entre Camadas
+
+A comunicação entre frontend e backend será realizada por meio de API REST, utilizando protocolo HTTP/HTTPS e dados no formato JSON.
+
+## Ferramentas de Desenvolvimento
+
+- Visual Studio / Visual Studio Code  
+- Git  
+- GitHub  
+- Postman  
+- Swagger/OpenAPI  
+
+**Fluxo tecnológico:**  
+Usuário → Navegador → Vue → HTTP → ASP.NET Core API → PostgreSQL → resposta → Vue
+
+---
+
+# Hospedagem
+
+O código-fonte do sistema será versionado no GitHub, permitindo controle de versão e colaboração entre os desenvolvedores.
+
+A aplicação será hospedada integralmente na plataforma Render, utilizando seus serviços gratuitos para publicação do sistema.
+
+O frontend, desenvolvido em Vue, será hospedado como Static Site, sendo responsável pela interface e interação com os usuários.
+
+O backend, desenvolvido em ASP.NET Core Web API, será hospedado como Web Service, responsável pelas regras de negócio, autenticação e acesso aos dados.
+
+O banco de dados PostgreSQL será provisionado diretamente na plataforma Render, garantindo integração simplificada com o backend.
+
+O processo de deploy será realizado por integração com o GitHub, permitindo atualizações contínuas durante o desenvolvimento e facilitando a manutenção da aplicação.

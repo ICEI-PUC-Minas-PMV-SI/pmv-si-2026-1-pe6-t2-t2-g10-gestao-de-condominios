@@ -10,8 +10,6 @@ O problema identificado aparece na rotina operacional, que em muitos casos ainda
 Objetivo Geral:
 Desenvolver um software capaz de solucionar os problemas identificados na administração de condomínios, especialmente aqueles relacionados à segurança no controle de acesso, falhas na comunicação interna, gestão de reclamações e conflitos no agendamento de áreas comuns.
 
-Objetivos específicos:
-
 Objetivos Específicos:
 - Centralizar as informações de moradores e unidades em um único sistema;
 - Modernizar o controle de portaria, agilizando o registro e liberação de visitantes;

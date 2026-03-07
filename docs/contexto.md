@@ -38,16 +38,25 @@ Diante desse cenário, o SmartSíndico foi idealizado para utilizar a tecnologia
 
 ## Público-Alvo
 
-Descreva quem serão as pessoas que usarão a sua aplicação indicando os diferentes perfis. O objetivo aqui não é definir quem serão os clientes ou quais serão os papéis dos usuários na aplicação. A ideia é, dentro do possível, conhecer um pouco mais sobre o perfil dos usuários: conhecimentos prévios, relação com a tecnologia, relações
-hierárquicas, etc.
+O público alvo do sistema é variado, porém limitado ao grupo de pessoas conviventes no condomínio. eles foram separados em 3 grupos:
 
-Adicione informações sobre o público-alvo por meio de uma descrição textual, diagramas de personas e mapa de stakeholders.
+Grupo 1. Moradores e Condôminos (Usuários do dia a dia): É um grupo diversificado. Varia entre jovens que fazem tudo pelo celular até idosos que podem ter dificuldade para fazer login e/ou navegar em menus.
 
-> **Links Úteis**:
-> - [Público-alvo](https://blog.hotmart.com/pt-br/publico-alvo/)
-> - [Como definir o público alvo](https://exame.com/pme/5-dicas-essenciais-para-definir-o-publico-alvo-do-seu-negocio/)
-> - [Público-alvo: o que é, tipos, como definir seu público e exemplos](https://klickpages.com.br/blog/publico-alvo-o-que-e/)
-> - [Qual a diferença entre público-alvo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
+Conhecimentos prévios: Variados. Alguns dominam apps, outros precisam de ajuda e supervisão.
+Relação com a tecnologia: Usam aplicativos comuns do dia a dia, como apps de entrega e redes sociais. A tecnologia age como facilitador nas demandas diárias e de relações.
+Hierarquia: Serão os clientes finais do serviço.
+
+Grupo 2. Portaria e Zeladoria (Funcionários): São profissionais que irão usar o sistema como ferramenta de trabalho. 
+
+Conhecimentos prévios: Conhecem bem a rotina da portaria, mas podem não ter familiaridade com softwares mais complexos.
+Relação com a tecnologia: Baixa/Mediana. Podem estar acostumados com o uso de celular (WhatsApp) e/ou softwares básicos de escritório, como Excel e Word.
+Hierarquia: Respondem ao síndico.
+
+Grupo 3. Síndico e Administração (Gestão): Morador eleito ou indicado. Eles conhecem as regras do condomínio (regimento interno), mas nem sempre possuem facilidade com a tecnologia.
+
+Conhecimentos prévios: Bom conhecimento sobre gestão e softwares de escritório (planilhas/Excel).
+Relação com a tecnologia: Mediana. Estão acostumados com o uso de softwares básicos de escritório, como Excel e Word.
+Hierarquia: São os tomadores de decisão. 
 
 # Especificações do Projeto
 
@@ -59,30 +68,19 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 |ID    | Descrição do Requisito  | Prioridade |
 |------|-----------------------------------------|----|
-|RF-001| Permitir que o usuário cadastre tarefas | ALTA | 
-|RF-002| Emitir um relatório de tarefas no mês   | MÉDIA |
+|RF-001| Permitir login e autenticação com perfis distintos (Morador, Porteiro, Síndico) | ALTA | 
+|RF-002| Permitir que o morador reserve áreas comuns (churrasqueira, salão) verificando disponibilidade de data/hora  | ALTA |
+|RF-003| Permitir que a portaria registre a entrada e saída de visitantes (nome, CPF, AP visitado/motivo da visita) | ALTA | 
+|RF-004| Permitir que o morador registre ocorrências (reclamações/manutenção) com descrição  | MÉDIA |
+|RF-005| Permitir que o síndico envie comunicados gerais (Mural de Avisos) para os moradores e funcionários | MÉDIA | 
 
 ### Requisitos não Funcionais
 
 |ID     | Descrição do Requisito  |Prioridade |
 |-------|-------------------------|----|
-|RNF-001| O sistema deve ser responsivo para rodar em um dispositivos móvel | MÉDIA | 
-|RNF-002| Deve processar requisições do usuário em no máximo 3s |  BAIXA | 
-
-Com base nas Histórias de Usuário, enumere os requisitos da sua solução. Classifique esses requisitos em dois grupos:
-
-- [Requisitos Funcionais
- (RF)](https://pt.wikipedia.org/wiki/Requisito_funcional):
- correspondem a uma funcionalidade que deve estar presente na
-  plataforma (ex: cadastro de usuário).
-- [Requisitos Não Funcionais
-  (RNF)](https://pt.wikipedia.org/wiki/Requisito_n%C3%A3o_funcional):
-  correspondem a uma característica técnica, seja de usabilidade,
-  desempenho, confiabilidade, segurança ou outro (ex: suporte a
-  dispositivos iOS e Android).
-Lembre-se que cada requisito deve corresponder à uma e somente uma
-característica alvo da sua solução. Além disso, certifique-se de que
-todos os aspectos capturados nas Histórias de Usuário foram cobertos.
+|RNF-001| O sistema deve exigir autenticação (login e senha) para acesso |  ALTA | 
+|RNF-002| O sistema deve ser responsivo para rodar em um dispositivos móvel | MÉDIA | 
+|RNF-003| Deve processar requisições do usuário em no máximo 3s |  BAIXA | 
 
 ## Restrições
 

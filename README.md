@@ -1,4 +1,4 @@
-# TÍTULO DO PROJETO
+# SmartSíndico
 
 `CURSO: Sistemas de Informação`
 

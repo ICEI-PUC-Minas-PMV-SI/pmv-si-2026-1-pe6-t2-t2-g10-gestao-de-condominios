@@ -1,4 +1,4 @@
-# ATA de Acompanhamento - Nome completo do aluno 3
+# ATA de Acompanhamento - Leandro Augusto Santos Araujo
 
 ## Registro de Atividades Semanais
 

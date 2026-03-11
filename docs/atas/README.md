@@ -22,7 +22,7 @@ Cada ATA contém um **Registro de Atividades Semanais** com 18 semanas:
 
 | Aluno | ATA |
 |-------|-----|
-| Aluno 1 | [aluno1.md](aluno1.md) |
+| Aluno 1 | [Fellipe Rodrigues dos Santos](aluno1.md) |
 | Aluno 2 | [aluno2.md](aluno2.md) |
 | Aluno 3 | [aluno3.md](aluno3.md) |
 | Aluno 4 | [aluno4.md](aluno4.md) |

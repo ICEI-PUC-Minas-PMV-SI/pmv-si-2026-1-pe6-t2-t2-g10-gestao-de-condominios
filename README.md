@@ -16,7 +16,7 @@ O SmartSíndico é um aplicativo de gestão de condomínios desenvolvido para ot
 
 ## Orientador
 
-* Nome completo do professor 1
+* Kleber Jacques Ferreira de Souza
 
 ## 📊 Relatório de Contribuições
 

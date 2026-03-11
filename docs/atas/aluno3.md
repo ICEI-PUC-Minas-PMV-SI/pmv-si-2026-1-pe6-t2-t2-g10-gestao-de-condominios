@@ -6,9 +6,9 @@
 |:-------:|:---------------:|:--------:|:------------------:|:-------------------:|
 | 09/02 - 15/02 | Gestão de Serviços de TI - Unidade 1 | ✅ | Estudar os microfundamentos e iniciar documentação do projeto. | Iniciei a documentação de apresentação do projeto.   |
 | 16/02 - 22/02 | Gestão de Serviços de TI - Unidade 2 | ✅ | Segmento na documentação, identificando principais problemas do tema escolhido. | Finalizado microfundamento, preenchimento dadocumentação, identificado principais problemas do tema. |
-| 23/02 - 01/03 | Arquitetura de Software Distribuído - Unidade 1 e 2 | ✅ |  |  |
-| 02/03 - 08/03 | Arquitetura de Software Distribuído - Unidade 3 | ✅ |  |  |
-| 09/03 - 15/03 | APIs e Web Services - Unidade 1 | ✅ |  |  |
+| 23/02 - 01/03 | Arquitetura de Software Distribuído - Unidade 1 e 2 | ✅ | Iniciar estudo do microfundamento, preencher objetivos e justificativas do projeto.  | Objetivos e justificativas do projeto descritos. |
+| 02/03 - 08/03 | Arquitetura de Software Distribuído - Unidade 3 | ✅ | Concluir microfundamento e finalizar e revisar documentação. | Microfundamento concluido, documentação concluida e revisada, feito pequenos ajustes.  |
+| 09/03 - 15/03 | APIs e Web Services - Unidade 1 | ✅ | Estudar e concluir microfundamento.  |  Microfundamento concluido.|
 | 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ⬜ |  |  |
 | 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ⬜ |  |  |
 | 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ⬜ |  |  |

@@ -1,0 +1,6 @@
+@SmartSíndico_HostAddress = http://localhost:5270
+
+GET {{SmartSíndico_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

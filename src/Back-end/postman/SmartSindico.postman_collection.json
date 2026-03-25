@@ -1,0 +1,621 @@
+{
+  "info": {
+    "_postman_id": "f861db0c-2219-4a78-89b4-3998796ec84e",
+    "name": "SmartSindico - Testes Locais",
+    "description": "Colecao para testar a API local do SmartSindico. Fluxo recomendado: 1) Setup, 2) Autenticacao, 3) Usuarios, 4) Comunicados.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33987837"
+  },
+  "item": [
+    {
+      "name": "Autenticacao",
+      "item": [
+        {
+          "name": "Entrar como Sindico",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var json = pm.response.json();",
+                  "pm.environment.set('tokenSindico', json.token);",
+                  "pm.environment.set('tokenAcessoAtual', json.token);",
+                  "pm.environment.set('usuarioIdSindico', json.usuario.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{emailSindico}}\",\n  \"senha\": \"{{senhaSindico}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/autenticacao/entrar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "autenticacao",
+                "entrar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Entrar como Porteiro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var json = pm.response.json();",
+                  "pm.environment.set('tokenPorteiro', json.token);",
+                  "pm.environment.set('tokenAcessoAtual', json.token);",
+                  "pm.environment.set('usuarioIdPorteiro', json.usuario.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{emailPorteiro}}\",\n  \"senha\": \"{{senhaPorteiro}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/autenticacao/entrar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "autenticacao",
+                "entrar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Entrar como Morador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var json = pm.response.json();",
+                  "pm.environment.set('tokenMorador', json.token);",
+                  "pm.environment.set('tokenAcessoAtual', json.token);",
+                  "pm.environment.set('usuarioIdMorador', json.usuario.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{emailMorador}}\",\n  \"senha\": \"{{senhaMorador}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/autenticacao/entrar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "autenticacao",
+                "entrar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Setup",
+      "item": [
+        {
+          "name": "Cadastrar Sindico",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 ou 409', function () {",
+                  "    pm.expect([201, 409]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "var json = {};",
+                  "try { json = pm.response.json(); } catch (error) {}",
+                  "",
+                  "if (pm.response.code === 201 && json.usuario) {",
+                  "    pm.environment.set('usuarioIdSindico', json.usuario.id);",
+                  "    pm.environment.set('tokenSindico', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{nomeNovoSindico}}\",\n  \"email\": \"{{emailNovoSindico}}\",\n  \"senha\": \"{{senhaNovoSindico}}\",\n  \"cpf\": \"{{cpfNovoSindico}}\",\n  \"telefone\": \"{{telefoneNovoSindico}}\",\n  \"perfil\": {{perfilNovoSindico}},\n  \"idApartamento\": {{idApartamentoNovoSindico}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/autenticacao/cadastrar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "autenticacao",
+                "cadastrar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar Porteiro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 ou 409', function () {",
+                  "    pm.expect([201, 409]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "var json = {};",
+                  "try { json = pm.response.json(); } catch (error) {}",
+                  "",
+                  "if (pm.response.code === 201 && json.usuario) {",
+                  "    pm.environment.set('usuarioIdPorteiro', json.usuario.id);",
+                  "    pm.environment.set('tokenPorteiro', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{nomeNovoPorteiro}}\",\n  \"email\": \"{{emailNovoPorteiro}}\",\n  \"senha\": \"{{senhaNovoPorteiro}}\",\n  \"cpf\": \"{{cpfNovoPorteiro}}\",\n  \"telefone\": \"{{telefoneNovoPorteiro}}\",\n  \"perfil\": {{perfilNovoPorteiro}},\n  \"idApartamento\": {{idApartamentoNovoPorteiro}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/autenticacao/cadastrar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "autenticacao",
+                "cadastrar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar Morador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 ou 409', function () {",
+                  "    pm.expect([201, 409]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "var json = {};",
+                  "try { json = pm.response.json(); } catch (error) {}",
+                  "",
+                  "if (pm.response.code === 201 && json.usuario) {",
+                  "    pm.environment.set('usuarioIdMorador', json.usuario.id);",
+                  "    pm.environment.set('tokenMorador', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{nomeNovoMorador}}\",\n  \"email\": \"{{emailNovoMorador}}\",\n  \"senha\": \"{{senhaNovoMorador}}\",\n  \"cpf\": \"{{cpfNovoMorador}}\",\n  \"telefone\": \"{{telefoneNovoMorador}}\",\n  \"perfil\": {{perfilNovoMorador}},\n  \"idApartamento\": {{idApartamentoNovoMorador}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/autenticacao/cadastrar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "autenticacao",
+                "cadastrar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Listar Usuarios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var usuarios = pm.response.json();",
+                  "function salvarId(email, chave) {",
+                  "    var usuario = usuarios.find(function (item) { return item.email === email; });",
+                  "    if (usuario) {",
+                  "        pm.environment.set(chave, usuario.id);",
+                  "    }",
+                  "}",
+                  "",
+                  "salvarId(pm.environment.get('emailSindico'), 'usuarioIdSindico');",
+                  "salvarId(pm.environment.get('emailPorteiro'), 'usuarioIdPorteiro');",
+                  "salvarId(pm.environment.get('emailMorador'), 'usuarioIdMorador');",
+                  "",
+                  "if (pm.environment.get('usuarioIdPorteiro')) {",
+                  "    pm.environment.set('usuarioIdAlvo', pm.environment.get('usuarioIdPorteiro'));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Morador por Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/{{usuarioIdMorador}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "{{usuarioIdMorador}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Status de Usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ativo\": {{usuarioAtivoDesejado}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/{{usuarioIdAlvo}}/ativo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "{{usuarioIdAlvo}}",
+                "ativo"
+              ]
+            },
+            "description": "Por padrao, o alvo sugerido eh o porteiro. Ajuste as variaveis do environment antes de executar."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comunicados",
+      "item": [
+        {
+          "name": "Criar Comunicado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "var json = pm.response.json();",
+                  "pm.environment.set('comunicadoId', json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"{{comunicadoTitulo}}\",\n  \"conteudo\": \"{{comunicadoConteudo}}\",\n  \"destaque\": {{comunicadoDestaque}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comunicados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "comunicados"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Comunicados",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/comunicados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "comunicados"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Comunicado por Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/comunicados/{{comunicadoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "comunicados",
+                "{{comunicadoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Status de Comunicado",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAcessoAtual}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ativo\": {{comunicadoAtivoDesejado}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comunicados/{{comunicadoId}}/ativo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "comunicados",
+                "{{comunicadoId}}",
+                "ativo"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

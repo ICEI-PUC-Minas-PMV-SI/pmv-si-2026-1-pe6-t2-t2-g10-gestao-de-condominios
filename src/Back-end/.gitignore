@@ -1,0 +1,37 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Visual Studio / IDE
+.vs/
+.vscode/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+*.csproj.user
+
+# Test / coverage artifacts
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Logs / temp files
+*.log
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local-only settings
+appsettings.Local.json
+appsettings.*.local.json
+src/Api/http-client.env.json
+
+# Postman private overrides
+postman/*.local.private.json
+postman/*.secret.json

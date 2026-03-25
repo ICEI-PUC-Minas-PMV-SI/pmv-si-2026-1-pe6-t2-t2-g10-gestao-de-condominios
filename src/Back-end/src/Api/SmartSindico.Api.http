@@ -1,0 +1,72 @@
+@SmartSindico_HostAddress = http://localhost:5053
+@TokenAcesso = COLE_SEU_TOKEN_AQUI
+@UsuarioId = COLE_O_ID_DO_USUARIO_AQUI
+@ComunicadoId = COLE_O_ID_DO_COMUNICADO_AQUI
+
+### Login com usuario semeado
+POST {{SmartSindico_HostAddress}}/api/autenticacao/entrar
+Content-Type: application/json
+
+{
+  "email": "sindico@smartsindico.local",
+  "senha": "Sindico@123"
+}
+
+### Cadastro de novo usuario
+POST {{SmartSindico_HostAddress}}/api/autenticacao/cadastrar
+Content-Type: application/json
+
+{
+  "nome": "Novo Morador",
+  "email": "novo.morador@smartsindico.local",
+  "senha": "Morador@123",
+  "cpf": "44444444444",
+  "telefone": "31999990004",
+  "perfil": 1,
+  "idApartamento": 101
+}
+
+### Listar usuarios - somente sindico
+GET {{SmartSindico_HostAddress}}/api/usuarios
+Authorization: Bearer {{TokenAcesso}}
+
+### Buscar usuario por id - somente sindico
+GET {{SmartSindico_HostAddress}}/api/usuarios/{{UsuarioId}}
+Authorization: Bearer {{TokenAcesso}}
+
+### Inativar usuario - somente sindico
+PATCH {{SmartSindico_HostAddress}}/api/usuarios/{{UsuarioId}}/ativo
+Authorization: Bearer {{TokenAcesso}}
+Content-Type: application/json
+
+{
+  "ativo": false
+}
+
+### Criar comunicado - somente sindico
+POST {{SmartSindico_HostAddress}}/api/comunicados
+Authorization: Bearer {{TokenAcesso}}
+Content-Type: application/json
+
+{
+  "titulo": "Manutencao programada",
+  "conteudo": "Havera interrupcao de agua na sexta-feira das 09h as 12h.",
+  "destaque": true
+}
+
+### Listar comunicados ativos
+GET {{SmartSindico_HostAddress}}/api/comunicados
+Authorization: Bearer {{TokenAcesso}}
+
+### Buscar comunicado por id
+GET {{SmartSindico_HostAddress}}/api/comunicados/{{ComunicadoId}}
+Authorization: Bearer {{TokenAcesso}}
+
+### Desativar comunicado - somente sindico
+PATCH {{SmartSindico_HostAddress}}/api/comunicados/{{ComunicadoId}}/ativo
+Authorization: Bearer {{TokenAcesso}}
+Content-Type: application/json
+
+{
+  "ativo": false
+}

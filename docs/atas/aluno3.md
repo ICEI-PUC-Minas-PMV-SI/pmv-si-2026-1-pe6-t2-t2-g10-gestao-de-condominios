@@ -9,8 +9,8 @@
 | 23/02 - 01/03 | Arquitetura de Software Distribuído - Unidade 1 e 2 | ✅ | Iniciar estudo do microfundamento, preencher objetivos e justificativas do projeto.  | Objetivos e justificativas do projeto descritos. |
 | 02/03 - 08/03 | Arquitetura de Software Distribuído - Unidade 3 | ✅ | Concluir microfundamento e finalizar e revisar documentação. | Microfundamento concluido, documentação concluida e revisada, feito pequenos ajustes.  |
 | 09/03 - 15/03 | APIs e Web Services - Unidade 1 | ✅ | Estudar e concluir microfundamento, participar da reunião junto ao grupo e ao professor.  |  Microfundamento concluido, grupo reunido com o professor, organização da etapa.|
-| 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ✅ |  |  |
-| 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ✅ |  |  |
+| 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ✅ | Iniciar estudo do microfundamento, começar a desenvolver API. | Desenvolvimento de API e participação nas reuniões. |
+| 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ✅ | Concluir Microfundamento e continuar desenvolvimento da API. | Conclusão do microfundamento, andamento na API. |
 | 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ⬜ |  |  |
 | 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ⬜ |  |  |
 | 13/04 - 19/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 1 | ⬜ |  |  |

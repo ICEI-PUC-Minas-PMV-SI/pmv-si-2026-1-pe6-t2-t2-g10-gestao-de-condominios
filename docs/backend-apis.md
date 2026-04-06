@@ -14,7 +14,9 @@ O primeiro passo é definir os objetivos da sua API. O que você espera alcança
 
 
 ## Modelagem da Aplicação
-[Descreva a modelagem da aplicação, incluindo a estrutura de dados, diagramas de classes ou entidades, e outras representações visuais relevantes.]
+
+<img width="940" height="558" alt="image" src="https://github.com/user-attachments/assets/dec3da02-0198-43f4-8411-ea30c78738d7" />
+
 
 
 ## Tecnologias Utilizadas

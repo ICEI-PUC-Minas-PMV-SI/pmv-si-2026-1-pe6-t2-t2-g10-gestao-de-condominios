@@ -11,7 +11,7 @@
 | 09/03 - 15/03 | APIs e Web Services - Unidade 1 | ⬜ | Fazer o microfundamento, corrigir o relatório da etapa 1 e preencher a ata semanal | Relatório ajeitado, ata preenchida. |
 | 16/03 - 22/03 | APIs e Web Services - Unidade 2 | ⬜ |  |  |
 | 23/03 - 29/03 | APIs e Web Services - Unidade 2 | ⬜ |Criar o mvp da aplicação e inserir fluxos de usuário, autenticação e  comunicado/ terminar o micro fundamento | Criado mvp |
-| 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ⬜ |  |  |
+| 30/03 - 05/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 1 | ✅ | Ver todo conteúdo de Microfundamento: APIs e Web Services |  Feito o microfundamento estipulado e relatório preenchido |
 | 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ⬜ |  |  |
 | 13/04 - 19/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 1 | ⬜ |  |  |
 | 20/04 - 26/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 2 | ⬜ |  |  |

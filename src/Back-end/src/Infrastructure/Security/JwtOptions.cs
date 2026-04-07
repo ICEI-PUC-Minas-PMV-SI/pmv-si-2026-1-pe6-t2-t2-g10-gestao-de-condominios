@@ -17,5 +17,5 @@ public sealed class JwtOptions
     public string Key { get; init; } = string.Empty;
 
     [Range(1, 1440)]
-    public int ExpirationMinutes { get; init; } = 120;
+    public int ExpirationMinutes { get; init; } = 30;
 }

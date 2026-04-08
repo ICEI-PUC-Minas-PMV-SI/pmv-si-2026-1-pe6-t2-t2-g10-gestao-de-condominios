@@ -60,11 +60,12 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 |ID    | Descrição do Requisito  | Prioridade |
 |------|-----------------------------------------|----|
-|RF-001| Permitir login e autenticação com perfis distintos (Morador, Porteiro, Síndico) | ALTA | 
+|RF-001| Permitir login e autenticação com perfis distintos (`Morador`, `Funcionário` e `Síndico`) | ALTA |
 |RF-002| Permitir que o morador reserve áreas comuns (churrasqueira, salão) verificando disponibilidade de data/hora  | ALTA |
 |RF-003| Permitir que a portaria registre a entrada e saída de visitantes (nome, CPF, AP visitado/motivo da visita) | ALTA | 
 |RF-004| Permitir que o morador registre ocorrências (reclamações/manutenção) com descrição  | MÉDIA |
-|RF-005| Permitir que o síndico envie comunicados gerais (Mural de Avisos) para os moradores e funcionários | MÉDIA | 
+|RF-005| Permitir a criação, consulta e atualização de status de comunicados para o mural digital, com publicação por `Funcionário` e `Síndico` e leitura pelos usuários autenticados | MÉDIA |
+RF-006 | Permitir fluxo de uso conforme o perfil do usuário (Morador, Funcionário e Síndico) | ALTA
 
 ### Requisitos não Funcionais
 
@@ -72,7 +73,6 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |-------|-------------------------|----|
 |RNF-001| O sistema deve exigir autenticação (login e senha) para acesso |  ALTA | 
 |RNF-002| O sistema deve ser responsivo para rodar em um dispositivos móvel | ALTA | 
-|RNF-003| Deve processar requisições do usuário em no máximo 3s |  BAIXA | 
 
 ## Restrições
 
@@ -89,7 +89,7 @@ O sistema SmartSíndico disponibilizará um conjunto de serviços digitais volta
 
 ## 1. Serviço de Autenticação e Controle de Acesso
 
-Permite que usuários (moradores, porteiros e administradores) acessem o sistema por meio de login e senha. O serviço realiza a validação das credenciais, geração de token JWT e controle de permissões conforme o perfil do usuário. Inclui também funcionalidades de logout e proteção das rotas da aplicação.
+Permite que usuários (moradores, funcionários e administradores) acessem o sistema por meio de login e senha. O serviço realiza a validação das credenciais, geração de token JWT e controle de permissões conforme o perfil do usuário. Inclui também funcionalidades de logout e proteção das rotas da aplicação.
 
 ## 2. Serviço de Gestão de Moradores
 

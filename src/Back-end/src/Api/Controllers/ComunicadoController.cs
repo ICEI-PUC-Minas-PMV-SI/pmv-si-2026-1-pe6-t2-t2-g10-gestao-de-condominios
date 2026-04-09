@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SmartSindico.Api.Autorizacao;
 using SmartSindico.Application.DTOs.Comunicados;
 using SmartSindico.Application.Interfaces.Services;
-using SmartSindico.Domain.Enums;
 
 namespace SmartSindico.Api.Controllers;
 
@@ -34,7 +34,7 @@ public class ComunicadoController : ApiControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = $"{nameof(PerfilUsuario.Funcionario)},{nameof(PerfilUsuario.Sindico)}")]
+    [Authorize(Roles = PerfisAutorizacao.FuncionarioOuSindico)]
     [ProducesResponseType<ComunicadoResponse>(StatusCodes.Status201Created)]
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
@@ -56,7 +56,7 @@ public class ComunicadoController : ApiControllerBase
     }
 
     [HttpPatch("{id:int}/ativo")]
-    [Authorize(Roles = $"{nameof(PerfilUsuario.Funcionario)},{nameof(PerfilUsuario.Sindico)}")]
+    [Authorize(Roles = PerfisAutorizacao.FuncionarioOuSindico)]
     [ProducesResponseType<ComunicadoResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden)]

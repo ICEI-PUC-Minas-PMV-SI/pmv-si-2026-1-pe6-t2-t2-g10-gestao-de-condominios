@@ -1,5 +1,5 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using SmartSindico.Api.Autorizacao;
 using SmartSindico.Application.Results;
 
 namespace SmartSindico.Api.Controllers;
@@ -36,8 +36,7 @@ public abstract class ApiControllerBase : ControllerBase
 
     protected bool TryGetUsuarioAtualId(out int idUsuario)
     {
-        var userIdText = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-        return int.TryParse(userIdText, out idUsuario);
+        return User.TryGetUsuarioAtualId(out idUsuario);
     }
 
     private static ValidationProblemDetails CriarValidationProblemDetails<T>(Result<T> result)

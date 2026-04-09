@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi;
+using SmartSindico.Api.Autorizacao;
 using SmartSindico.Application;
-using SmartSindico.Api.Filters;
 using SmartSindico.Api.Middleware;
 using SmartSindico.Infrastructure.DependencyInjection;
 
@@ -19,15 +20,7 @@ public class Program
                 optional: true,
                 reloadOnChange: true);
 
-        builder.Services.AddScoped<ValidationActionFilter>();
-        builder.Services.Configure<ApiBehaviorOptions>(options =>
-        {
-            options.SuppressModelStateInvalidFilter = true;
-        });
-        builder.Services.AddControllers(options =>
-        {
-            options.Filters.Add<ValidationActionFilter>();
-        });
+        builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
@@ -55,6 +48,23 @@ public class Program
         });
         builder.Services.AddApplication();
         builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy(
+                PoliticasAutorizacao.CadastrarUsuario,
+                policy => policy.RequireAuthenticatedUser().AddRequirements(new CadastrarUsuarioRequirement()));
+
+            options.AddPolicy(
+                PoliticasAutorizacao.VisualizarUsuario,
+                policy => policy.RequireAuthenticatedUser().AddRequirements(new VisualizarUsuarioRequirement()));
+
+            options.AddPolicy(
+                PoliticasAutorizacao.AtualizarStatusUsuario,
+                policy => policy.RequireAuthenticatedUser().AddRequirements(new AtualizarStatusUsuarioRequirement()));
+        });
+        builder.Services.AddSingleton<IAuthorizationHandler, CadastrarUsuarioAuthorizationHandler>();
+        builder.Services.AddSingleton<IAuthorizationHandler, VisualizarUsuarioAuthorizationHandler>();
+        builder.Services.AddSingleton<IAuthorizationHandler, AtualizarStatusUsuarioAuthorizationHandler>();
 
         var app = builder.Build();
 

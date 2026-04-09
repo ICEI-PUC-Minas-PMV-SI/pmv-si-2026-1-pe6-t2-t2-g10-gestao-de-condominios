@@ -3,17 +3,18 @@
 @UsuarioId = COLE_O_ID_DO_USUARIO_AQUI
 @ComunicadoId = COLE_O_ID_DO_COMUNICADO_AQUI
 
-### Login com usuario semeado
+### Login com usuário semeado
 POST {{SmartSindico_HostAddress}}/api/autenticacao/entrar
 Content-Type: application/json
 
 {
   "email": "sindico@smartsindico.local",
-  "senha": "Sindico@123"
+  "senha": "123456"
 }
 
-### Cadastro de novo usuario
-POST {{SmartSindico_HostAddress}}/api/autenticacao/cadastrar
+### Cadastro de novo usuário - somente Funcionário ou Síndico
+POST {{SmartSindico_HostAddress}}/api/usuarios
+Authorization: Bearer {{TokenAcesso}}
 Content-Type: application/json
 
 {
@@ -26,15 +27,15 @@ Content-Type: application/json
   "idApartamento": 101
 }
 
-### Listar usuarios - somente sindico
+### Listar usuários - somente Síndico
 GET {{SmartSindico_HostAddress}}/api/usuarios
 Authorization: Bearer {{TokenAcesso}}
 
-### Buscar usuario por id - somente sindico
+### Buscar usuário por id - conforme a regra do perfil autenticado
 GET {{SmartSindico_HostAddress}}/api/usuarios/{{UsuarioId}}
 Authorization: Bearer {{TokenAcesso}}
 
-### Inativar usuario - somente sindico
+### Atualizar status do usuário - Funcionário ou Síndico, conforme a regra de acesso
 PATCH {{SmartSindico_HostAddress}}/api/usuarios/{{UsuarioId}}/ativo
 Authorization: Bearer {{TokenAcesso}}
 Content-Type: application/json
@@ -43,14 +44,14 @@ Content-Type: application/json
   "ativo": false
 }
 
-### Criar comunicado - somente sindico
+### Criar comunicado - somente Funcionário ou Síndico
 POST {{SmartSindico_HostAddress}}/api/comunicados
 Authorization: Bearer {{TokenAcesso}}
 Content-Type: application/json
 
 {
-  "titulo": "Manutencao programada",
-  "conteudo": "Havera interrupcao de agua na sexta-feira das 09h as 12h.",
+  "titulo": "Manutenção programada",
+  "conteudo": "Haverá interrupção de água na sexta-feira das 09h às 12h.",
   "destaque": true
 }
 
@@ -62,7 +63,7 @@ Authorization: Bearer {{TokenAcesso}}
 GET {{SmartSindico_HostAddress}}/api/comunicados/{{ComunicadoId}}
 Authorization: Bearer {{TokenAcesso}}
 
-### Desativar comunicado - somente sindico
+### Desativar comunicado - somente Funcionário ou Síndico
 PATCH {{SmartSindico_HostAddress}}/api/comunicados/{{ComunicadoId}}/ativo
 Authorization: Bearer {{TokenAcesso}}
 Content-Type: application/json

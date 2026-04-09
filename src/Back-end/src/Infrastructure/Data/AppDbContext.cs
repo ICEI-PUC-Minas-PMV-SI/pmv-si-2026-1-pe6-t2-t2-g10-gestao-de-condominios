@@ -11,6 +11,9 @@ public sealed class AppDbContext : DbContext
 
     public DbSet<Comunicado> Comunicados => Set<Comunicado>();
     public DbSet<Usuario> Usuarios => Set<Usuario>();
+    public DbSet<Apartamento> Apartamentos => Set<Apartamento>();
+    public DbSet<Visitante> Visitantes => Set<Visitante>();
+    public DbSet<AcessoVisitante> AcessoVisitantes => Set<AcessoVisitante>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

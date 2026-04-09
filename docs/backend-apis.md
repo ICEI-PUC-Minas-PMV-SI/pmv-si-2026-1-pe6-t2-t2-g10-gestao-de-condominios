@@ -336,13 +336,13 @@ As principais medidas de segurança previstas e implementadas no backend são:
 
 ## Implantação
 
-[Instruções para implantar a aplicação distribuída em um ambiente de produção.]
+A implantação do backend do SmartSíndico em ambiente de produção exige uma infraestrutura capaz de executar a API desenvolvida em .NET e disponibilizar um banco de dados PostgreSQL para persistência das informações. Em termos de software, é necessário um ambiente com suporte à execução de aplicações ASP.NET Core, acesso ao runtime compatível com a versão utilizada no projeto e disponibilidade de um serviço de banco relacional configurado para uso externo ou interno, conforme a arquitetura adotada. Em termos de hardware, os requisitos variam conforme a carga esperada, mas para este projeto acadêmico uma instância de pequeno porte com capacidade de processamento básica, memória suficiente para a API e armazenamento para o banco já atende ao cenário inicial.
 
-1. Defina os requisitos de hardware e software necessários para implantar a aplicação em um ambiente de produção.
-2. Escolha uma plataforma de hospedagem adequada, como um provedor de nuvem ou um servidor dedicado.
-3. Configure o ambiente de implantação, incluindo a instalação de dependências e configuração de variáveis de ambiente.
-4. Faça o deploy da aplicação no ambiente escolhido, seguindo as instruções específicas da plataforma de hospedagem.
-5. Realize testes para garantir que a aplicação esteja funcionando corretamente no ambiente de produção.
+Como plataforma de hospedagem, pode-se utilizar um provedor em nuvem, como Render, Railway, Azure ou AWS, desde que permita publicar a API e configurar variáveis de ambiente com segurança. A escolha da plataforma deve considerar facilidade de deploy, integração com repositório Git, suporte ao PostgreSQL e possibilidade de escalar a aplicação futuramente. Para o contexto do projeto, uma plataforma gerenciada é mais adequada, pois reduz a complexidade operacional e facilita a publicação contínua.
+
+A configuração do ambiente de implantação deve incluir a definição da string de conexão com o banco de dados PostgreSQL, chave JWT, emissor, audiência e demais parâmetros necessários para autenticação e execução da API. Essas configurações não devem ficar fixas no código-fonte, devendo ser fornecidas por variáveis de ambiente ou mecanismos seguros da plataforma escolhida. Também é necessário garantir que as dependências da aplicação estejam instaladas e que o banco de dados esteja acessível antes do início da execução da API.
+
+O processo de deploy consiste em publicar a aplicação no ambiente escolhido, aplicar as configurações necessárias, executar as migrations do banco de dados e iniciar a API em modo de produção. Após a publicação, devem ser realizados testes para validar o funcionamento da aplicação, incluindo autenticação, acesso aos endpoints protegidos, integração com o banco de dados e respostas corretas da API em cenários de sucesso e erro. Dessa forma, garante-se que a aplicação esteja operacional, segura e pronta para uso em ambiente produtivo.
 
 ## Testes
 

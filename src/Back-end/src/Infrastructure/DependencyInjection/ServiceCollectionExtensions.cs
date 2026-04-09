@@ -48,8 +48,6 @@ public static class ServiceCollectionExtensions
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();
 
-        services.AddAuthorization();
-
         return services;
     }
 }

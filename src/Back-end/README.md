@@ -83,9 +83,9 @@ Perfis atuais:
 
 ## Regras atuais de acesso
 
-- `Sindico`: gerencia usuarios, ativa/desativa usuarios, cria e desativa comunicados, cadastra qualquer perfil.
-- `Funcionario`: cadastra apenas `Morador`, consulta comunicados, cria comunicado e desativa comunicado.
-- `Morador`: consulta comunicados e nao tem acesso a gestao de usuarios.
+- `Sindico`: lista todos os usuarios, consulta qualquer usuario, cadastra qualquer perfil, cria e desativa comunicados, e pode alterar o proprio status e o status de `Funcionario`.
+- `Funcionario`: consulta o proprio cadastro e cadastros de `Morador`, cadastra apenas `Morador`, cria e desativa comunicados, e pode alterar o status de `Morador`.
+- `Morador`: consulta comunicados e pode visualizar apenas o proprio cadastro.
 
 ## Padrão de contribuição
 

@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "f861db0c-2219-4a78-89b4-3998796ec84e",
     "name": "SmartSindico - Testes Locais",
-    "description": "Colecao para testar a API local do SmartSindico. Fluxo recomendado: 1) Setup, 2) Autenticacao, 3) Usuarios, 4) Comunicados.",
+    "description": "Coleção para testar a API local do SmartSíndico. Fluxo recomendado: 1) Autenticação, 2) Setup, 3) Usuários, 4) Comunicados.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "33987837"
   },
@@ -168,9 +168,8 @@
                   "var json = {};",
                   "try { json = pm.response.json(); } catch (error) {}",
                   "",
-                  "if (pm.response.code === 201 && json.usuario) {",
-                  "    pm.environment.set('usuarioIdSindico', json.usuario.id);",
-                  "    pm.environment.set('tokenSindico', json.token);",
+                  "if (pm.response.code === 201 && json.id) {",
+                  "    pm.environment.set('usuarioIdSindico', json.id);",
                   "}"
                 ]
               }
@@ -199,14 +198,13 @@
               "raw": "{\n  \"nome\": \"{{nomeNovoSindico}}\",\n  \"email\": \"{{emailNovoSindico}}\",\n  \"senha\": \"{{senhaNovoSindico}}\",\n  \"cpf\": \"{{cpfNovoSindico}}\",\n  \"telefone\": \"{{telefoneNovoSindico}}\",\n  \"perfil\": {{perfilNovoSindico}},\n  \"idApartamento\": {{idApartamentoNovoSindico}}\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/autenticacao/cadastrar",
+              "raw": "{{baseUrl}}/api/usuarios",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
-                "autenticacao",
-                "cadastrar"
+                "usuarios"
               ]
             }
           },
@@ -227,9 +225,8 @@
                   "var json = {};",
                   "try { json = pm.response.json(); } catch (error) {}",
                   "",
-                  "if (pm.response.code === 201 && json.usuario) {",
-                  "    pm.environment.set('usuarioIdPorteiro', json.usuario.id);",
-                  "    pm.environment.set('tokenPorteiro', json.token);",
+                  "if (pm.response.code === 201 && json.id) {",
+                  "    pm.environment.set('usuarioIdPorteiro', json.id);",
                   "}"
                 ]
               }
@@ -258,14 +255,13 @@
               "raw": "{\n  \"nome\": \"{{nomeNovoPorteiro}}\",\n  \"email\": \"{{emailNovoPorteiro}}\",\n  \"senha\": \"{{senhaNovoPorteiro}}\",\n  \"cpf\": \"{{cpfNovoPorteiro}}\",\n  \"telefone\": \"{{telefoneNovoPorteiro}}\",\n  \"perfil\": {{perfilNovoPorteiro}},\n  \"idApartamento\": {{idApartamentoNovoPorteiro}}\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/autenticacao/cadastrar",
+              "raw": "{{baseUrl}}/api/usuarios",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
-                "autenticacao",
-                "cadastrar"
+                "usuarios"
               ]
             }
           },
@@ -286,9 +282,8 @@
                   "var json = {};",
                   "try { json = pm.response.json(); } catch (error) {}",
                   "",
-                  "if (pm.response.code === 201 && json.usuario) {",
-                  "    pm.environment.set('usuarioIdMorador', json.usuario.id);",
-                  "    pm.environment.set('tokenMorador', json.token);",
+                  "if (pm.response.code === 201 && json.id) {",
+                  "    pm.environment.set('usuarioIdMorador', json.id);",
                   "}"
                 ]
               }
@@ -317,14 +312,13 @@
               "raw": "{\n  \"nome\": \"{{nomeNovoMorador}}\",\n  \"email\": \"{{emailNovoMorador}}\",\n  \"senha\": \"{{senhaNovoMorador}}\",\n  \"cpf\": \"{{cpfNovoMorador}}\",\n  \"telefone\": \"{{telefoneNovoMorador}}\",\n  \"perfil\": {{perfilNovoMorador}},\n  \"idApartamento\": {{idApartamentoNovoMorador}}\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/autenticacao/cadastrar",
+              "raw": "{{baseUrl}}/api/usuarios",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
-                "autenticacao",
-                "cadastrar"
+                "usuarios"
               ]
             }
           },

@@ -71,7 +71,7 @@ RF-006 | Permitir fluxo de uso conforme o perfil do usuário (Morador, Funcioná
 
 |ID     | Descrição do Requisito  |Prioridade |
 |-------|-------------------------|----|
-|RNF-001| O sistema deve exigir autenticação (login e senha) para acesso |  ALTA | 
+|RNF-001| O sistema deve exigir autenticação (login e senha) para acesso e resposta coerente para falhas de autorização |  ALTA | 
 |RNF-002| O sistema deve ser responsivo para rodar em um dispositivos móvel | ALTA | 
 
 ## Restrições

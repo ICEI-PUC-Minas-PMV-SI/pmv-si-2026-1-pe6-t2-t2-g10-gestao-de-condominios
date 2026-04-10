@@ -300,7 +300,7 @@ Os endpoints atualmente implementados estão organizados em três grupos: autent
 - Acesso: autenticado.
 - Perfis autorizados: Sindico.
 - Corpo da requisição:
-
+```json
 {
   "id": 6,
   "nome": "Churrasco",

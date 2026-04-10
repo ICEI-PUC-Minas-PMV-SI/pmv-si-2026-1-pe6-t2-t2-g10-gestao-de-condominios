@@ -293,6 +293,27 @@ Os endpoints atualmente implementados estão organizados em três grupos: autent
   - `403 Forbidden`: perfil sem permissão;
   - `404 NotFound`: usuário não encontrado.
 
+### 4. Área Comum
+#### `POST /areas`
+
+- Objetivo: cadastrar uma área comum.
+- Acesso: autenticado.
+- Perfis autorizados: Sindico.
+- Corpo da requisição:
+
+{
+  "id": 6,
+  "nome": "Churrasco",
+  "descricao": "Churrasqueira, espetos, grelhas, mesas e cadeiras.",
+  "capacidade": 10,
+  "ativa": true,
+  "requerAprovacao": true
+}
+
+
+
+
+
 ### Padrão de erros da API
 
 Falhas de validação retornam `ValidationProblemDetails`:
@@ -377,7 +398,12 @@ Os testes de integração já implementados utilizam `WebApplicationFactory` com
 - exigência de autenticação nas rotas protegidas;
 - autorização por perfil no pipeline HTTP completo;
 - integração entre controllers, middleware, autenticação, autorização, aplicação e persistência.
+- Criação de reserva com sucesso quando os dados são válidos.
+- Persistência correta no banco após criar/editar/cancelar reserva
+- Respostas HTTP esperadas da API (200, 201, 400, 409, etc.)
+- Integração entre controller, service, repository e banco funcionando em conjunto
 
+  
 Os cenários automatizados atualmente cobrem:
 
 - login com credenciais válidas;
@@ -386,6 +412,10 @@ Os cenários automatizados atualmente cobrem:
 - bloqueio de consulta de usuário fora da regra de acesso do `Morador`;
 - atualização de status de `Morador` por `Funcionario`;
 - bloqueio de criação de comunicado por `Morador`.
+- Criação de reserva com sucesso quando os dados são válidos.
+- Bloqueio de conflitos de horário/data para evitar reservas duplicadas.
+- Bloqueio de reserva para outro usúario.
+  
 
 ### Testes manuais e exploratórios
 

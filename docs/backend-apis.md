@@ -55,7 +55,7 @@ As tecnologias principais utilizadas no backend são:
 
 ## API Endpoints
 
-Os endpoints atualmente implementados estão organizados em cinco grupos: autenticação, comunicados, usuários, áreas e reserva.
+Os endpoints atualmente implementados estão organizados em cinco grupos: autenticação, comunicados, usuários, área comum e reserva.
 
 ### 1. Autenticação
 
@@ -372,6 +372,9 @@ Os endpoints atualmente implementados estão organizados em cinco grupos: autent
   - `409 Conflict`: área já reservada.
 
 #### `GET /reservas`
+- Objetivo: listar reservas efetuadas.
+- Acesso: autenticado.
+- Resposta de sucesso (`200 OK`):
 
 {
   "id": 4,

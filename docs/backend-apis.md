@@ -323,8 +323,8 @@ Os endpoints atualmente implementados estão organizados em três grupos: autent
 ```
 
 - Possíveis erros:
-403 Forbidden: perfil sem permissão;
-409 Conflict: área já cadastrados.
+ - 403 Forbidden: perfil sem permissão;
+ - 409 Conflict: área já cadastrados.
 
 
 ### Padrão de erros da API

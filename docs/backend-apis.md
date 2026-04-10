@@ -326,6 +326,23 @@ Os endpoints atualmente implementados estão organizados em três grupos: autent
  - 403 Forbidden: perfil sem permissão;
  - 409 Conflict: área já cadastrados.
 
+#### `GET /areas`
+
+- Objetivo: listar usuários cadastrados.
+- Acesso: autenticado.
+
+```json
+{
+    "id": 9,
+    "nome": "Churrasco",
+    "descricao": "Churrasqueira, grelhas e espetos",
+    "capacidade": 10,
+    "ativa": true,
+    "requerAprovacao": true
+  }
+```
+
+
 
 ### Padrão de erros da API
 

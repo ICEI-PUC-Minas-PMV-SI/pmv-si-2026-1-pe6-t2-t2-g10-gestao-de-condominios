@@ -330,6 +330,7 @@ Os endpoints atualmente implementados estão organizados em três grupos: autent
 
 - Objetivo: listar usuários cadastrados.
 - Acesso: autenticado.
+- Resposta de sucesso (`200 OK`):
 
 ```json
 {
@@ -342,7 +343,51 @@ Os endpoints atualmente implementados estão organizados em três grupos: autent
   }
 ```
 
+### 5. Reserva
+#### `POST /reservas`
 
+- Objetivo: Solicitar uma reserva.
+- Acesso: autenticado.
+- Perfis autorizados: `Funcionario` e `Sindico`.
+- Corpo da requisição:
+ ```json
+{
+  "id": 4,
+  "idAreaComum": 9,
+  "idUsuario": 20,
+  "idApartamento": 202,
+  "dataHoraInicio": "2026-04-10T00:08:26.133Z",
+  "dataHoraFim": "2026-04-10T00:08:26.133Z",
+  "status": 1,
+  "observacao": "Noite",
+  "dataSolicitacao": "2026-04-10T00:08:26.133Z",
+  "dataAprovacao": "2026-04-10T00:08:26.133Z",
+  "idUsuarioAprovador": 0
+}
+
+```
+- Possíveis erros:
+  - `400 BadRequest`: dados inválidos;
+  - `401 Unauthorized`: token ausente ou inválido;
+  - `409 Conflict`: área já reservada.
+
+#### `GET /reservas`
+
+{
+  "id": 4,
+  "idAreaComum": 9,
+  "idUsuario": 20,
+  "idApartamento": 202,
+  "dataHoraInicio": "2026-04-10T00:08:26.133Z",
+  "dataHoraFim": "2026-04-10T00:08:26.133Z",
+  "status": 1,
+  "observacao": "Noite",
+  "dataSolicitacao": "2026-04-10T00:08:26.133Z",
+  "dataAprovacao": "2026-04-10T00:08:26.133Z",
+  "idUsuarioAprovador": 0
+}
+
+```
 
 ### Padrão de erros da API
 

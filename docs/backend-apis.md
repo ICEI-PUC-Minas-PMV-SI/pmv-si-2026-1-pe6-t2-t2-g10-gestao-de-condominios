@@ -55,7 +55,7 @@ As tecnologias principais utilizadas no backend são:
 
 ## API Endpoints
 
-Os endpoints atualmente implementados estão organizados em três grupos: autenticação, comunicados e usuários.
+Os endpoints atualmente implementados estão organizados em cinco grupos: autenticação, comunicados, usuários, áreas e reserva.
 
 ### 1. Autenticação
 

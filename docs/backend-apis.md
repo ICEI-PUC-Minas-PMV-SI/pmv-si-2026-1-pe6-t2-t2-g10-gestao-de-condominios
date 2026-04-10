@@ -302,16 +302,29 @@ Os endpoints atualmente implementados estão organizados em três grupos: autent
 - Corpo da requisição:
 ```json
 {
-  "id": 6,
+  "id": 9,
   "nome": "Churrasco",
-  "descricao": "Churrasqueira, espetos, grelhas, mesas e cadeiras.",
+  "descricao": "Churrasqueira, grelhas e espetos",
+  "capacidade": 10,
+}
+```
+
+- Resposta de sucesso:
+
+```json
+{
+  "id": 9,
+  "nome": "Churrasco",
+  "descricao": "Churrasqueira, grelhas e espetos",
   "capacidade": 10,
   "ativa": true,
   "requerAprovacao": true
 }
 ```
 
-
+- Possíveis erros:
+403 Forbidden: perfil sem permissão;
+409 Conflict: área já cadastrados.
 
 
 ### Padrão de erros da API

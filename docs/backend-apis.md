@@ -445,62 +445,119 @@ O processo de deploy consiste em publicar a aplicação no ambiente escolhido, a
 
 ## Testes
 
-A estratégia de testes do backend combina validação manual dos endpoints com automação de testes unitários e testes de integração.
+Os testes do backend do SmartSíndico foram organizados para validar a regra de negócio, a autorização por perfil e o comportamento HTTP da API. A suíte atual está dividida entre testes unitários e testes de integração, usando `xUnit` como framework principal, `Moq` para simulação de dependências nos testes unitários e `WebApplicationFactory` com `Entity Framework Core InMemory` nos testes de integração.
 
-### Testes unitários
+### 1. Testes unitários
 
-Os testes unitários já implementados utilizam `xUnit` e `Moq` para isolar as dependências dos serviços de aplicação. A suíte atual cobre:
+Os testes unitários verificam unidades isoladas da aplicação, sem acesso a banco real. Nesse grupo, repositórios, geração de token, hash de senha e validações são simulados para que o foco fique apenas no comportamento esperado da regra de negócio ou da action testada.
 
-- `AutenticacaoService`: validação do login, autenticação com sucesso, credenciais inválidas e bloqueio de usuário inativo;
-- `ComunicadoService`: validação de criação, bloqueio de autor inativo, criação com sucesso e tentativa de atualizar comunicado inexistente;
-- `UsuarioService`: validação de cadastro, conflito por email, cadastro com sucesso, retorno `NotFound` para usuário inexistente e atualização de status com sucesso;
-- `ComunicadoController`: exigência de usuário autenticado para criação, publicação com autor identificado e validação das anotações de autorização das rotas;
-- `UsuarioController`: contrato HTTP das ações protegidas e integração com o serviço de autorização;
-- `AuthorizationHandlers` de usuários: regras contextuais de cadastro, visualização e atualização de status conforme o perfil autenticado.
+#### `TestesAutenticacaoService` - 4 cenários
 
-Esses testes garantem a cobertura inicial das regras de negócio mais importantes relacionadas a:
+- Camada testada: `Application/Services/AutenticacaoService`.
+- Objetivo: garantir que o fluxo de login responda corretamente para entradas válidas e inválidas.
+- Testes implementados:
+  - `EntrarAsync_QuandoValidacaoFalhar_DeveRetornarFalhaDeValidacao`: valida o retorno de erro quando a requisição de login não passa pelas regras de validação.
+  - `EntrarAsync_QuandoCredenciaisForemValidas_DeveAtualizarUltimoLoginERetornarToken`: verifica o login com sucesso, a atualização da data de último login e a geração da resposta autenticada.
+  - `EntrarAsync_QuandoCredenciaisForemInvalidas_DeveRetornarNaoAutorizado`: confirma o retorno de `Unauthorized` quando email ou senha não conferem.
+  - `EntrarAsync_QuandoUsuarioEstiverInativo_DeveRetornarProibido`: garante o bloqueio do acesso quando o usuário está inativo.
 
+#### `TestesComunicadoService` - 4 cenários
 
-- RF-001: autenticação e controle básico de acesso;
-- RF-005: criação e consulta de comunicados;
-- RF-006: fluxo de uso conforme o perfil do usuário, incluindo as permissões administrativas hoje implementadas para usuários;
-- RNF-001: exigência de autenticação e resposta coerente para falhas de autorização.
+- Camada testada: `Application/Services/ComunicadoService`.
+- Objetivo: validar a criação e a alteração de status dos comunicados.
+- Testes implementados:
+  - `CriarAsync_QuandoValidacaoFalhar_DeveRetornarFalhaDeValidacao`: valida a resposta de erro quando a requisição de criação é inválida.
+  - `CriarAsync_QuandoAutorEstiverInativo_DeveRetornarProibido`: garante que um autor inativo não consiga publicar comunicado.
+  - `CriarAsync_QuandoRequisicaoForValida_DeveCriarComunicadoEAssociarAutor`: verifica a criação correta do comunicado e a associação com o autor.
+  - `AtualizarStatusAsync_QuandoComunicadoNaoExistir_DeveRetornarNaoEncontrado`: confirma o retorno `NotFound` quando o comunicado informado não existe.
 
-Além dos serviços, os testes de controller reforçam o contrato HTTP da API e a configuração de acesso por perfil declarada com `[Authorize]` e `[AllowAnonymous]`.
+#### `TestesUsuarioService` - 5 cenários
 
-### Testes de integração
+- Camada testada: `Application/Services/UsuarioService`.
+- Objetivo: validar o cadastro e a alteração de status de usuários.
+- Testes implementados:
+  - `CadastrarAsync_QuandoValidacaoFalhar_DeveRetornarFalhaDeValidacao`: valida o erro retornado quando o cadastro é inválido.
+  - `CadastrarAsync_QuandoEmailJaExistir_DeveRetornarConflito`: garante o retorno `Conflict` para tentativa de cadastro com email já existente.
+  - `CadastrarAsync_QuandoRequisicaoForValida_DevePersistirUsuarioERetornarResposta`: confirma a persistência do usuário e a resposta esperada no cadastro com sucesso.
+  - `AtualizarStatusAsync_QuandoUsuarioNaoExistir_DeveRetornarNaoEncontrado`: valida o retorno `NotFound` ao tentar alterar um usuário inexistente.
+  - `AtualizarStatusAsync_QuandoUsuarioExistir_DeveAtualizarStatusERetornarResposta`: verifica a atualização do status e o retorno da resposta correta.
 
-Os testes de integração já implementados utilizam `WebApplicationFactory` com banco em memória para validar:
+#### `TestesComunicadoController` - 6 cenários
 
-- login com geração real de JWT;
-- exigência de autenticação nas rotas protegidas;
-- autorização por perfil no pipeline HTTP completo;
-- integração entre controllers, middleware, autenticação, autorização, aplicação e persistência.
-- Criação de reserva com sucesso quando os dados são válidos.
-- Persistência correta no banco após criar/editar/cancelar reserva
-- Respostas HTTP esperadas da API (200, 201, 400, 409, etc.)
-- Integração entre controller, service, repository e banco funcionando em conjunto
+- Camada testada: `Api/Controllers/ComunicadoController`.
+- Objetivo: validar o contrato HTTP e as restrições declarativas de acesso das rotas de comunicados.
+- Testes implementados:
+  - `Controller_DeveExigirAutenticacao`: valida a presença da proteção de autenticação no controller.
+  - `Criar_DeveExigirRolesDeFuncionarioOuSindico`: confirma a restrição de perfil na action de criação.
+  - `AtualizarStatus_DeveExigirRolesDeFuncionarioOuSindico`: confirma a restrição de perfil na action de atualização de status.
+  - `Criar_QuandoUsuarioAtualNaoEstiverNoToken_DeveRetornarNaoAutorizado`: verifica o retorno `401 Unauthorized` quando o token não identifica o usuário atual.
+  - `Criar_QuandoUsuarioAtualEstiverNoToken_DeveRetornarCriado`: valida o retorno `201 Created` quando a criação ocorre com sucesso.
+  - `AtualizarStatus_QuandoServiceRetornarSucesso_DeveRetornarOk`: garante o retorno `200 OK` quando o service conclui a atualização.
 
-  
-Os cenários automatizados atualmente cobrem:
+#### `TestesUsuarioController` - 10 cenários
 
-- login com credenciais válidas;
-- bloqueio de acesso sem token;
-- restrição de cadastro de usuário quando `Funcionario` tenta criar perfil não permitido;
-- bloqueio de consulta de usuário fora da regra de acesso do `Morador`;
-- atualização de status de `Morador` por `Funcionario`;
-- bloqueio de criação de comunicado por `Morador`.
-- Criação de reserva com sucesso quando os dados são válidos.
-- Bloqueio de conflitos de horário/data para evitar reservas duplicadas.
-- Bloqueio de reserva para outro usúario.
-  
+- Camada testada: `Api/Controllers/UsuarioController`.
+- Objetivo: validar o comportamento HTTP das rotas de usuários e o uso do serviço de autorização contextual.
+- Testes implementados:
+  - `Controller_DeveExigirAutenticacaoPorPadrao`: verifica que o controller exige autenticação em suas rotas.
+  - `Cadastrar_DeveExigirRolesDeFuncionarioOuSindico`: valida a restrição de perfis na rota de cadastro.
+  - `ObterTodos_DeveExigirRoleDeSindico`: confirma que a listagem geral é exclusiva do perfil síndico.
+  - `AtualizarStatus_DeveExigirRolesDeFuncionarioOuSindico`: valida a restrição de perfis na atualização de status.
+  - `Cadastrar_QuandoAutorizacaoFalhar_DeveRetornarProibido`: confirma o retorno `403 Forbidden` quando o cadastro não é autorizado.
+  - `Cadastrar_QuandoAutorizacaoForPermitida_DeveRetornarCriado`: verifica o retorno `201 Created` quando o cadastro é autorizado.
+  - `ObterPorId_QuandoAutorizacaoFalhar_DeveRetornarProibido`: confirma o retorno `403 Forbidden` na consulta por id sem permissão.
+  - `ObterPorId_QuandoAutorizacaoForPermitida_DeveRetornarSucesso`: valida a resposta de sucesso na consulta autorizada.
+  - `AtualizarStatus_QuandoAutorizacaoFalhar_DeveRetornarProibido`: confirma o retorno `403 Forbidden` na alteração de status sem permissão.
+  - `AtualizarStatus_QuandoAutorizacaoForPermitida_DeveRetornarOk`: valida o retorno `200 OK` quando a alteração de status é autorizada.
 
-### Testes manuais e exploratórios
+#### `TestesHandlersAutorizacaoUsuario` - 9 cenários
 
-Durante o desenvolvimento, os endpoints podem ser validados com:
+- Camada testada: handlers de autorização em `Api/Autorizacao`.
+- Objetivo: validar as regras contextuais de acesso, ou seja, situações em que a decisão depende do perfil do usuário autenticado e também do recurso acessado.
+- Testes implementados:
+  - `CadastrarUsuario_QuandoFuncionarioCadastrarMorador_DeveAutorizar`: valida que funcionário pode cadastrar morador.
+  - `CadastrarUsuario_QuandoFuncionarioCadastrarSindico_DeveNegar`: valida que funcionário não pode cadastrar síndico.
+  - `VisualizarUsuario_QuandoMoradorVisualizarProprioCadastro_DeveAutorizar`: garante que morador pode ver o próprio cadastro.
+  - `VisualizarUsuario_QuandoMoradorVisualizarOutroCadastro_DeveNegar`: garante que morador não pode ver outro usuário.
+  - `VisualizarUsuario_QuandoFuncionarioVisualizarMorador_DeveAutorizar`: valida o acesso do funcionário ao cadastro de morador.
+  - `AtualizarStatusUsuario_QuandoFuncionarioAtualizarMorador_DeveAutorizar`: confirma que funcionário pode alterar o status de morador.
+  - `AtualizarStatusUsuario_QuandoFuncionarioAtualizarFuncionario_DeveNegar`: confirma que funcionário não pode alterar o status de outro funcionário.
+  - `AtualizarStatusUsuario_QuandoSindicoAtualizarProprioStatus_DeveAutorizar`: valida a alteração do próprio status pelo síndico.
+  - `AtualizarStatusUsuario_QuandoSindicoAtualizarMorador_DeveNegar`: valida a negação quando o síndico tenta alterar o status de morador.
 
-- `Swagger/OpenAPI`, disponível no ambiente de desenvolvimento;
-- coleções `Postman`, para verificação de fluxos autenticados e regressão manual.
+### 2. Testes de integração
+
+Os testes de integração executam a API em ambiente de teste com `WebApplicationFactory`, `TestServer` e banco em memória. Nesse grupo, o objetivo é validar o comportamento de ponta a ponta, incluindo autenticação JWT, autorização, controllers, services, persistência e respostas HTTP.
+
+#### `TestesIntegracaoApi` - 6 cenários
+
+- Camada testada: aplicação completa, do endpoint HTTP até a persistência em memória.
+- Objetivo: confirmar que os fluxos mais importantes funcionam corretamente quando a API é executada como um todo.
+- Testes implementados:
+  - `Entrar_QuandoCredenciaisForemValidas_DeveRetornarToken`: valida o login completo com retorno de token JWT.
+  - `ListarUsuarios_QuandoNaoAutenticado_DeveRetornarUnauthorized`: confirma que a rota protegida de listagem exige autenticação.
+  - `CadastrarUsuario_QuandoFuncionarioTentarCadastrarSindico_DeveRetornarForbidden`: valida a regra de perfil no cadastro de usuários.
+  - `ObterUsuarioPorId_QuandoMoradorConsultarOutroUsuario_DeveRetornarForbidden`: confirma a regra de visualização por perfil no pipeline HTTP completo.
+  - `AtualizarStatus_QuandoFuncionarioAtualizarMorador_DeveRetornarOk`: valida a atualização de status permitida para funcionário sobre morador.
+  - `CriarComunicado_QuandoMoradorTentarCriar_DeveRetornarForbidden`: confirma o bloqueio de criação de comunicado para morador.
+
+### 3. Cobertura atual da suíte
+
+No estado atual do backend, a suíte automatizada cobre diretamente os fluxos implementados relacionados a:
+
+- `RF-001`: autenticação e login com perfis distintos;
+- `RF-005`: criação e consulta de comunicados;
+- `RF-006`: fluxo de uso conforme o perfil do usuário, incluindo cadastro, consulta e atualização de status com regra de acesso;
+- `RNF-001`: exigência de autenticação e tratamento consistente para falhas de autorização.
+
+Ao todo, a documentação desta etapa registra 38 testes unitários e 6 testes de integração, totalizando 44 cenários automatizados.
+
+### 4. Testes manuais
+
+Além da suíte automatizada, os endpoints também podem ser validados manualmente durante o desenvolvimento por meio de:
+
+- `Swagger/OpenAPI`, para inspeção e execução direta das rotas;
+- `Postman`, para validação dos fluxos autenticados e regressão manual dos principais cenários da API.
 
 ## Referências
 

@@ -10,6 +10,8 @@ namespace SmartSindico.Api;
 
 public class Program
 {
+    private const string CorsPolicyName = "FrontendPolicy";
+
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +22,25 @@ public class Program
                 optional: true,
                 reloadOnChange: true);
 
+        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(CorsPolicyName, policy =>
+            {
+                if (allowedOrigins.Length == 0)
+                {
+                    return;
+                }
+
+                policy
+                    .WithOrigins(allowedOrigins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
         builder.Services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo
@@ -80,6 +99,7 @@ public class Program
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseHttpsRedirection();
+        app.UseCors(CorsPolicyName);
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();

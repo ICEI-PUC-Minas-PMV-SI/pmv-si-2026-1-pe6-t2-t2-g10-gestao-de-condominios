@@ -61,6 +61,11 @@ public class Comunicado
         Ativo = ativo;
     }
 
+    public void DefinirDestaque(bool destaque)
+    {
+        Destaque = destaque;
+    }
+
     public void AssociarAutor(Usuario autor)
     {
         Autor = autor ?? throw new DomainException("Autor do comunicado e obrigatorio.");

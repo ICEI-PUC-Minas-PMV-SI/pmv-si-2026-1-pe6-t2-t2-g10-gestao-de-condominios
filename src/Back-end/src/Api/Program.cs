@@ -78,11 +78,16 @@ public class Program
                 policy => policy.RequireAuthenticatedUser().AddRequirements(new VisualizarUsuarioRequirement()));
 
             options.AddPolicy(
+                PoliticasAutorizacao.AtualizarUsuario,
+                policy => policy.RequireAuthenticatedUser().AddRequirements(new AtualizarUsuarioRequirement()));
+
+            options.AddPolicy(
                 PoliticasAutorizacao.AtualizarStatusUsuario,
                 policy => policy.RequireAuthenticatedUser().AddRequirements(new AtualizarStatusUsuarioRequirement()));
         });
         builder.Services.AddSingleton<IAuthorizationHandler, CadastrarUsuarioAuthorizationHandler>();
         builder.Services.AddSingleton<IAuthorizationHandler, VisualizarUsuarioAuthorizationHandler>();
+        builder.Services.AddSingleton<IAuthorizationHandler, AtualizarUsuarioAuthorizationHandler>();
         builder.Services.AddSingleton<IAuthorizationHandler, AtualizarStatusUsuarioAuthorizationHandler>();
 
         var app = builder.Build();

@@ -26,7 +26,7 @@ public sealed class VisualizarUsuarioAuthorizationHandler : AuthorizationHandler
         }
 
         if (context.User.IsInRole(PerfisAutorizacao.Funcionario)
-            && (resource.Id == idUsuarioAtual || resource.Perfil == PerfisAutorizacao.Morador))
+            && (resource.Id == idUsuarioAtual || resource.Perfil != PerfisAutorizacao.Sindico))
         {
             context.Succeed(requirement);
             return Task.CompletedTask;

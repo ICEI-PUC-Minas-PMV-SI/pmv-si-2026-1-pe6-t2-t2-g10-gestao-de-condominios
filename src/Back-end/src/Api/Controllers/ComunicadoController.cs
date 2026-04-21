@@ -65,4 +65,15 @@ public class ComunicadoController : ApiControllerBase
     {
         return FromResult(await _comunicadoService.AtualizarStatusAsync(id, requisicao, cancellationToken));
     }
+
+    [HttpPatch("{id:int}/destaque")]
+    [Authorize(Roles = PerfisAutorizacao.FuncionarioOuSindico)]
+    [ProducesResponseType<ComunicadoResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AtualizarDestaque(int id, [FromBody] AtualizacaoDestaqueComunicadoRequest requisicao, CancellationToken cancellationToken)
+    {
+        return FromResult(await _comunicadoService.AtualizarDestaqueAsync(id, requisicao, cancellationToken));
+    }
 }

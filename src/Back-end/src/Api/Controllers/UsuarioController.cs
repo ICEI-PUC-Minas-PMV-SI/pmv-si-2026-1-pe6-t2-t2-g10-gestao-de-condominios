@@ -38,7 +38,7 @@ public class UsuarioController : ApiControllerBase
         if (!autorizacao.Succeeded)
         {
             return Problem(
-                title: "Perfil sem permissao para cadastrar este tipo de usuario.",
+                title: "Perfil sem permissão para cadastrar este tipo de usuário.",
                 statusCode: StatusCodes.Status403Forbidden);
         }
 
@@ -46,13 +46,33 @@ public class UsuarioController : ApiControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = PerfisAutorizacao.Sindico)]
+    [Authorize(Roles = PerfisAutorizacao.FuncionarioOuSindico)]
     [ProducesResponseType<IReadOnlyList<UsuarioResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> ObterTodos(CancellationToken cancellationToken)
     {
-        return FromResult(await _usuarioService.ObterTodosAsync(cancellationToken));
+        var resultadoUsuarios = await _usuarioService.ObterTodosAsync(cancellationToken);
+        if (!resultadoUsuarios.IsSuccess)
+        {
+            return FromResult(resultadoUsuarios);
+        }
+
+        var usuariosVisiveis = new List<UsuarioResponse>();
+        foreach (var usuario in resultadoUsuarios.Value!)
+        {
+            var autorizacao = await _authorizationService.AuthorizeAsync(
+                User,
+                usuario,
+                PoliticasAutorizacao.VisualizarUsuario);
+
+            if (autorizacao.Succeeded)
+            {
+                usuariosVisiveis.Add(usuario);
+            }
+        }
+
+        return Ok(usuariosVisiveis);
     }
 
     [HttpGet("{id:int}")]
@@ -81,6 +101,39 @@ public class UsuarioController : ApiControllerBase
         }
 
         return FromResult(resultadoUsuario);
+    }
+
+    [HttpPatch("{id:int}")]
+    [ProducesResponseType<UsuarioResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Atualizar(
+        int id,
+        [FromBody] AtualizacaoUsuarioRequest requisicao,
+        CancellationToken cancellationToken)
+    {
+        var resultadoUsuario = await _usuarioService.ObterPorIdAsync(id, cancellationToken);
+        if (!resultadoUsuario.IsSuccess)
+        {
+            return FromResult(resultadoUsuario);
+        }
+
+        var autorizacao = await _authorizationService.AuthorizeAsync(
+            User,
+            new AtualizarUsuarioResource(resultadoUsuario.Value!, requisicao),
+            PoliticasAutorizacao.AtualizarUsuario);
+
+        if (!autorizacao.Succeeded)
+        {
+            return Problem(
+                title: "Usuário sem permissão para editar este cadastro.",
+                statusCode: StatusCodes.Status403Forbidden);
+        }
+
+        return FromResult(await _usuarioService.AtualizarAsync(id, requisicao, cancellationToken));
     }
 
     [HttpPatch("{id:int}/ativo")]

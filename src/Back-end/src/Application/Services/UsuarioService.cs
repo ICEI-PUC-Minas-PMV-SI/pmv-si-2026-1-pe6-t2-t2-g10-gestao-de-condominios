@@ -15,15 +15,18 @@ public class UsuarioService : IUsuarioService
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IValidator<CadastroRequest> _cadastroValidator;
+    private readonly IValidator<AtualizacaoUsuarioRequest> _atualizacaoUsuarioValidator;
 
     public UsuarioService(
         IUsuarioRepository usuarioRepository,
         IPasswordHasher passwordHasher,
-        IValidator<CadastroRequest> cadastroValidator)
+        IValidator<CadastroRequest> cadastroValidator,
+        IValidator<AtualizacaoUsuarioRequest> atualizacaoUsuarioValidator)
     {
         _usuarioRepository = usuarioRepository;
         _passwordHasher = passwordHasher;
         _cadastroValidator = cadastroValidator;
+        _atualizacaoUsuarioValidator = atualizacaoUsuarioValidator;
     }
 
     public async Task<Result<UsuarioResponse>> CadastrarAsync(CadastroRequest requisicao, CancellationToken cancellationToken = default)
@@ -82,6 +85,56 @@ public class UsuarioService : IUsuarioService
                 "USER_NOT_FOUND",
                 ErrorType.NotFound);
         }
+
+        return Result<UsuarioResponse>.Success(ParaResposta(usuario));
+    }
+
+    public async Task<Result<UsuarioResponse>> AtualizarAsync(
+        int id,
+        AtualizacaoUsuarioRequest requisicao,
+        CancellationToken cancellationToken = default)
+    {
+        var validacao = await _atualizacaoUsuarioValidator.ValidateAsync(requisicao, cancellationToken);
+        if (!validacao.IsValid)
+        {
+            return Result<UsuarioResponse>.ValidationFailure(validacao.Errors);
+        }
+
+        var usuario = await _usuarioRepository.ObterPorIdAsync(id, cancellationToken);
+        if (usuario is null)
+        {
+            return Result<UsuarioResponse>.Failure(
+                "Usuário não encontrado.",
+                "USER_NOT_FOUND",
+                ErrorType.NotFound);
+        }
+
+        var email = Email.Criar(requisicao.Email);
+        if (!string.Equals(usuario.Email.Value, email.Value, StringComparison.OrdinalIgnoreCase))
+        {
+            var usuarioComMesmoEmail = await _usuarioRepository.ObterPorEmailAsync(email.Value, cancellationToken);
+            if (usuarioComMesmoEmail is not null && usuarioComMesmoEmail.Id != id)
+            {
+                return Result<UsuarioResponse>.Failure(
+                    "Este e-mail já está cadastrado.",
+                    "EMAIL_ALREADY_EXISTS",
+                    ErrorType.Conflict);
+            }
+        }
+
+        var senhaHash = string.IsNullOrWhiteSpace(requisicao.Senha)
+            ? null
+            : _passwordHasher.Hash(requisicao.Senha.Trim());
+
+        usuario.AtualizarDados(
+            requisicao.Nome,
+            email,
+            senhaHash,
+            requisicao.Perfil,
+            requisicao.IdApartamento,
+            requisicao.Telefone,
+            requisicao.Ativo);
+        await _usuarioRepository.AtualizarAsync(usuario, cancellationToken);
 
         return Result<UsuarioResponse>.Success(ParaResposta(usuario));
     }

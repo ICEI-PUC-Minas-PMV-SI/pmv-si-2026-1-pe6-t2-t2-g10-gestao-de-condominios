@@ -19,14 +19,14 @@ public sealed class AtualizarStatusUsuarioAuthorizationHandler : AuthorizationHa
             return Task.CompletedTask;
         }
 
-        if (context.User.IsInRole(PerfisAutorizacao.Funcionario) && resource.Perfil == PerfisAutorizacao.Morador)
+        if (context.User.IsInRole(PerfisAutorizacao.Funcionario)
+            && (resource.Id == idUsuarioAtual || resource.Perfil != PerfisAutorizacao.Sindico))
         {
             context.Succeed(requirement);
             return Task.CompletedTask;
         }
 
-        if (context.User.IsInRole(PerfisAutorizacao.Sindico)
-            && (resource.Id == idUsuarioAtual || resource.Perfil == PerfisAutorizacao.Funcionario))
+        if (context.User.IsInRole(PerfisAutorizacao.Sindico))
         {
             context.Succeed(requirement);
         }

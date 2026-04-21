@@ -83,9 +83,46 @@ public class Usuario
         Ativo = ativo;
     }
 
-    public void AtualizarTelefone(string? telefone)
+    public void AtualizarDados(
+        string nome,
+        Email email,
+        string? senhaHash,
+        PerfilUsuario perfil,
+        int? idApartamento,
+        string? telefone,
+        bool ativo)
     {
+        if (string.IsNullOrWhiteSpace(nome))
+        {
+            throw new DomainException("Nome é obrigatório.");
+        }
+
+        if (nome.Trim().Length > 120)
+        {
+            throw new DomainException("Nome deve ter no máximo 120 caracteres.");
+        }
+
+        if (!Enum.IsDefined(perfil))
+        {
+            throw new DomainException("Perfil inválido.");
+        }
+
+        if (senhaHash is not null && string.IsNullOrWhiteSpace(senhaHash))
+        {
+            throw new DomainException("SenhaHash inválido.");
+        }
+
+        Nome = nome.Trim();
+        Email = email;
+        if (!string.IsNullOrWhiteSpace(senhaHash))
+        {
+            SenhaHash = senhaHash;
+        }
+
         Telefone = NormalizarTelefone(telefone);
+        Perfil = perfil;
+        IdApartamento = perfil == PerfilUsuario.Morador ? idApartamento : null;
+        Ativo = ativo;
     }
 
     private static string? NormalizarTelefone(string? telefone)

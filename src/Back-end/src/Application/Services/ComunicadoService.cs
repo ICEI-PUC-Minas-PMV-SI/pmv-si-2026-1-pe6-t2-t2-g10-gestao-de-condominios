@@ -81,6 +81,26 @@ public class ComunicadoService : IComunicadoService
         return Result<ComunicadoResponse>.Success(ParaResposta(comunicado));
     }
 
+    public async Task<Result<ComunicadoResponse>> AtualizarDestaqueAsync(
+        int id,
+        AtualizacaoDestaqueComunicadoRequest requisicao,
+        CancellationToken cancellationToken = default)
+    {
+        var comunicado = await _comunicadoRepository.ObterPorIdAsync(id, cancellationToken);
+        if (comunicado is null)
+        {
+            return Result<ComunicadoResponse>.Failure(
+                "Comunicado não encontrado.",
+                "NOTICE_NOT_FOUND",
+                ErrorType.NotFound);
+        }
+
+        comunicado.DefinirDestaque(requisicao.Destaque);
+        await _comunicadoRepository.AtualizarAsync(comunicado, cancellationToken);
+
+        return Result<ComunicadoResponse>.Success(ParaResposta(comunicado));
+    }
+
     public async Task<Result<ComunicadoResponse>> AtualizarStatusAsync(int id, AtualizacaoStatusComunicadoRequest requisicao, CancellationToken cancellationToken = default)
     {
         var comunicado = await _comunicadoRepository.ObterPorIdAsync(id, cancellationToken);

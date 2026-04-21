@@ -23,9 +23,9 @@ public class ReservaAreaComum
         return new ReservaAreaComum
         {
             IdAreaComum = IdAreaComum,
-            IdUsuario = IdUsuario
-            IdApartamento = idApartamento,
-            DataSolicitacao = DataSolicitacao,
+            IdUsuario = IdUsuario,
+            IdApartamento = IdApartamento,
+            DataSolicitacao = DateTime.Now,
             Observacao = observacao 
         };
     }

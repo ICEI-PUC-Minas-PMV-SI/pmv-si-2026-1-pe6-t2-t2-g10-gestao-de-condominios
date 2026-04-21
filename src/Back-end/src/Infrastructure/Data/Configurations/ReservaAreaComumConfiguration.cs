@@ -9,9 +9,6 @@ public class ReservaAreaComumConfiguration : IEntityTypeConfiguration<ReservaAre
     public void Configure(EntityTypeBuilder<ReservaAreaComum> builder)
     {
         builder.ToTable("ReservaAreaComum");
-        builder.HasKey(ReservaAreaComum => ReservaAreaComum.Id);
-        builder.Property(ReservaAreaComum => a.ReservaAreaComum).
-        IsRequired().
-        HasMaxLength(20);
+        builder.HasKey(reserva => reserva.Id);
     }
 }

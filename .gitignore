@@ -1,0 +1,13 @@
+# Temporary local artifacts
+tmp-codex-build/
+tmp-codex-logs/
+
+# Root-level IDE and OS artifacts
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.rsuser
+Thumbs.db
+.DS_Store

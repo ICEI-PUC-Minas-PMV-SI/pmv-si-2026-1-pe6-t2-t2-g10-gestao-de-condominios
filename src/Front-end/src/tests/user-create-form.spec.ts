@@ -44,4 +44,16 @@ describe('UserCreateForm', () => {
       ],
     ])
   })
+
+  it('mantém o campo de apartamento visível para morador mesmo sem opções', () => {
+    const wrapper = mount(UserCreateForm, {
+      props: {
+        allowedProfiles,
+        apartments: [],
+      },
+    })
+
+    expect(wrapper.find('#apartamento').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Não há apartamentos disponíveis para vincular no momento.')
+  })
 })

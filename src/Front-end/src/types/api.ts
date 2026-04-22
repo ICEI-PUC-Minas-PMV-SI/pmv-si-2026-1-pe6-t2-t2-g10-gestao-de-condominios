@@ -1,5 +1,19 @@
 export type UserRole = 'Morador' | 'Funcionario' | 'Sindico'
 
+export interface PaginationQuery {
+  page?: number
+  pageSize?: number
+  search?: string
+}
+
+export interface PagedResponse<T> {
+  items: T[]
+  page: number
+  pageSize: number
+  totalItems: number
+  totalPages: number
+}
+
 export interface LoginRequest {
   email: string
   senha: string

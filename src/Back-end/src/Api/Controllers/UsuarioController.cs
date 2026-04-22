@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSindico.Api.Autorizacao;
 using SmartSindico.Application.DTOs.Autenticacao;
+using SmartSindico.Application.DTOs.Common;
 using SmartSindico.Application.DTOs.Usuarios;
 using SmartSindico.Application.Interfaces.Services;
+using SmartSindico.Domain.Enums;
 
 namespace SmartSindico.Api.Controllers;
 
@@ -47,32 +49,25 @@ public class UsuarioController : ApiControllerBase
 
     [HttpGet]
     [Authorize(Roles = PerfisAutorizacao.FuncionarioOuSindico)]
-    [ProducesResponseType<IReadOnlyList<UsuarioResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PaginacaoResponse<UsuarioResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> ObterTodos(CancellationToken cancellationToken)
+    public async Task<IActionResult> ObterTodos(
+        [FromQuery] PaginacaoRequest paginacao,
+        [FromQuery] string? search,
+        CancellationToken cancellationToken)
     {
-        var resultadoUsuarios = await _usuarioService.ObterTodosAsync(cancellationToken);
-        if (!resultadoUsuarios.IsSuccess)
+        if (!TryGetUsuarioAtualId(out var idUsuarioAtual))
         {
-            return FromResult(resultadoUsuarios);
+            return Unauthorized();
         }
 
-        var usuariosVisiveis = new List<UsuarioResponse>();
-        foreach (var usuario in resultadoUsuarios.Value!)
-        {
-            var autorizacao = await _authorizationService.AuthorizeAsync(
-                User,
-                usuario,
-                PoliticasAutorizacao.VisualizarUsuario);
-
-            if (autorizacao.Succeeded)
-            {
-                usuariosVisiveis.Add(usuario);
-            }
-        }
-
-        return Ok(usuariosVisiveis);
+        return FromResult(await _usuarioService.ObterTodosAsync(
+            ObterPerfilAtual(),
+            idUsuarioAtual,
+            search,
+            paginacao,
+            cancellationToken));
     }
 
     [HttpGet("{id:int}")]
@@ -163,5 +158,20 @@ public class UsuarioController : ApiControllerBase
         }
 
         return FromResult(await _usuarioService.AtualizarStatusAsync(id, requisicao, cancellationToken));
+    }
+
+    private PerfilUsuario ObterPerfilAtual()
+    {
+        if (User.IsInRole(PerfisAutorizacao.Sindico))
+        {
+            return PerfilUsuario.Sindico;
+        }
+
+        if (User.IsInRole(PerfisAutorizacao.Funcionario))
+        {
+            return PerfilUsuario.Funcionario;
+        }
+
+        return PerfilUsuario.Morador;
     }
 }

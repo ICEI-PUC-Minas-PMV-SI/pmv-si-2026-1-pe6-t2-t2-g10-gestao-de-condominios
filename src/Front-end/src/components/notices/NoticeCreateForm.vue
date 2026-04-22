@@ -66,7 +66,7 @@ defineExpose({
         v-model="form.titulo"
         type="text"
         maxlength="150"
-        class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+        class="theme-control"
         placeholder="Informe o título do comunicado"
       >
       <p v-if="errors.titulo" class="text-sm text-red-700">{{ errors.titulo }}</p>
@@ -78,13 +78,16 @@ defineExpose({
         id="conteudo"
         v-model="form.conteudo"
         rows="5"
-        class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+        class="theme-control"
         placeholder="Descreva o comunicado a ser publicado."
       />
       <p v-if="errors.conteudo" class="text-sm text-red-700">{{ errors.conteudo }}</p>
     </div>
 
-    <label class="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-ink-700">
+    <label
+      class="flex items-center gap-3 rounded-lg border px-4 py-3 text-sm"
+      :style="{ borderColor: 'var(--panel-border-strong)', background: 'var(--panel-muted-bg)', color: 'var(--text-secondary)' }"
+    >
       <input
         v-model="form.destaque"
         type="checkbox"
@@ -93,13 +96,13 @@ defineExpose({
       Marcar como destaque
     </label>
 
-    <p v-if="localMessage" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <p v-if="localMessage" class="theme-danger-banner">
       {{ localMessage }}
     </p>
 
     <button
       type="submit"
-      class="soft-ring w-full rounded-lg bg-ink-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-ink-800 disabled:cursor-not-allowed disabled:bg-ink-700/60"
+      class="theme-primary-button w-full"
       :disabled="loading"
     >
       {{ loading ? 'Publicando...' : 'Publicar aviso' }}

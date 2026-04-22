@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, shallowRef, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { useTemplateRef } from 'vue'
 
+import PaginationControls from '@/components/shared/PaginationControls.vue'
 import UserCreateForm from '@/components/users/UserCreateForm.vue'
 import UserEditForm from '@/components/users/UserEditForm.vue'
 import UserList from '@/components/users/UserList.vue'
@@ -31,10 +32,16 @@ const {
   loadingUsers,
   loadingApartments,
   savingUser,
+  page: usersPage,
+  pageSize: usersPageSize,
+  totalItems: usersTotalItems,
+  totalPages: usersTotalPages,
   loadUsers,
   loadApartments,
   registerUser,
 } = useUserDirectory()
+
+let filterDebounceHandle: ReturnType<typeof window.setTimeout> | undefined
 
 const canListUsers = computed(
   () => auth.role === USER_ROLES.Funcionario || auth.role === USER_ROLES.Sindico,
@@ -81,29 +88,6 @@ const editPermissions = computed(() => ({
   canEditAtivo: true,
 }))
 
-const filteredUsers = computed(() => {
-  const query = filterText.value.trim().toLowerCase()
-
-  if (!query) {
-    return users.value
-  }
-
-  return users.value.filter((user) => {
-    const haystack = [
-      user.nome,
-      user.email,
-      user.cpf,
-      user.telefone ?? '',
-      user.perfil,
-      String(user.idApartamento ?? ''),
-    ]
-      .join(' ')
-      .toLowerCase()
-
-    return haystack.includes(query)
-  })
-})
-
 watch(users, (currentUsers) => {
   if (!selectedUser.value) {
     return
@@ -112,13 +96,41 @@ watch(users, (currentUsers) => {
   selectedUser.value = currentUsers.find((user) => user.id === selectedUser.value?.id) ?? null
 })
 
+watch(filterText, () => {
+  if (!canListUsers.value) {
+    return
+  }
+
+  if (filterDebounceHandle) {
+    window.clearTimeout(filterDebounceHandle)
+  }
+
+  filterDebounceHandle = window.setTimeout(() => {
+    void loadUsersPage(1)
+  }, 300)
+})
+
+async function loadUsersPage(nextPage = usersPage.value) {
+  listErrorMessage.value = ''
+
+  try {
+    await loadUsers({
+      page: nextPage,
+      search: filterText.value.trim(),
+    })
+  } catch (error) {
+    listErrorMessage.value =
+      error instanceof AppError ? error.message : 'Não foi possível carregar os usuários.'
+  }
+}
+
 async function loadPageData() {
   listErrorMessage.value = ''
 
   try {
     await Promise.all([
       loadApartments(),
-      canListUsers.value ? loadUsers() : Promise.resolve(),
+      canListUsers.value ? loadUsersPage(1) : Promise.resolve(),
     ])
   } catch (error) {
     listErrorMessage.value =
@@ -137,7 +149,7 @@ async function handleCreate(payload: CadastroRequest) {
     formSuccessMessage.value = 'Usuário cadastrado com sucesso.'
 
     if (canListUsers.value) {
-      await loadUsers()
+      await loadUsersPage(1)
     }
   } catch (error) {
     if (error instanceof AppError && error.type === 'validation') {
@@ -198,6 +210,11 @@ async function handleUpdate(payload: AtualizacaoUsuarioRequest) {
 }
 
 onMounted(loadPageData)
+onBeforeUnmount(() => {
+  if (filterDebounceHandle) {
+    window.clearTimeout(filterDebounceHandle)
+  }
+})
 </script>
 
 <template>
@@ -217,7 +234,7 @@ onMounted(loadPageData)
             <input
               v-model="filterText"
               type="search"
-              class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500 lg:max-w-sm"
+              class="theme-control soft-ring lg:max-w-sm"
               placeholder="Buscar por nome, e-mail, CPF ou apartamento"
             >
 
@@ -236,7 +253,7 @@ onMounted(loadPageData)
           </div>
 
           <div
-            v-else-if="!filteredUsers.length"
+            v-else-if="!users.length"
             class="mt-6 rounded-xl border border-dashed border-slate-300 p-6 text-sm text-ink-700"
           >
             Nenhum usuário encontrado para o filtro informado.
@@ -244,9 +261,19 @@ onMounted(loadPageData)
 
           <div v-else class="mt-6">
             <UserList
-              :users="filteredUsers"
+              :users="users"
               :selected-user-id="selectedUser?.id ?? null"
               @edit="handleSelectUser"
+            />
+
+            <PaginationControls
+              v-if="usersTotalPages > 1"
+              :page="usersPage"
+              :page-size="usersPageSize"
+              :total-items="usersTotalItems"
+              :total-pages="usersTotalPages"
+              :loading="loadingUsers"
+              @change="loadUsersPage"
             />
           </div>
         </div>

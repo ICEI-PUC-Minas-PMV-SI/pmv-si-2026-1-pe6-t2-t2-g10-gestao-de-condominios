@@ -2,8 +2,8 @@
 import { computed, onMounted, shallowRef } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { fetchNotices } from '@/services/notice.service'
 import { AppError } from '@/services/http/errors'
+import { fetchNotices } from '@/services/notice.service'
 import { useAuthStore } from '@/stores/auth'
 import type { ComunicadoResponse } from '@/types/api'
 import { formatDate } from '@/utils/formatters'
@@ -11,20 +11,17 @@ import { formatDate } from '@/utils/formatters'
 const auth = useAuthStore()
 
 const firstName = computed(() => auth.usuario?.nome?.split(' ')[0] ?? 'Usuário')
-const recentNotices = shallowRef<ComunicadoResponse[]>([])
+const highlightedNotices = shallowRef<ComunicadoResponse[]>([])
 const noticesLoading = shallowRef(false)
 const noticesError = shallowRef('')
 
-async function loadRecentNotices() {
+async function loadHighlightedNotices() {
   noticesLoading.value = true
   noticesError.value = ''
 
   try {
-    const notices = await fetchNotices()
-    recentNotices.value = [...notices]
-      .filter((notice) => notice.ativo)
-      .sort((left, right) => new Date(right.dataPublicacao).getTime() - new Date(left.dataPublicacao).getTime())
-      .slice(0, 4)
+    const response = await fetchNotices({ page: 1, pageSize: 4 })
+    highlightedNotices.value = response.items.filter((notice) => notice.destaque)
   } catch (error) {
     noticesError.value = error instanceof AppError ? error.message : 'Não foi possível carregar os comunicados.'
   } finally {
@@ -32,7 +29,7 @@ async function loadRecentNotices() {
   }
 }
 
-onMounted(loadRecentNotices)
+onMounted(loadHighlightedNotices)
 </script>
 
 <template>
@@ -41,27 +38,27 @@ onMounted(loadRecentNotices)
       <h2 class="font-display text-3xl text-ink-950">
         Olá, {{ firstName }}.
       </h2>
-      <p class="mt-3 text-sm leading-7 text-ink-700">
-        Aqui estão os comunicados mais recentes.
+      <p class="mt-3 text-sm leading-7 text-app-secondary">
+        Aqui estão os comunicados em destaque.
       </p>
     </div>
 
     <section class="surface-card p-6">
-      <div class="flex items-center justify-between gap-4">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p class="section-kicker">Comunicados</p>
-          <h3 class="mt-2 font-display text-2xl text-ink-950">Últimos avisos</h3>
+          <h3 class="mt-2 font-display text-2xl text-ink-950">Destaques</h3>
         </div>
 
         <RouterLink
           to="/avisos"
-          class="soft-ring rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-ink-950 transition hover:bg-slate-100"
+          class="theme-secondary-button py-2 text-center"
         >
           Ver todos
         </RouterLink>
       </div>
 
-      <div v-if="noticesLoading" class="mt-6 text-sm text-ink-700">
+      <div v-if="noticesLoading" class="mt-6 text-sm text-app-secondary">
         Carregando comunicados...
       </div>
 
@@ -70,38 +67,44 @@ onMounted(loadRecentNotices)
       </div>
 
       <div
-        v-else-if="!recentNotices.length"
-        class="mt-6 rounded-xl border border-dashed border-slate-300 p-6 text-sm text-ink-700"
+        v-else-if="!highlightedNotices.length"
+        class="mt-6 rounded-xl border border-dashed border-slate-300 p-6 text-sm text-app-secondary"
       >
-        Nenhum comunicado disponível neste momento.
+        Nenhum comunicado em destaque neste momento.
       </div>
 
       <div v-else class="mt-6 space-y-4">
         <article
-          v-for="notice in recentNotices"
+          v-for="notice in highlightedNotices"
           :key="notice.id"
-          class="rounded-xl border border-slate-200 bg-white p-5"
-          :class="notice.destaque ? 'border-brand-300 bg-brand-50/40 shadow-[0_0_0_1px_rgba(191,219,254,0.6)]' : ''"
+          class="relative overflow-hidden rounded-2xl border-2 border-amber-400/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.98),rgba(254,240,138,0.78))] p-6 shadow-[0_0_0_2px_rgba(251,191,36,0.16),0_18px_42px_rgba(245,158,11,0.18)] dark:border-amber-400/70 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(69,39,8,0.94))] dark:shadow-[0_0_0_2px_rgba(251,191,36,0.14),0_22px_48px_rgba(2,6,23,0.56)]"
         >
+          <div class="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,rgba(245,158,11,0.95),rgba(251,191,36,1),rgba(245,158,11,0.95))]" />
+
           <div class="flex flex-wrap items-center gap-2">
             <span
-              class="pill"
-              :class="notice.destaque ? 'border-brand-300 bg-brand-100 text-brand-800' : 'border-slate-200 bg-slate-50 text-ink-700'"
+              class="pill border-amber-300 bg-amber-100 text-amber-950 shadow-[0_0_0_1px_rgba(251,191,36,0.35)] dark:border-amber-300/40 dark:bg-amber-300 dark:text-slate-950"
             >
-              {{ notice.destaque ? 'Destaque' : 'Comunicado' }}
+              Destaque
             </span>
-            <span class="pill">{{ formatDate(notice.dataPublicacao) }}</span>
+            <span
+              class="pill border-amber-200/90 bg-white/75 text-amber-950 shadow-[0_0_0_1px_rgba(251,191,36,0.14)] dark:border-amber-300/25 dark:bg-slate-950/40 dark:text-amber-50"
+            >
+              {{ formatDate(notice.dataPublicacao) }}
+            </span>
           </div>
 
-          <h4 class="mt-4 text-lg font-semibold text-ink-950">{{ notice.titulo }}</h4>
-          <p class="mt-2 text-sm leading-7 text-ink-700">
+          <h4 class="mt-5 max-w-3xl font-display text-2xl leading-tight text-slate-950 dark:text-white">
+            {{ notice.titulo }}
+          </h4>
+          <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-800 dark:text-slate-100">
             {{ notice.conteudo }}
           </p>
 
-          <div class="mt-4 flex items-center justify-between gap-4">
+          <div class="mt-4 flex items-center justify-end gap-4">
             <RouterLink
               :to="`/avisos/${notice.id}`"
-              class="ml-auto text-sm font-semibold text-brand-700 transition hover:text-brand-800"
+              class="inline-flex items-center rounded-lg border border-amber-300/80 bg-white/75 px-4 py-2 text-sm font-semibold text-amber-950 transition hover:bg-white dark:border-amber-300/30 dark:bg-slate-950/35 dark:text-amber-50 dark:hover:bg-slate-950/55"
             >
               Ver detalhes
             </RouterLink>

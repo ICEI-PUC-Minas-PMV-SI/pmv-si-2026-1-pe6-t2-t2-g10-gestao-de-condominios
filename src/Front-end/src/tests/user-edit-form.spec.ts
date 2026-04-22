@@ -63,4 +63,37 @@ describe('UserEditForm', () => {
       ],
     ])
   })
+
+  it('mostra o campo de apartamento para um morador editável', () => {
+    const wrapper = mount(UserEditForm, {
+      props: {
+        user: {
+          id: 7,
+          nome: 'Usuário Teste',
+          email: 'usuario@teste.com',
+          cpf: '12345678901',
+          telefone: '(31) 99999-0000',
+          perfil: 'Morador',
+          idApartamento: 10,
+          ativo: true,
+          dataCriacao: '2025-01-01T00:00:00Z',
+          dataUltimoLogin: '2025-01-02T00:00:00Z',
+        },
+        apartments: [],
+        allowedProfiles: [{ label: 'Morador', value: 1 as const, role: 'Morador' as const }],
+        permissions: {
+          canEditNome: true,
+          canEditEmail: true,
+          canEditTelefone: true,
+          canEditSenha: true,
+          canEditPerfil: true,
+          canEditApartamento: true,
+          canEditAtivo: true,
+        },
+      },
+    })
+
+    expect(wrapper.find('select').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Não há apartamentos disponíveis para vincular no momento.')
+  })
 })

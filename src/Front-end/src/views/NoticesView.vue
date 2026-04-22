@@ -3,6 +3,7 @@ import { computed, onMounted, shallowRef, useTemplateRef } from 'vue'
 
 import NoticeCreateForm from '@/components/notices/NoticeCreateForm.vue'
 import NoticeList from '@/components/notices/NoticeList.vue'
+import PaginationControls from '@/components/shared/PaginationControls.vue'
 import { NOTICE_MANAGER_ROLES } from '@/constants/roles'
 import { useNoticeBoard } from '@/composables/use-notice-board'
 import { AppError } from '@/services/http/errors'
@@ -18,10 +19,14 @@ const {
   notices,
   loading,
   saving,
-  highlightNotice,
+  page: noticesPage,
+  pageSize: noticesPageSize,
+  totalItems: noticesTotalItems,
+  totalPages: noticesTotalPages,
   loadNotices,
   publishNotice,
   archiveNotice,
+  setHighlight,
   removeHighlight,
 } = useNoticeBoard()
 
@@ -30,11 +35,11 @@ const contentGridClass = computed(() =>
   canManageNotices.value ? 'grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]' : 'space-y-4',
 )
 
-async function refreshBoard() {
+async function loadNoticePage(nextPage = noticesPage.value) {
   errorMessage.value = ''
 
   try {
-    await loadNotices()
+    await loadNotices({ page: nextPage })
   } catch (error) {
     if (error instanceof AppError) {
       errorMessage.value = error.message
@@ -51,13 +56,15 @@ async function handleCreate(payload: CriacaoComunicadoRequest) {
   try {
     await publishNotice(payload)
     formRef.value?.resetForm()
+    await loadNoticePage(1)
   } catch (error) {
     if (error instanceof AppError && error.type === 'validation') {
       fieldErrors.value = error.fieldErrors ?? {}
       return
     }
 
-    errorMessage.value = error instanceof AppError ? error.message : 'Não foi possível publicar o comunicado.'
+    errorMessage.value =
+      error instanceof AppError ? error.message : 'Não foi possível publicar o comunicado.'
   }
 }
 
@@ -66,8 +73,22 @@ async function handleArchive(id: number) {
 
   try {
     await archiveNotice(id)
+    await loadNoticePage(noticesPage.value)
   } catch (error) {
-    errorMessage.value = error instanceof AppError ? error.message : 'Não foi possível desativar o comunicado.'
+    errorMessage.value =
+      error instanceof AppError ? error.message : 'Não foi possível desativar o comunicado.'
+  }
+}
+
+async function handleSetHighlight(id: number) {
+  errorMessage.value = ''
+
+  try {
+    await setHighlight(id)
+    await loadNoticePage(noticesPage.value)
+  } catch (error) {
+    errorMessage.value =
+      error instanceof AppError ? error.message : 'Não foi possível definir o destaque.'
   }
 }
 
@@ -76,12 +97,14 @@ async function handleRemoveHighlight(id: number) {
 
   try {
     await removeHighlight(id)
+    await loadNoticePage(noticesPage.value)
   } catch (error) {
-    errorMessage.value = error instanceof AppError ? error.message : 'Não foi possível remover o destaque.'
+    errorMessage.value =
+      error instanceof AppError ? error.message : 'Não foi possível remover o destaque.'
   }
 }
 
-onMounted(refreshBoard)
+onMounted(loadNoticePage)
 </script>
 
 <template>
@@ -96,16 +119,9 @@ onMounted(refreshBoard)
 
     <div :class="contentGridClass">
       <section class="surface-card p-6">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
           <div>
             <h3 class="font-display text-2xl text-ink-950">Mural</h3>
-          </div>
-
-          <div
-            v-if="highlightNotice"
-            class="rounded-lg border border-brand-200 bg-brand-50 px-4 py-3 text-sm font-medium text-brand-800"
-          >
-            Destaque atual: {{ highlightNotice.titulo }}
           </div>
         </div>
 
@@ -125,18 +141,24 @@ onMounted(refreshBoard)
             :notices="notices"
             :can-manage="canManageNotices"
             @archive="handleArchive"
+            @set-highlight="handleSetHighlight"
             @remove-highlight="handleRemoveHighlight"
+          />
+
+          <PaginationControls
+            v-if="noticesTotalPages > 1"
+            :page="noticesPage"
+            :page-size="noticesPageSize"
+            :total-items="noticesTotalItems"
+            :total-pages="noticesTotalPages"
+            :loading="loading"
+            @change="loadNoticePage"
           />
         </div>
       </section>
 
       <aside v-if="canManageNotices" class="surface-card p-6">
-        <div class="space-y-6">
-          <div v-if="highlightNotice" class="rounded-xl border border-brand-200 bg-brand-50/60 p-4">
-            <p class="text-xs uppercase tracking-[0.2em] text-brand-700">Em destaque</p>
-            <p class="mt-2 text-sm font-semibold text-ink-950">{{ highlightNotice.titulo }}</p>
-          </div>
-
+        <div>
           <div>
             <h3 class="font-display text-2xl text-ink-950">Novo comunicado</h3>
           </div>

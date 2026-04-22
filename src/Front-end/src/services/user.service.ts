@@ -2,6 +2,8 @@ import { api } from './http/client'
 import type {
   AtualizacaoUsuarioRequest,
   CadastroRequest,
+  PagedResponse,
+  PaginationQuery,
   UsuarioResponse,
 } from '@/types/api'
 
@@ -10,8 +12,8 @@ export async function fetchUserById(id: number) {
   return data
 }
 
-export async function fetchUsers() {
-  const { data } = await api.get<UsuarioResponse[]>('/usuarios')
+export async function fetchUsers(params: PaginationQuery = {}) {
+  const { data } = await api.get<PagedResponse<UsuarioResponse>>('/usuarios', { params })
   return data
 }
 

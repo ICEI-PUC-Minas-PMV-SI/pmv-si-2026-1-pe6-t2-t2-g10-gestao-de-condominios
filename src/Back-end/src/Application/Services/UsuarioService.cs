@@ -1,4 +1,5 @@
 using SmartSindico.Application.DTOs.Autenticacao;
+using SmartSindico.Application.DTOs.Common;
 using SmartSindico.Application.Interfaces.Persistence;
 using SmartSindico.Application.Interfaces.Security;
 using SmartSindico.Application.Interfaces.Services;
@@ -6,6 +7,7 @@ using SmartSindico.Application.DTOs.Usuarios;
 using SmartSindico.Application.Interfaces.Validation;
 using SmartSindico.Application.Results;
 using SmartSindico.Domain.Entities;
+using SmartSindico.Domain.Enums;
 using SmartSindico.Domain.ValueObjects;
 
 namespace SmartSindico.Application.Services;
@@ -69,10 +71,29 @@ public class UsuarioService : IUsuarioService
         return Result<UsuarioResponse>.Success(ParaResposta(usuario));
     }
 
-    public async Task<Result<IReadOnlyList<UsuarioResponse>>> ObterTodosAsync(CancellationToken cancellationToken = default)
+    public async Task<Result<PaginacaoResponse<UsuarioResponse>>> ObterTodosAsync(
+        PerfilUsuario perfilAtual,
+        int idUsuarioAtual,
+        string? search,
+        PaginacaoRequest paginacao,
+        CancellationToken cancellationToken = default)
     {
-        var usuarios = await _usuarioRepository.ObterTodosAsync(cancellationToken);
-        return Result<IReadOnlyList<UsuarioResponse>>.Success(usuarios.Select(ParaResposta).ToList());
+        var page = paginacao.GetNormalizedPage();
+        var pageSize = paginacao.GetNormalizedPageSize();
+        var (usuarios, totalItems, currentPage) = await _usuarioRepository.ObterVisiveisPaginadosAsync(
+            perfilAtual,
+            idUsuarioAtual,
+            search,
+            page,
+            pageSize,
+            cancellationToken);
+
+        return Result<PaginacaoResponse<UsuarioResponse>>.Success(
+            PaginacaoResponse<UsuarioResponse>.Create(
+                usuarios.Select(ParaResposta).ToList(),
+                currentPage,
+                pageSize,
+                totalItems));
     }
 
     public async Task<Result<UsuarioResponse>> ObterPorIdAsync(int id, CancellationToken cancellationToken = default)

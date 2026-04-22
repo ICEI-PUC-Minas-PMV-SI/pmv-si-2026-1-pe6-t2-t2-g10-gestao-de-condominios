@@ -13,15 +13,29 @@ public sealed class ComunicadoRepository : IComunicadoRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyList<Comunicado>> ObterAtivosAsync(CancellationToken cancellationToken = default)
+    public async Task<(IReadOnlyList<Comunicado> Items, int TotalItems, int Page)> ObterAtivosPaginadosAsync(
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Comunicados
+        var query = _dbContext.Comunicados
             .AsNoTracking()
             .Include(comunicado => comunicado.Autor)
             .Where(comunicado => comunicado.Ativo)
             .OrderByDescending(comunicado => comunicado.Destaque)
-            .ThenByDescending(comunicado => comunicado.DataPublicacao)
+            .ThenByDescending(comunicado => comunicado.DataPublicacao);
+
+        var totalItems = await query.CountAsync(cancellationToken);
+        var totalPages = totalItems == 0
+            ? 1
+            : (int)Math.Ceiling(totalItems / (double)pageSize);
+        var currentPage = Math.Min(Math.Max(page, 1), totalPages);
+        var items = await query
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
+
+        return (items, totalItems, currentPage);
     }
 
     public async Task<Comunicado?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default)

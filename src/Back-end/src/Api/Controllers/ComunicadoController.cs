@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSindico.Api.Autorizacao;
 using SmartSindico.Application.DTOs.Comunicados;
+using SmartSindico.Application.DTOs.Common;
 using SmartSindico.Application.Interfaces.Services;
 
 namespace SmartSindico.Api.Controllers;
@@ -19,10 +20,10 @@ public class ComunicadoController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType<IReadOnlyList<ComunicadoResponse>>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ObterAtivos(CancellationToken cancellationToken)
+    [ProducesResponseType<PaginacaoResponse<ComunicadoResponse>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> ObterAtivos([FromQuery] PaginacaoRequest paginacao, CancellationToken cancellationToken)
     {
-        return FromResult(await _comunicadoService.ObterAtivosAsync(cancellationToken));
+        return FromResult(await _comunicadoService.ObterAtivosAsync(paginacao, cancellationToken));
     }
 
     [HttpGet("{id:int}")]

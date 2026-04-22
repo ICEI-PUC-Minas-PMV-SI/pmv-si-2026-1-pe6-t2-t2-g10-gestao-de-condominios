@@ -1,6 +1,7 @@
 using SmartSindico.Application.Interfaces.Persistence;
 using SmartSindico.Application.Interfaces.Services;
 using SmartSindico.Application.DTOs.Comunicados;
+using SmartSindico.Application.DTOs.Common;
 using SmartSindico.Application.Interfaces.Validation;
 using SmartSindico.Application.Results;
 using SmartSindico.Domain.Entities;
@@ -23,10 +24,23 @@ public class ComunicadoService : IComunicadoService
         _criacaoValidator = criacaoValidator;
     }
 
-    public async Task<Result<IReadOnlyList<ComunicadoResponse>>> ObterAtivosAsync(CancellationToken cancellationToken = default)
+    public async Task<Result<PaginacaoResponse<ComunicadoResponse>>> ObterAtivosAsync(
+        PaginacaoRequest paginacao,
+        CancellationToken cancellationToken = default)
     {
-        var comunicados = await _comunicadoRepository.ObterAtivosAsync(cancellationToken);
-        return Result<IReadOnlyList<ComunicadoResponse>>.Success(comunicados.Select(ParaResposta).ToList());
+        var page = paginacao.GetNormalizedPage();
+        var pageSize = paginacao.GetNormalizedPageSize();
+        var (comunicados, totalItems, currentPage) = await _comunicadoRepository.ObterAtivosPaginadosAsync(
+            page,
+            pageSize,
+            cancellationToken);
+
+        return Result<PaginacaoResponse<ComunicadoResponse>>.Success(
+            PaginacaoResponse<ComunicadoResponse>.Create(
+                comunicados.Select(ParaResposta).ToList(),
+                currentPage,
+                pageSize,
+                totalItems));
     }
 
     public async Task<Result<ComunicadoResponse>> ObterPorIdAsync(int id, CancellationToken cancellationToken = default)

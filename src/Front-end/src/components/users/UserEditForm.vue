@@ -76,12 +76,15 @@ const form = reactive<EditableFormState>({
   ativo: true,
 })
 
+const selectedProfileValue = computed(() => Number(form.perfil) as AtualizacaoUsuarioRequest['perfil'])
+
 const selectedRole = computed<UserRole>(() => {
-  const option = props.allowedProfiles.find((item) => item.value === form.perfil)
+  const option = props.allowedProfiles.find((item) => item.value === selectedProfileValue.value)
   return option?.role ?? props.user.perfil
 })
 
 const shouldShowApartment = computed(() => selectedRole.value === USER_ROLES.Morador)
+const hasApartments = computed(() => props.apartments.length > 0)
 
 watch(
   () => props.user,
@@ -109,7 +112,7 @@ function handleSubmit() {
     email: form.email.trim(),
     senha: form.senha.trim() ? form.senha.trim() : null,
     telefone: form.telefone?.trim() ? form.telefone.trim() : null,
-    perfil: form.perfil,
+    perfil: selectedProfileValue.value,
     idApartamento: shouldShowApartment.value ? form.idApartamento : null,
     ativo: form.ativo,
   })
@@ -125,7 +128,7 @@ function handleSubmit() {
         v-model="form.nome"
         type="text"
         :disabled="!permissions.canEditNome"
-        class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500 disabled:cursor-not-allowed disabled:bg-slate-100"
+        class="theme-control"
         placeholder="Informe o nome completo"
       >
       <p v-if="fieldErrors.nome" class="text-sm text-red-700">{{ fieldErrors.nome[0] }}</p>
@@ -139,7 +142,7 @@ function handleSubmit() {
           v-model="form.email"
           type="email"
           :disabled="!permissions.canEditEmail"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500 disabled:cursor-not-allowed disabled:bg-slate-100"
+          class="theme-control"
           placeholder="usuario@dominio.com"
         >
         <p v-if="fieldErrors.email" class="text-sm text-red-700">{{ fieldErrors.email[0] }}</p>
@@ -147,7 +150,7 @@ function handleSubmit() {
 
       <div class="space-y-2">
         <label class="text-sm font-semibold text-ink-950">CPF</label>
-        <div class="rounded-lg border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-ink-700">
+        <div class="theme-static-field">
           {{ user.cpf }}
         </div>
       </div>
@@ -161,7 +164,7 @@ function handleSubmit() {
           v-model="form.telefone"
           type="text"
           :disabled="!permissions.canEditTelefone"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500 disabled:cursor-not-allowed disabled:bg-slate-100"
+          class="theme-control"
           placeholder="Informe um telefone"
         >
         <p v-if="fieldErrors.telefone" class="text-sm text-red-700">{{ fieldErrors.telefone[0] }}</p>
@@ -174,7 +177,7 @@ function handleSubmit() {
           v-model="form.senha"
           type="password"
           :disabled="!permissions.canEditSenha"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500 disabled:cursor-not-allowed disabled:bg-slate-100"
+          class="theme-control"
           placeholder="Preencha apenas se quiser alterar"
         >
         <p v-if="fieldErrors.senha" class="text-sm text-red-700">{{ fieldErrors.senha[0] }}</p>
@@ -187,7 +190,7 @@ function handleSubmit() {
         <select
           v-if="permissions.canEditPerfil"
           v-model="form.perfil"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950"
+          class="theme-control"
         >
           <option
             v-for="profile in allowedProfiles"
@@ -199,7 +202,7 @@ function handleSubmit() {
         </select>
         <div
           v-else
-          class="rounded-lg border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-ink-700"
+          class="theme-static-field"
         >
           {{ formatRole(user.perfil) }}
         </div>
@@ -211,23 +214,29 @@ function handleSubmit() {
         <select
           v-if="permissions.canEditApartamento"
           v-model="form.idApartamento"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950"
+          class="theme-control"
+          :disabled="!hasApartments"
         >
-          <option :value="null">Selecione um apartamento</option>
+          <option :value="null">
+            {{ hasApartments ? 'Selecione um apartamento' : 'Nenhum apartamento disponível' }}
+          </option>
           <option
             v-for="apartment in apartments"
             :key="apartment.id"
             :value="apartment.id"
           >
-            {{ apartment.bloco }} - {{ apartment.numero }} - {{ apartment.tipo }}
+            {{ apartment.numero }}
           </option>
         </select>
         <div
           v-else
-          class="rounded-lg border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-ink-700"
+          class="theme-static-field"
         >
           {{ formatApartment(user.idApartamento) }}
         </div>
+        <p v-if="permissions.canEditApartamento && !hasApartments" class="text-sm text-ink-700">
+          Não há apartamentos disponíveis para vincular no momento.
+        </p>
         <p v-if="fieldErrors.idApartamento" class="text-sm text-red-700">{{ fieldErrors.idApartamento[0] }}</p>
       </div>
     </div>
@@ -236,30 +245,31 @@ function handleSubmit() {
       <label class="text-sm font-semibold text-ink-950">Status</label>
       <label
         v-if="permissions.canEditAtivo"
-        class="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink-950"
+        class="flex items-center gap-3 rounded-lg border px-4 py-3 text-sm"
+        :style="{ borderColor: 'var(--panel-border-strong)', background: 'var(--panel-bg)', color: 'var(--text-primary)' }"
       >
         <input v-model="form.ativo" type="checkbox" class="h-4 w-4 rounded border-slate-300 text-brand-600">
         <span>{{ form.ativo ? 'Usuário ativo' : 'Usuário inativo' }}</span>
       </label>
       <div
         v-else
-        class="rounded-lg border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-ink-700"
+        class="theme-static-field"
       >
         {{ user.ativo ? 'Ativo' : 'Inativo' }}
       </div>
     </div>
 
-    <p v-if="serverMessage" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <p v-if="serverMessage" class="theme-danger-banner">
       {{ serverMessage }}
     </p>
 
-    <p v-if="successMessage" class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+    <p v-if="successMessage" class="theme-success-banner">
       {{ successMessage }}
     </p>
 
     <button
       type="submit"
-      class="soft-ring rounded-lg bg-ink-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-ink-800 disabled:cursor-not-allowed disabled:bg-ink-700/60"
+      class="theme-primary-button"
       :disabled="loading"
     >
       {{ loading ? 'Salvando...' : 'Salvar alterações' }}

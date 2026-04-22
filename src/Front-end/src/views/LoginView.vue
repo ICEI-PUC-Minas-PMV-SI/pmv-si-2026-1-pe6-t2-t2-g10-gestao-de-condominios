@@ -3,6 +3,7 @@ import { shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import LoginForm from '@/components/auth/LoginForm.vue'
+import ThemeToggle from '@/components/layout/ThemeToggle.vue'
 import { AppError } from '@/services/http/errors'
 import { useAuthStore } from '@/stores/auth'
 import type { LoginRequest } from '@/types/api'
@@ -46,58 +47,71 @@ async function handleLogin(payload: LoginRequest) {
 
 <template>
   <div class="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+    <div class="mx-auto mb-4 flex max-w-[1280px] justify-end">
+      <ThemeToggle />
+    </div>
+
     <div class="mx-auto grid min-h-[calc(100vh-3rem)] max-w-[1280px] gap-4 lg:grid-cols-[minmax(0,1fr)_460px]">
-      <section class="flex rounded-2xl bg-ink-950 p-8 text-white shadow-[0_24px_60px_rgba(15,23,42,0.24)] lg:p-12">
+      <section
+        class="surface-card order-2 flex p-6 lg:order-1 lg:p-12"
+        :style="{ background: 'var(--sidebar-bg)', color: 'var(--sidebar-text)' }"
+      >
         <div class="flex w-full flex-col justify-between">
           <div class="space-y-6">
             <div class="space-y-3">
-              <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.28em]" :style="{ color: 'var(--sidebar-muted)' }">
                 SmartSindico
               </p>
               <h1 class="font-display text-4xl leading-tight sm:text-5xl">
                 Acesso ao ambiente institucional
               </h1>
-              <p class="max-w-xl text-sm leading-7 text-slate-300 sm:text-base">
+              <p class="max-w-xl text-sm leading-7 sm:text-base" :style="{ color: 'var(--sidebar-muted)' }">
                 Área destinada à autenticação de usuários autorizados.
               </p>
             </div>
 
             <div class="grid gap-4 md:max-w-xl">
-              <div class="rounded-xl border border-white/10 bg-white/5 p-5">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              <div
+                class="rounded-xl border p-5"
+                :style="{ borderColor: 'var(--sidebar-border)', background: 'var(--secondary-button-inverted-bg)' }"
+              >
+                <p class="text-[11px] font-semibold uppercase tracking-[0.22em]" :style="{ color: 'var(--sidebar-muted)' }">
                   Orientação
                 </p>
-                <p class="mt-3 text-sm leading-7 text-slate-100">
+                <p class="mt-3 text-sm leading-7">
                   Utilize suas credenciais para iniciar a sessão e acessar os recursos disponíveis para o seu perfil.
                 </p>
               </div>
 
-              <div class="rounded-xl border border-white/10 bg-white/5 p-5">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              <div
+                class="rounded-xl border p-5"
+                :style="{ borderColor: 'var(--sidebar-border)', background: 'var(--secondary-button-inverted-bg)' }"
+              >
+                <p class="text-[11px] font-semibold uppercase tracking-[0.22em]" :style="{ color: 'var(--sidebar-muted)' }">
                   Suporte
                 </p>
-                <p class="mt-3 text-sm leading-7 text-slate-100">
+                <p class="mt-3 text-sm leading-7">
                   Em caso de indisponibilidade ou divergência de acesso, contate a administração responsável.
                 </p>
               </div>
             </div>
           </div>
 
-          <div class="border-t border-white/10 pt-6">
-            <p class="text-xs uppercase tracking-[0.22em] text-slate-400">Ambiente</p>
-            <p class="mt-2 text-sm leading-6 text-slate-200">
+          <div class="border-t pt-6" :style="{ borderColor: 'var(--sidebar-border)' }">
+            <p class="text-xs uppercase tracking-[0.22em]" :style="{ color: 'var(--sidebar-muted)' }">Ambiente</p>
+            <p class="mt-2 text-sm leading-6" :style="{ color: 'var(--sidebar-muted)' }">
               Sessão autenticada, navegação protegida e acesso controlado conforme permissões vigentes.
             </p>
           </div>
         </div>
       </section>
 
-      <section class="surface-card flex items-center p-6 sm:p-8">
+      <section class="surface-card order-1 flex items-center p-6 sm:p-8 lg:order-2">
         <div class="mx-auto w-full max-w-sm space-y-8">
           <div class="space-y-3">
             <p class="section-kicker">Identificação</p>
             <h2 class="font-display text-3xl text-ink-950">Entrar</h2>
-            <p class="text-sm leading-6 text-ink-700">
+            <p class="text-sm leading-6 text-app-secondary">
               Informe seus dados de acesso para continuar.
             </p>
           </div>

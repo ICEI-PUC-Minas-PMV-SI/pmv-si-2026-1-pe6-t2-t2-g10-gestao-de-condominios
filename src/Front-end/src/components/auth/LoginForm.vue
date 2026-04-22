@@ -56,7 +56,7 @@ function handleSubmit() {
         v-model="form.email"
         type="email"
         autocomplete="email"
-        class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+        class="theme-control"
         placeholder="Informe seu e-mail"
       >
       <p v-if="mergedErrors.email" class="text-sm text-red-700">{{ mergedErrors.email }}</p>
@@ -69,19 +69,19 @@ function handleSubmit() {
         v-model="form.senha"
         type="password"
         autocomplete="current-password"
-        class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+        class="theme-control"
         placeholder="Informe sua senha"
       >
       <p v-if="mergedErrors.senha" class="text-sm text-red-700">{{ mergedErrors.senha }}</p>
     </div>
 
-    <p v-if="localMessage || serverMessage" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <p v-if="localMessage || serverMessage" class="theme-danger-banner">
       {{ localMessage || serverMessage }}
     </p>
 
     <button
       type="submit"
-      class="soft-ring w-full rounded-lg bg-ink-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-ink-800 disabled:cursor-not-allowed disabled:bg-ink-700/60"
+      class="theme-primary-button w-full"
       :disabled="loading"
     >
       {{ loading ? 'Entrando...' : 'Entrar' }}

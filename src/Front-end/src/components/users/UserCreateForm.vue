@@ -44,12 +44,15 @@ const form = reactive<CadastroRequest>({
   idApartamento: null,
 })
 
+const selectedProfileValue = computed(() => Number(form.perfil) as CadastroRequest['perfil'])
+
 const selectedRole = computed<UserRole>(() => {
-  const option = props.allowedProfiles.find((item) => item.value === form.perfil)
+  const option = props.allowedProfiles.find((item) => item.value === selectedProfileValue.value)
   return option?.role ?? USER_ROLES.Morador
 })
 
 const shouldShowApartment = computed(() => selectedRole.value === USER_ROLES.Morador)
+const hasApartments = computed(() => props.apartments.length > 0)
 
 watch(shouldShowApartment, (value) => {
   if (!value) {
@@ -74,7 +77,7 @@ function handleSubmit() {
     senha: form.senha,
     cpf: form.cpf.trim(),
     telefone: form.telefone?.trim() ? form.telefone.trim() : null,
-    perfil: form.perfil,
+    perfil: selectedProfileValue.value,
     idApartamento: shouldShowApartment.value ? form.idApartamento : null,
   })
 }
@@ -92,7 +95,7 @@ defineExpose({
         id="nome"
         v-model="form.nome"
         type="text"
-        class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+        class="theme-control"
         placeholder="Informe o nome completo"
       >
       <p v-if="fieldErrors.nome" class="text-sm text-red-700">{{ fieldErrors.nome[0] }}</p>
@@ -105,7 +108,7 @@ defineExpose({
           id="email"
           v-model="form.email"
           type="email"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+          class="theme-control"
           placeholder="usuario@dominio.com"
         >
         <p v-if="fieldErrors.email" class="text-sm text-red-700">{{ fieldErrors.email[0] }}</p>
@@ -117,7 +120,7 @@ defineExpose({
           id="senha"
           v-model="form.senha"
           type="password"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+          class="theme-control"
           placeholder="Defina uma senha"
         >
         <p v-if="fieldErrors.senha" class="text-sm text-red-700">{{ fieldErrors.senha[0] }}</p>
@@ -131,7 +134,7 @@ defineExpose({
           id="cpf"
           v-model="form.cpf"
           type="text"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+          class="theme-control"
           placeholder="Informe o CPF"
         >
         <p v-if="fieldErrors.cpf" class="text-sm text-red-700">{{ fieldErrors.cpf[0] }}</p>
@@ -143,7 +146,7 @@ defineExpose({
           id="telefone"
           v-model="form.telefone"
           type="text"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950 placeholder:text-ink-500"
+          class="theme-control"
           placeholder="Informe um telefone"
         >
         <p v-if="fieldErrors.telefone" class="text-sm text-red-700">{{ fieldErrors.telefone[0] }}</p>
@@ -156,7 +159,7 @@ defineExpose({
         <select
           id="perfil"
           v-model="form.perfil"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950"
+          class="theme-control"
         >
           <option
             v-for="profile in allowedProfiles"
@@ -174,32 +177,38 @@ defineExpose({
         <select
           id="apartamento"
           v-model="form.idApartamento"
-          class="soft-ring w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink-950"
+          class="theme-control"
+          :disabled="!hasApartments"
         >
-          <option :value="null">Selecione um apartamento</option>
+          <option :value="null">
+            {{ hasApartments ? 'Selecione um apartamento' : 'Nenhum apartamento disponível' }}
+          </option>
           <option
             v-for="apartment in apartments"
             :key="apartment.id"
             :value="apartment.id"
           >
-            {{ apartment.bloco }} - {{ apartment.numero }} - {{ apartment.tipo }}
+            {{ apartment.numero }}
           </option>
         </select>
+        <p v-if="!hasApartments" class="text-sm text-ink-700">
+          Não há apartamentos disponíveis para vincular no momento.
+        </p>
         <p v-if="fieldErrors.idApartamento" class="text-sm text-red-700">{{ fieldErrors.idApartamento[0] }}</p>
       </div>
     </div>
 
-    <p v-if="serverMessage" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <p v-if="serverMessage" class="theme-danger-banner">
       {{ serverMessage }}
     </p>
 
-    <p v-if="successMessage" class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+    <p v-if="successMessage" class="theme-success-banner">
       {{ successMessage }}
     </p>
 
     <button
       type="submit"
-      class="soft-ring rounded-lg bg-ink-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-ink-800 disabled:cursor-not-allowed disabled:bg-ink-700/60"
+      class="theme-primary-button"
       :disabled="loading"
     >
       {{ loading ? 'Salvando...' : 'Cadastrar usuário' }}

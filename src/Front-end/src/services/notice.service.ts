@@ -4,10 +4,12 @@ import type {
   AtualizacaoStatusComunicadoRequest,
   ComunicadoResponse,
   CriacaoComunicadoRequest,
+  PagedResponse,
+  PaginationQuery,
 } from '@/types/api'
 
-export async function fetchNotices() {
-  const { data } = await api.get<ComunicadoResponse[]>('/comunicados')
+export async function fetchNotices(params: PaginationQuery = {}) {
+  const { data } = await api.get<PagedResponse<ComunicadoResponse>>('/comunicados', { params })
   return data
 }
 

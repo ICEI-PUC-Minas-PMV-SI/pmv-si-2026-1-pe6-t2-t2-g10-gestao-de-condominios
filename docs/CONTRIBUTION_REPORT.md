@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 22/04/2026 02:33
+**Última atualização:** 27/04/2026 00:19
 
 ---
 
@@ -13,27 +13,27 @@
 | Gabriela              |         1 |       382 |         0 |         12 |              0 |               0 |
 | Gabriela Rios         |         5 |        42 |        52 |          2 |              5 |               2 |
 | LeandroAugustoSantos  |        39 |       262 |       164 |         10 |             33 |               4 |
-| github-actions[bot]   |        40 |       244 |       241 |          3 |             40 |               1 |
+| github-actions[bot]   |        41 |       257 |       252 |          3 |             41 |               1 |
 | github-classroom[bot] |         1 |      2152 |         0 |         45 |              1 |              13 |
 
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-04-15**: Fellipe Rodrigues: 9, Felpa147: 2, github-actions[bot]: 6
+**2026-04-20**: Fellipe Rodrigues: 9, Felpa147: 1, github-actions[bot]: 5
 
-**2026-04-08**: Fellipe Rodrigues: 5, Felpa147: 6, Gabriela: 1, LeandroAugustoSantos: 15, github-actions[bot]: 22
+**2026-04-13**: Felpa147: 2, github-actions[bot]: 3
 
-**2026-04-01**: Fellipe Rodrigues: 1, Felpa147: 4, LeandroAugustoSantos: 3, github-actions[bot]: 6
+**2026-04-06**: Fellipe Rodrigues: 6, Felpa147: 9, Gabriela: 1, LeandroAugustoSantos: 18, github-actions[bot]: 26
 
-**2026-03-25**: Fellipe Rodrigues: 1, Felpa147: 4, LeandroAugustoSantos: 3, github-actions[bot]: 6
+**2026-03-30**: LeandroAugustoSantos: 2, github-actions[bot]: 3
 
-**2026-03-18**: Fellipe Rodrigues: 2
+**2026-03-23**: Fellipe Rodrigues: 3, Felpa147: 4, LeandroAugustoSantos: 1, github-actions[bot]: 4
 
-**2026-03-11**: Felpa147: 5, LeandroAugustoSantos: 8
+**2026-03-09**: Felpa147: 5, LeandroAugustoSantos: 8
 
-**2026-03-04**: Felpa147: 4, Gabriela Rios: 5, LeandroAugustoSantos: 10
+**2026-03-02**: Felpa147: 4, Gabriela Rios: 5, LeandroAugustoSantos: 10
 
-**2026-02-18**: github-classroom[bot]: 1
+**2026-02-16**: github-classroom[bot]: 1
 
 
 

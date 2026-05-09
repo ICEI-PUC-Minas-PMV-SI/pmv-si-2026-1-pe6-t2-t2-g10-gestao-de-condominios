@@ -1,4 +1,4 @@
-@SmartSindico_HostAddress = http://localhost:5053
+@SmartSindico_HostAddress = http://localhost:7107
 @TokenAcesso = COLE_SEU_TOKEN_AQUI
 @UsuarioId = COLE_O_ID_DO_USUARIO_AQUI
 @ComunicadoId = COLE_O_ID_DO_COMUNICADO_AQUI

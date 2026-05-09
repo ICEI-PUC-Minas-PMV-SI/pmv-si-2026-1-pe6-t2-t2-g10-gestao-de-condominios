@@ -22,4 +22,5 @@ public class Apartamento
     {
         Numero = numero; Bloco = bloco; Andar = andar; Tipo = tipo;
     }
+    public void DefinirStatus(bool ativo) => Ativo = ativo;
 }

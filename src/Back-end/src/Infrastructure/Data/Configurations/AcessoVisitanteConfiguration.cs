@@ -11,5 +11,10 @@ public class AcessoVisitanteConfiguration : IEntityTypeConfiguration<AcessoVisit
         builder.ToTable("AcessoVisitantes");
         builder.HasKey(a => a.Id);
         builder.Property(a => a.DataHoraEntrada).IsRequired();
+
+        // ADICIONA ISSO:
+        builder.HasOne(a => a.Visitante)
+               .WithMany(v => v.Acessos)
+               .HasForeignKey(a => a.IdVisitante);
     }
 }

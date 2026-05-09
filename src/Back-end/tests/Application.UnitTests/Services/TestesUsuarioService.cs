@@ -18,6 +18,7 @@ public class TestesUsuarioService
     private readonly Mock<IUsuarioRepository> _repositorioUsuarioMock;
     private readonly Mock<IPasswordHasher> _hashSenhaMock;
     private readonly Mock<IValidator<CadastroRequest>> _validadorCadastroMock;
+    private readonly Mock<IValidator<AtualizacaoUsuarioRequest>> _validadorAtualizacaoMock;
     private readonly UsuarioService _servico;
 
     public TestesUsuarioService()
@@ -25,15 +26,21 @@ public class TestesUsuarioService
         _repositorioUsuarioMock = new Mock<IUsuarioRepository>();
         _hashSenhaMock = new Mock<IPasswordHasher>();
         _validadorCadastroMock = new Mock<IValidator<CadastroRequest>>();
+        _validadorAtualizacaoMock = new Mock<IValidator<AtualizacaoUsuarioRequest>>();
 
         _validadorCadastroMock
             .Setup(v => v.ValidateAsync(It.IsAny<CadastroRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ValidationResult());
 
+        _validadorAtualizacaoMock
+            .Setup(v => v.ValidateAsync(It.IsAny<AtualizacaoUsuarioRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+
         _servico = new UsuarioService(
             _repositorioUsuarioMock.Object,
             _hashSenhaMock.Object,
-            _validadorCadastroMock.Object);
+            _validadorCadastroMock.Object,
+            _validadorAtualizacaoMock.Object);
     }
 
     [Fact]

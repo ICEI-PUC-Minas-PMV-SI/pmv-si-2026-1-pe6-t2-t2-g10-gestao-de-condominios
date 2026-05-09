@@ -12,7 +12,7 @@ public class AcessoVisitante
     public DateTime DataHoraEntrada { get; private set; }
     public DateTime? DataHoraSaida { get; private set; }
     public string Observacao { get; private set; } = string.Empty;
-    public Visitante? Visitante { get; private set; }
+    public Visitante? Visitante { get; set; }
 
     public static AcessoVisitante RegistrarEntrada(int idVisitante, int idApartamento, int idUsuarioApartamento, int idUsuarioPorteiro, int tipoAcesso, int motivoVisita, string observacao)
     {

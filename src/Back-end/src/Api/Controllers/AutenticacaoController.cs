@@ -7,7 +7,7 @@ namespace SmartSindico.Api.Controllers;
 
 [ApiController]
 [Route("api/autenticacao")]
-[Authorize]
+[AllowAnonymous]
 public class AutenticacaoController : ApiControllerBase
 {
     private readonly IAutenticacaoService _autenticacaoService;

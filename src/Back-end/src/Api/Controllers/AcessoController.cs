@@ -1,20 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmartSindico.Application.DTOs.Acessos;
 using SmartSindico.Application.Results;
 using SmartSindico.Domain.Entities;
-using SmartSindico.Domain.ValueObjects;
 using SmartSindico.Infrastructure.Data;
 
 namespace SmartSindico.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class AcessosController(AppDbContext context) : ApiControllerBase
 {
     [HttpPost("Entrada/{cpf}")]
     [ProducesResponseType<AcessoVisitante>(StatusCodes.Status201Created)]
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RegistrarEntrada(string cpf)
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RegistrarEntrada(string cpf, [FromBody] RegistroEntradaRequest request)
     {
         var v = await context.Visitantes.FirstOrDefaultAsync(v => v.Cpf.Value == cpf);
         if (v == null || !v.Ativo)
@@ -22,45 +25,47 @@ public class AcessosController(AppDbContext context) : ApiControllerBase
 
         var aberto = await context.AcessoVisitantes.AnyAsync(a => a.IdVisitante == v.Id && a.DataHoraSaida == null);
         if (aberto)
-            return FromResult(Result<AcessoVisitante>.Failure("Já existe um acesso em aberto", "400", ErrorType.Validation));
+            return FromResult(Result<AcessoVisitante>.Failure("Já existe um acesso em aberto para este visitante.", "400", ErrorType.Validation));
 
-        var acesso = AcessoVisitante.RegistrarEntrada(v.Id, v.IdApartamento, 0, 1, 1, 1, "Entrada manual");
+        var acesso = AcessoVisitante.RegistrarEntrada(
+            v.Id,
+            v.IdApartamento,
+            request.IdUsuarioApartamento,
+            request.IdUsuarioPorteiro,
+            request.TipoAcesso,
+            request.MotivoVisita,
+            request.Observacao ?? string.Empty);
+
         context.AcessoVisitantes.Add(acesso);
         await context.SaveChangesAsync();
-
         return FromResult(Result<AcessoVisitante>.Success(acesso));
     }
 
     [HttpPost("Saida/{cpf}")]
-    [ProducesResponseType<bool>(StatusCodes.Status201Created)]
-    [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
+    [ProducesResponseType<bool>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RegistrarSaida(string cpf)
     {
-
-        var visitante = await context.Visitantes
-         .FirstOrDefaultAsync(v => v.Cpf.Value == cpf);
-
+        var visitante = await context.Visitantes.FirstOrDefaultAsync(v => v.Cpf.Value == cpf);
         if (visitante == null)
             return FromResult(Result<bool>.Failure("Visitante não encontrado.", "404", ErrorType.NotFound));
 
         var acesso = await context.AcessoVisitantes
             .FirstOrDefaultAsync(a => a.IdVisitante == visitante.Id && a.DataHoraSaida == null);
-
         if (acesso == null)
-            return FromResult(Result<bool>.Failure("Não há acesso aberto para esse visitante.", "404", ErrorType.NotFound));
+            return FromResult(Result<bool>.Failure("Não há acesso em aberto para esse visitante.", "404", ErrorType.NotFound));
 
         acesso.RegistrarSaida();
         await context.SaveChangesAsync();
         return FromResult(Result<bool>.Success(true));
     }
 
-    [HttpGet("buscar-acessos-cpf/{cpf}")]
+    [HttpGet("{cpf}")]
     [ProducesResponseType<List<AcessoVisitante>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAcessosPorCPF(string cpf)
     {
         var visitante = await context.Visitantes
-        .FirstOrDefaultAsync(v => v.Cpf.Value == cpf.Trim());
+            .FirstOrDefaultAsync(v => v.Cpf.Value == cpf.Trim());
 
         if (visitante == null)
             return FromResult(Result<List<AcessoVisitante>>.Success(new List<AcessoVisitante>()));
@@ -73,7 +78,7 @@ public class AcessosController(AppDbContext context) : ApiControllerBase
         return FromResult(Result<List<AcessoVisitante>>.Success(acessos));
     }
 
-    [HttpGet("buscar-acessos-abertos")]
+    [HttpGet]
     [ProducesResponseType<List<AcessoVisitante>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAcessosEmAberto()
     {
@@ -84,10 +89,4 @@ public class AcessosController(AppDbContext context) : ApiControllerBase
 
         return FromResult(Result<List<AcessoVisitante>>.Success(abertos));
     }
-
 }
-
-
-
-//cpf teste: 56216959093 
-//teste 2 50081837020

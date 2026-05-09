@@ -41,6 +41,7 @@ public class ComunicadoController : ApiControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    [AllowAnonymous]
     public async Task<IActionResult> Criar([FromBody] CriacaoComunicadoRequest requisicao, CancellationToken cancellationToken)
     {
         if (!TryGetUsuarioAtualId(out var idUsuario))

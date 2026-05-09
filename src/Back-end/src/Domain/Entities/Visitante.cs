@@ -14,6 +14,7 @@ public class Visitante
     public string Observacao { get; private set; } = string.Empty; 
     public bool Ativo { get; private set; } = true;
 
+    [System.Text.Json.Serialization.JsonIgnore]
     public ICollection<AcessoVisitante> Acessos { get; private set; } = new List<AcessoVisitante>();
     public int IdApartamento { get; private set; }
 
@@ -31,4 +32,6 @@ public class Visitante
     }
 
     public void DefinirStatus(bool ativo) => Ativo = ativo;
+
+    
 }

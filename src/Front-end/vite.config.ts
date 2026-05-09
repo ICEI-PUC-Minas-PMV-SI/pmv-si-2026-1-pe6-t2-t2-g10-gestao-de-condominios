@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
 
-const apiTarget = process.env.VITE_API_TARGET ?? 'http://localhost:5053'
+const apiTarget = process.env.VITE_API_TARGET ?? 'https://localhost:7107'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -17,6 +17,7 @@ export default defineConfig({
       '/api': {
         target: apiTarget,
         changeOrigin: true,
+        secure: false,
       },
     },
   },

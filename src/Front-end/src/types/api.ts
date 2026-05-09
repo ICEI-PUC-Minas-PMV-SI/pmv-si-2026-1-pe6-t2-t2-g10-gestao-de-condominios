@@ -120,3 +120,35 @@ export interface SessionSnapshot {
   expiraEmUtc: string
   usuario: PerfilUsuarioResponse
 }
+
+export interface CpfValue {
+  value: string
+}
+
+export interface VisitanteResponse {
+  id: number
+  nome: string
+  cpf: CpfValue
+  telefone: string
+  observacao: string
+  ativo: boolean
+  idApartamento: number
+}
+
+export interface AcessoVisitanteResponse {
+  id: number
+  idVisitante: number
+  idApartamento: number
+  dataHoraEntrada: string
+  dataHoraSaida: string | null
+  observacao: string
+  visitante?: VisitanteResponse
+}
+
+export interface RegistroEntradaRequest {
+  idUsuarioApartamento: number
+  idUsuarioPorteiro: number
+  tipoAcesso: number
+  motivoVisita: number
+  observacao: string
+}

@@ -15,6 +15,9 @@ const navigationItems = computed(() => [
   { label: 'Tela inicial', to: '/' },
   { label: 'Perfil', to: '/perfil' },
   { label: 'Comunicados', to: '/avisos' },
+  { label: 'Portaria', to: '/portaria' },
+  { label: 'Visitantes', to: '/visitantes' },
+  { label: 'Apartamentos', to: '/apartamentos' },
   ...(auth.role === 'Funcionario' || auth.role === 'Sindico'
     ? [{ label: 'Usuários', to: '/usuarios' }]
     : []),

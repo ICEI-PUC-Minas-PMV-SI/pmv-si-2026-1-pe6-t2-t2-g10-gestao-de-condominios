@@ -445,7 +445,17 @@ O processo de deploy consiste em publicar a aplicação no ambiente escolhido, a
 
 ## Testes
 
-### Casos de teste automatizados
+### Estratégia da suíte
+
+Os testes automatizados do backend foram estruturados para validar os fluxos sob responsabilidade desta entrega: autenticação, autorização por perfil, gerenciamento de usuários e comunicados. A suíte combina testes unitários, que isolam services, controllers e handlers de autorização, com testes de integração, que executam a API por meio de `WebApplicationFactory` e verificam o comportamento HTTP real das rotas protegidas.
+
+| Tipo de teste | Quantidade | Ferramentas | Objetivo técnico |
+| --- | ---: | --- | --- |
+| Unitário | 38 | `xUnit`, `Moq` | Validar regras de negócio, contratos de controllers e decisões de autorização sem depender de banco real. |
+| Integração | 6 | `xUnit`, `WebApplicationFactory`, `TestServer`, `EF Core InMemory` | Validar autenticação JWT, autorização, pipeline HTTP e persistência em ambiente controlado. |
+| Total | 44 | Execução via `dotnet test` | Garantir regressão automatizada dos principais fluxos da API. |
+
+### Matriz de casos automatizados
 
 Os casos abaixo registram os testes automatizados relevantes para os fluxos de autenticação, usuários e comunicados. Nos testes unitários, a coluna de rota indica a camada ou action testada. Nos testes de integração, a coluna indica a rota HTTP executada.
 
@@ -496,103 +506,7 @@ Os casos abaixo registram os testes automatizados relevantes para os fluxos de a
 | CT-BE-043 | `TestesIntegracaoApi.cs` | `PATCH /api/usuarios/{id}/ativo` | Funcionário alterando status de morador com `{ "ativo": false }` | Retorna `200 OK` e usuário inativo. |
 | CT-BE-044 | `TestesIntegracaoApi.cs` | `POST /api/comunicados` | Morador tentando criar comunicado | Retorna `403 Forbidden`. |
 
-Os testes do backend do SmartSíndico foram organizados para validar a regra de negócio, a autorização por perfil e o comportamento HTTP da API. A suíte atual está dividida entre testes unitários e testes de integração, usando `xUnit` como framework principal, `Moq` para simulação de dependências nos testes unitários e `WebApplicationFactory` com `Entity Framework Core InMemory` nos testes de integração.
-
-### 1. Testes unitários
-
-Os testes unitários verificam unidades isoladas da aplicação, sem acesso a banco real. Nesse grupo, repositórios, geração de token, hash de senha e validações são simulados para que o foco fique apenas no comportamento esperado da regra de negócio ou da action testada.
-
-#### `TestesAutenticacaoService` - 4 cenários
-
-- Camada testada: `Application/Services/AutenticacaoService`.
-- Objetivo: garantir que o fluxo de login responda corretamente para entradas válidas e inválidas.
-- Testes implementados:
-  - `EntrarAsync_QuandoValidacaoFalhar_DeveRetornarFalhaDeValidacao`: valida o retorno de erro quando a requisição de login não passa pelas regras de validação.
-  - `EntrarAsync_QuandoCredenciaisForemValidas_DeveAtualizarUltimoLoginERetornarToken`: verifica o login com sucesso, a atualização da data de último login e a geração da resposta autenticada.
-  - `EntrarAsync_QuandoCredenciaisForemInvalidas_DeveRetornarNaoAutorizado`: confirma o retorno de `Unauthorized` quando email ou senha não conferem.
-  - `EntrarAsync_QuandoUsuarioEstiverInativo_DeveRetornarProibido`: garante o bloqueio do acesso quando o usuário está inativo.
-
-#### `TestesComunicadoService` - 4 cenários
-
-- Camada testada: `Application/Services/ComunicadoService`.
-- Objetivo: validar a criação e a alteração de status dos comunicados.
-- Testes implementados:
-  - `CriarAsync_QuandoValidacaoFalhar_DeveRetornarFalhaDeValidacao`: valida a resposta de erro quando a requisição de criação é inválida.
-  - `CriarAsync_QuandoAutorEstiverInativo_DeveRetornarProibido`: garante que um autor inativo não consiga publicar comunicado.
-  - `CriarAsync_QuandoRequisicaoForValida_DeveCriarComunicadoEAssociarAutor`: verifica a criação correta do comunicado e a associação com o autor.
-  - `AtualizarStatusAsync_QuandoComunicadoNaoExistir_DeveRetornarNaoEncontrado`: confirma o retorno `NotFound` quando o comunicado informado não existe.
-
-#### `TestesUsuarioService` - 5 cenários
-
-- Camada testada: `Application/Services/UsuarioService`.
-- Objetivo: validar o cadastro e a alteração de status de usuários.
-- Testes implementados:
-  - `CadastrarAsync_QuandoValidacaoFalhar_DeveRetornarFalhaDeValidacao`: valida o erro retornado quando o cadastro é inválido.
-  - `CadastrarAsync_QuandoEmailJaExistir_DeveRetornarConflito`: garante o retorno `Conflict` para tentativa de cadastro com email já existente.
-  - `CadastrarAsync_QuandoRequisicaoForValida_DevePersistirUsuarioERetornarResposta`: confirma a persistência do usuário e a resposta esperada no cadastro com sucesso.
-  - `AtualizarStatusAsync_QuandoUsuarioNaoExistir_DeveRetornarNaoEncontrado`: valida o retorno `NotFound` ao tentar alterar um usuário inexistente.
-  - `AtualizarStatusAsync_QuandoUsuarioExistir_DeveAtualizarStatusERetornarResposta`: verifica a atualização do status e o retorno da resposta correta.
-
-#### `TestesComunicadoController` - 6 cenários
-
-- Camada testada: `Api/Controllers/ComunicadoController`.
-- Objetivo: validar o contrato HTTP e as restrições declarativas de acesso das rotas de comunicados.
-- Testes implementados:
-  - `Controller_DeveExigirAutenticacao`: valida a presença da proteção de autenticação no controller.
-  - `Criar_DeveExigirRolesDeFuncionarioOuSindico`: confirma a restrição de perfil na action de criação.
-  - `AtualizarStatus_DeveExigirRolesDeFuncionarioOuSindico`: confirma a restrição de perfil na action de atualização de status.
-  - `Criar_QuandoUsuarioAtualNaoEstiverNoToken_DeveRetornarNaoAutorizado`: verifica o retorno `401 Unauthorized` quando o token não identifica o usuário atual.
-  - `Criar_QuandoUsuarioAtualEstiverNoToken_DeveRetornarCriado`: valida o retorno `201 Created` quando a criação ocorre com sucesso.
-  - `AtualizarStatus_QuandoServiceRetornarSucesso_DeveRetornarOk`: garante o retorno `200 OK` quando o service conclui a atualização.
-
-#### `TestesUsuarioController` - 10 cenários
-
-- Camada testada: `Api/Controllers/UsuarioController`.
-- Objetivo: validar o comportamento HTTP das rotas de usuários e o uso do serviço de autorização contextual.
-- Testes implementados:
-  - `Controller_DeveExigirAutenticacaoPorPadrao`: verifica que o controller exige autenticação em suas rotas.
-  - `Cadastrar_DeveExigirRolesDeFuncionarioOuSindico`: valida a restrição de perfis na rota de cadastro.
-  - `ObterTodos_DeveExigirRolesDeFuncionarioOuSindico`: confirma que a listagem geral exige perfil funcionário ou síndico.
-  - `AtualizarStatus_DeveExigirRolesDeFuncionarioOuSindico`: valida a restrição de perfis na atualização de status.
-  - `Cadastrar_QuandoAutorizacaoFalhar_DeveRetornarProibido`: confirma o retorno `403 Forbidden` quando o cadastro não é autorizado.
-  - `Cadastrar_QuandoAutorizacaoForPermitida_DeveRetornarCriado`: verifica o retorno `201 Created` quando o cadastro é autorizado.
-  - `ObterPorId_QuandoAutorizacaoFalhar_DeveRetornarProibido`: confirma o retorno `403 Forbidden` na consulta por id sem permissão.
-  - `ObterPorId_QuandoAutorizacaoForPermitida_DeveRetornarSucesso`: valida a resposta de sucesso na consulta autorizada.
-  - `AtualizarStatus_QuandoAutorizacaoFalhar_DeveRetornarProibido`: confirma o retorno `403 Forbidden` na alteração de status sem permissão.
-  - `AtualizarStatus_QuandoAutorizacaoForPermitida_DeveRetornarOk`: valida o retorno `200 OK` quando a alteração de status é autorizada.
-
-#### `TestesHandlersAutorizacaoUsuario` - 9 cenários
-
-- Camada testada: handlers de autorização em `Api/Autorizacao`.
-- Objetivo: validar as regras contextuais de acesso, ou seja, situações em que a decisão depende do perfil do usuário autenticado e também do recurso acessado.
-- Testes implementados:
-  - `CadastrarUsuario_QuandoFuncionarioCadastrarMorador_DeveAutorizar`: valida que funcionário pode cadastrar morador.
-  - `CadastrarUsuario_QuandoFuncionarioCadastrarSindico_DeveNegar`: valida que funcionário não pode cadastrar síndico.
-  - `VisualizarUsuario_QuandoMoradorVisualizarProprioCadastro_DeveAutorizar`: garante que morador pode ver o próprio cadastro.
-  - `VisualizarUsuario_QuandoMoradorVisualizarOutroCadastro_DeveNegar`: garante que morador não pode ver outro usuário.
-  - `VisualizarUsuario_QuandoFuncionarioVisualizarMorador_DeveAutorizar`: valida o acesso do funcionário ao cadastro de morador.
-  - `AtualizarStatusUsuario_QuandoFuncionarioAtualizarMorador_DeveAutorizar`: confirma que funcionário pode alterar o status de morador.
-  - `AtualizarStatusUsuario_QuandoFuncionarioAtualizarFuncionario_DeveAutorizar`: confirma que funcionário pode alterar o status de outro funcionário.
-  - `AtualizarStatusUsuario_QuandoSindicoAtualizarProprioStatus_DeveAutorizar`: valida a alteração do próprio status pelo síndico.
-  - `AtualizarStatusUsuario_QuandoSindicoAtualizarMorador_DeveAutorizar`: valida que o síndico pode alterar o status de morador.
-
-### 2. Testes de integração
-
-Os testes de integração executam a API em ambiente de teste com `WebApplicationFactory`, `TestServer` e banco em memória. Nesse grupo, o objetivo é validar o comportamento de ponta a ponta, incluindo autenticação JWT, autorização, controllers, services, persistência e respostas HTTP.
-
-#### `TestesIntegracaoApi` - 6 cenários
-
-- Camada testada: aplicação completa, do endpoint HTTP até a persistência em memória.
-- Objetivo: confirmar que os fluxos mais importantes funcionam corretamente quando a API é executada como um todo.
-- Testes implementados:
-  - `Entrar_QuandoCredenciaisForemValidas_DeveRetornarToken`: valida o login completo com retorno de token JWT.
-  - `ListarUsuarios_QuandoNaoAutenticado_DeveRetornarUnauthorized`: confirma que a rota protegida de listagem exige autenticação.
-  - `CadastrarUsuario_QuandoFuncionarioTentarCadastrarSindico_DeveRetornarForbidden`: valida a regra de perfil no cadastro de usuários.
-  - `ObterUsuarioPorId_QuandoMoradorConsultarOutroUsuario_DeveRetornarForbidden`: confirma a regra de visualização por perfil no pipeline HTTP completo.
-  - `AtualizarStatus_QuandoFuncionarioAtualizarMorador_DeveRetornarOk`: valida a atualização de status permitida para funcionário sobre morador.
-  - `CriarComunicado_QuandoMoradorTentarCriar_DeveRetornarForbidden`: confirma o bloqueio de criação de comunicado para morador.
-
-### 3. Cobertura atual da suíte
+### Cobertura e evidência
 
 No estado atual do backend, a suíte automatizada cobre diretamente os fluxos implementados relacionados a:
 
@@ -613,7 +527,7 @@ Na execução registrada, a suíte automatizada do backend apresentou o seguinte
 
 ![Execução dos testes do backend](img/testes-back.png)
 
-### 4. Testes manuais
+### Validação manual complementar
 
 Além da suíte automatizada, os endpoints também podem ser validados manualmente durante o desenvolvimento por meio de:
 

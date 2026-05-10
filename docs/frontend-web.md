@@ -115,6 +115,14 @@ Os testes automatizados do front-end Web foram criados para validar apenas as fu
 
 A suíte utiliza `Vitest`, `@vue/test-utils` e `jsdom`. Foram priorizados testes unitários, testes de services, testes de composables e testes de componentes/telas. As chamadas HTTP são simuladas por mocks, permitindo validar o contrato do front-end com a API sem depender do backend ou do banco de dados.
 
+### Estratégia da suíte
+
+| Tipo de teste | Ferramentas | Objetivo técnico |
+| --- | --- | --- |
+| Services | `Vitest`, mocks do cliente HTTP | Validar rotas consumidas, query params e payloads enviados para a API. |
+| Stores e composables | `Vitest`, Pinia, mocks de services | Validar estado, paginação, filtros e sincronização dos dados carregados. |
+| Componentes e views | `@vue/test-utils`, `jsdom`, Vue Router mockado | Validar renderização, eventos do usuário e navegação dos fluxos principais. |
+
 ### Escopo testado
 
 - Autenticação e sessão;
@@ -124,7 +132,7 @@ A suíte utiliza `Vitest`, `@vue/test-utils` e `jsdom`. Foram priorizados testes
 - Home page com comunicados ativos em destaque;
 - Mural de avisos, incluindo filtro por status, paginação, desativação, reativação e destaque.
 
-### Casos de teste do front-end
+### Matriz de casos automatizados
 
 | ID | Arquivo de teste | Tela, rota ou service | Payload, entrada ou mock | Resultado esperado |
 | --- | --- | --- | --- | --- |
@@ -162,6 +170,8 @@ A suíte utiliza `Vitest`, `@vue/test-utils` e `jsdom`. Foram priorizados testes
 | CT-FE-032 | `pagination-controls.spec.ts` | Componente de paginação | `loading: true` | Bloqueia a troca de página enquanto carrega. |
 
 ### Execução dos testes
+
+Ao todo, a documentação desta etapa registra 21 arquivos de teste e 48 cenários automatizados para o front-end Web.
 
 Os testes são executados no diretório `src/Front-end` com o comando:
 

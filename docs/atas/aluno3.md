@@ -15,8 +15,8 @@
 | 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ✅ | Participar das reuniões, finalizar projeto API. | API finalizada, realização de testes da API concluidos com sucesso. |
 | 13/04 - 19/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 1 | ✅ | Estudo do microfundamento, participação na reunião. | Iniciar projeto. |
 | 20/04 - 26/04 | Computação Ubíqua e Pervasiva e IoT - Unidade 2 | ✅ | Concluir microfundamento, andamento no projeto. | Continuar desenvolvimento do projeto. |
-| 27/04 - 03/05 | Desenvolvimento de Aplicações Móveis - Unidade 1 | ✅ |  |  |
-| 04/05 - 10/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅ |  |  |
+| 27/04 - 03/05 | Desenvolvimento de Aplicações Móveis - Unidade 1 | ✅ | Concluir projeto, estudo do microfundamento. | Conclussão do Microfundamento. |
+| 04/05 - 10/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ✅ | Concluir Projeto e microfundamento | Conclussão do Microfundamento.  |
 | 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ⬜ |  |  |
 | 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ⬜ |  |  |
 | 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ⬜ |  |  |

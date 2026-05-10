@@ -11,7 +11,6 @@ namespace SmartSindico.Api.Controllers;
 [ApiController]
 [Route("api/usuarios")]
 [Authorize]
-[AllowAnonymous]
 public class UsuarioController : ApiControllerBase
 {
     private readonly IUsuarioService _usuarioService;
@@ -30,10 +29,9 @@ public class UsuarioController : ApiControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
-    [AllowAnonymous]
     public async Task<IActionResult> Cadastrar([FromBody] CadastroRequest requisicao, CancellationToken cancellationToken)
     {
-       /* var autorizacao = await _authorizationService.AuthorizeAsync(
+        var autorizacao = await _authorizationService.AuthorizeAsync(
             User,
             requisicao,
             PoliticasAutorizacao.CadastrarUsuario);
@@ -41,9 +39,9 @@ public class UsuarioController : ApiControllerBase
         if (!autorizacao.Succeeded)
         {
             return Problem(
-                title: "Perfil sem permissão para cadastrar este tipo de usuário.",
+                title: "Perfil sem permissao para cadastrar este tipo de usuario.",
                 statusCode: StatusCodes.Status403Forbidden);
-        }*/
+        }
 
         return FromResult(await _usuarioService.CadastrarAsync(requisicao, cancellationToken), StatusCodes.Status201Created);
     }
@@ -56,6 +54,7 @@ public class UsuarioController : ApiControllerBase
     public async Task<IActionResult> ObterTodos(
         [FromQuery] PaginacaoRequest paginacao,
         [FromQuery] string? search,
+        [FromQuery] bool? ativo,
         CancellationToken cancellationToken)
     {
         if (!TryGetUsuarioAtualId(out var idUsuarioAtual))
@@ -67,6 +66,7 @@ public class UsuarioController : ApiControllerBase
             ObterPerfilAtual(),
             idUsuarioAtual,
             search,
+            ativo,
             paginacao,
             cancellationToken));
     }

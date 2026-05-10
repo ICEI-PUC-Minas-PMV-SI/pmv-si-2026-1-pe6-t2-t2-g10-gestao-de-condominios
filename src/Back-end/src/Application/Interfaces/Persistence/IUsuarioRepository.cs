@@ -9,6 +9,7 @@ public interface IUsuarioRepository
         PerfilUsuario perfilAtual,
         int idUsuarioAtual,
         string? search,
+        bool? ativo,
         int page,
         int pageSize,
         CancellationToken cancellationToken = default);

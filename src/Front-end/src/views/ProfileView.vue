@@ -161,14 +161,6 @@ onMounted(loadProfile)
         <h3 class="font-display text-2xl text-ink-950">Informações da conta</h3>
         <dl class="mt-6 space-y-5">
           <div>
-            <dt class="text-xs uppercase tracking-[0.2em] text-ink-600">CPF</dt>
-            <dd class="mt-2 text-sm font-medium text-ink-950">{{ profile.cpf }}</dd>
-          </div>
-          <div>
-            <dt class="text-xs uppercase tracking-[0.2em] text-ink-600">Criado em</dt>
-            <dd class="mt-2 text-sm font-medium text-ink-950">{{ formatDate(profile.dataCriacao) }}</dd>
-          </div>
-          <div>
             <dt class="text-xs uppercase tracking-[0.2em] text-ink-600">Último login</dt>
             <dd class="mt-2 text-sm font-medium text-ink-950">
               {{ profile.dataUltimoLogin ? formatDate(profile.dataUltimoLogin) : 'Sem registro ainda' }}

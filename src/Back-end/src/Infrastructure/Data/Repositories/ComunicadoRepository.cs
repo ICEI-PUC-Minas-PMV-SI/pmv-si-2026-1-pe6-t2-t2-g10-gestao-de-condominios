@@ -14,15 +14,23 @@ public sealed class ComunicadoRepository : IComunicadoRepository
     }
 
     public async Task<(IReadOnlyList<Comunicado> Items, int TotalItems, int Page)> ObterAtivosPaginadosAsync(
+        bool? ativo,
         int page,
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        var query = _dbContext.Comunicados
+        IQueryable<Comunicado> query = _dbContext.Comunicados
             .AsNoTracking()
-            .Include(comunicado => comunicado.Autor)
-            .Where(comunicado => comunicado.Ativo)
-            .OrderByDescending(comunicado => comunicado.Destaque)
+            .Include(comunicado => comunicado.Autor);
+
+        if (ativo.HasValue)
+        {
+            query = query.Where(comunicado => comunicado.Ativo == ativo.Value);
+        }
+
+        query = query
+            .OrderByDescending(comunicado => comunicado.Ativo)
+            .ThenByDescending(comunicado => comunicado.Destaque)
             .ThenByDescending(comunicado => comunicado.DataPublicacao);
 
         var totalItems = await query.CountAsync(cancellationToken);

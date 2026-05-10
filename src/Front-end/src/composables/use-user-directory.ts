@@ -17,6 +17,7 @@ export function useUserDirectory() {
   const totalItems = shallowRef(0)
   const totalPages = shallowRef(1)
   const currentSearch = shallowRef('')
+  const currentAtivo = shallowRef<boolean | undefined>()
 
   const activeApartments = computed(() => apartments.value.filter((apartment) => apartment.ativo))
 
@@ -24,6 +25,7 @@ export function useUserDirectory() {
     const nextPage = options.page ?? page.value
     const nextPageSize = options.pageSize ?? pageSize.value
     const nextSearch = options.search?.trim() ?? currentSearch.value
+    const nextAtivo = Object.prototype.hasOwnProperty.call(options, 'ativo') ? options.ativo : currentAtivo.value
     loadingUsers.value = true
 
     try {
@@ -31,6 +33,7 @@ export function useUserDirectory() {
         page: nextPage,
         pageSize: nextPageSize,
         search: nextSearch || undefined,
+        ativo: nextAtivo,
       })
 
       users.value = response.items
@@ -39,6 +42,7 @@ export function useUserDirectory() {
       totalItems.value = response.totalItems
       totalPages.value = response.totalPages
       currentSearch.value = nextSearch
+      currentAtivo.value = nextAtivo
     } finally {
       loadingUsers.value = false
     }
@@ -76,6 +80,7 @@ export function useUserDirectory() {
     totalItems,
     totalPages,
     currentSearch,
+    currentAtivo,
     loadUsers,
     loadApartments,
     registerUser,

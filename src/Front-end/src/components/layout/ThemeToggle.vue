@@ -20,7 +20,7 @@ const buttonClass = computed(() => [
   'soft-ring inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition',
   props.fullWidth ? 'w-full' : '',
   props.inverted
-    ? 'border border-white/12 bg-white/8 text-white hover:bg-white/14'
+    ? 'border border-[var(--sidebar-border)] bg-[var(--secondary-button-inverted-bg)] text-[var(--sidebar-text)] hover:bg-[var(--secondary-button-inverted-hover)]'
     : 'theme-secondary-button',
 ])
 

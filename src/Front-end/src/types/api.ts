@@ -4,6 +4,7 @@ export interface PaginationQuery {
   page?: number
   pageSize?: number
   search?: string
+  ativo?: boolean
 }
 
 export interface PagedResponse<T> {

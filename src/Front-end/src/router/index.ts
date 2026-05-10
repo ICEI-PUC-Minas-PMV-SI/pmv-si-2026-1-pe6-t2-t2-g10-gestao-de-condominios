@@ -58,6 +58,24 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: 'usuarios/novo',
+                    name: 'user-create',
+                    component: () => import('@/views/UserCreateView.vue'),
+                    meta: {
+                        title: 'Novo usuÃ¡rio',
+                        allowedRoles: [USER_ROLES.Funcionario, USER_ROLES.Sindico],
+                    },
+                },
+                {
+                    path: 'usuarios/:id/editar',
+                    name: 'user-edit',
+                    component: () => import('@/views/UserEditView.vue'),
+                    meta: {
+                        title: 'Editar usuÃ¡rio',
+                        allowedRoles: [USER_ROLES.Funcionario, USER_ROLES.Sindico],
+                    },
+                },
+                {
                     path: 'usuarios',
                     name: 'users',
                     component: () => import('@/views/UsersView.vue'),

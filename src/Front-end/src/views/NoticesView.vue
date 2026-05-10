@@ -14,6 +14,7 @@ const auth = useAuthStore()
 const formRef = useTemplateRef<InstanceType<typeof NoticeCreateForm>>('noticeForm')
 const errorMessage = shallowRef('')
 const fieldErrors = shallowRef<Record<string, string[]>>({})
+const statusFilter = shallowRef<'all' | 'active' | 'inactive'>('all')
 
 const {
   notices,
@@ -26,6 +27,7 @@ const {
   loadNotices,
   publishNotice,
   archiveNotice,
+  activateNotice,
   setHighlight,
   removeHighlight,
 } = useNoticeBoard()
@@ -35,11 +37,23 @@ const contentGridClass = computed(() =>
   canManageNotices.value ? 'grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]' : 'space-y-4',
 )
 
+function getAtivoFilter() {
+  if (statusFilter.value === 'active') {
+    return true
+  }
+
+  if (statusFilter.value === 'inactive') {
+    return false
+  }
+
+  return undefined
+}
+
 async function loadNoticePage(nextPage = noticesPage.value) {
   errorMessage.value = ''
 
   try {
-    await loadNotices({ page: nextPage })
+    await loadNotices({ page: nextPage, ativo: getAtivoFilter() })
   } catch (error) {
     if (error instanceof AppError) {
       errorMessage.value = error.message
@@ -78,6 +92,23 @@ async function handleArchive(id: number) {
     errorMessage.value =
       error instanceof AppError ? error.message : 'Não foi possível desativar o comunicado.'
   }
+}
+
+async function handleActivate(id: number) {
+  errorMessage.value = ''
+
+  try {
+    await activateNotice(id)
+    await loadNoticePage(noticesPage.value)
+  } catch (error) {
+    errorMessage.value =
+      error instanceof AppError ? error.message : 'NÃ£o foi possÃ­vel reativar o comunicado.'
+  }
+}
+
+async function handleStatusFilterChange(nextFilter: 'all' | 'active' | 'inactive') {
+  statusFilter.value = nextFilter
+  await loadNoticePage(1)
 }
 
 async function handleSetHighlight(id: number) {
@@ -120,8 +151,35 @@ onMounted(loadNoticePage)
     <div :class="contentGridClass">
       <section class="surface-card p-6">
         <div>
-          <div>
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <h3 class="font-display text-2xl text-ink-950">Mural</h3>
+
+            <div class="theme-filter-group">
+              <button
+                type="button"
+                class="theme-filter-button"
+                :class="{ 'theme-filter-button--active': statusFilter === 'all' }"
+                @click="handleStatusFilterChange('all')"
+              >
+                Todos
+              </button>
+              <button
+                type="button"
+                class="theme-filter-button"
+                :class="{ 'theme-filter-button--active': statusFilter === 'active' }"
+                @click="handleStatusFilterChange('active')"
+              >
+                Ativos
+              </button>
+              <button
+                type="button"
+                class="theme-filter-button"
+                :class="{ 'theme-filter-button--active': statusFilter === 'inactive' }"
+                @click="handleStatusFilterChange('inactive')"
+              >
+                Inativos
+              </button>
+            </div>
           </div>
         </div>
 
@@ -141,12 +199,12 @@ onMounted(loadNoticePage)
             :notices="notices"
             :can-manage="canManageNotices"
             @archive="handleArchive"
+            @activate="handleActivate"
             @set-highlight="handleSetHighlight"
             @remove-highlight="handleRemoveHighlight"
           />
 
           <PaginationControls
-            v-if="noticesTotalPages > 1"
             :page="noticesPage"
             :page-size="noticesPageSize"
             :total-items="noticesTotalItems"

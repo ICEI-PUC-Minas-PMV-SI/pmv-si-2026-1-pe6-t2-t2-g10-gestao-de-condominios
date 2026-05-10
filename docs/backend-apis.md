@@ -445,6 +445,57 @@ O processo de deploy consiste em publicar a aplicação no ambiente escolhido, a
 
 ## Testes
 
+### Casos de teste automatizados
+
+Os casos abaixo registram os testes automatizados relevantes para os fluxos de autenticação, usuários e comunicados. Nos testes unitários, a coluna de rota indica a camada ou action testada. Nos testes de integração, a coluna indica a rota HTTP executada.
+
+| ID | Arquivo de teste | Rota, action ou camada | Payload, entrada ou contexto | Resultado esperado |
+| --- | --- | --- | --- | --- |
+| CT-BE-001 | `TestesAutenticacaoService.cs` | `AutenticacaoService.EntrarAsync` | Login com dados inválidos na validação | Retorna falha de validação sem autenticar o usuário. |
+| CT-BE-002 | `TestesAutenticacaoService.cs` | `AutenticacaoService.EntrarAsync` | `{ "email": "sindico@teste.com", "senha": "123456" }` | Atualiza o último login e retorna token JWT com dados do usuário. |
+| CT-BE-003 | `TestesAutenticacaoService.cs` | `AutenticacaoService.EntrarAsync` | Login com e-mail ou senha incorretos | Retorna `Unauthorized`. |
+| CT-BE-004 | `TestesAutenticacaoService.cs` | `AutenticacaoService.EntrarAsync` | Usuário inativo tentando autenticar | Retorna `Forbidden`. |
+| CT-BE-005 | `TestesUsuarioService.cs` | `UsuarioService.CadastrarAsync` | Cadastro inválido | Retorna falha de validação. |
+| CT-BE-006 | `TestesUsuarioService.cs` | `UsuarioService.CadastrarAsync` | Cadastro com e-mail já existente | Retorna conflito (`Conflict`). |
+| CT-BE-007 | `TestesUsuarioService.cs` | `UsuarioService.CadastrarAsync` | Cadastro válido com nome, e-mail, senha, CPF, perfil e apartamento | Persiste o usuário e retorna os dados cadastrados. |
+| CT-BE-008 | `TestesUsuarioService.cs` | `UsuarioService.AtualizarStatusAsync` | ID de usuário inexistente | Retorna `NotFound`. |
+| CT-BE-009 | `TestesUsuarioService.cs` | `UsuarioService.AtualizarStatusAsync` | `{ "ativo": false }` para usuário existente | Atualiza o status e retorna o usuário com o novo valor. |
+| CT-BE-010 | `TestesComunicadoService.cs` | `ComunicadoService.CriarAsync` | Comunicado inválido | Retorna falha de validação. |
+| CT-BE-011 | `TestesComunicadoService.cs` | `ComunicadoService.CriarAsync` | Autor inativo tentando criar comunicado | Retorna `Forbidden`. |
+| CT-BE-012 | `TestesComunicadoService.cs` | `ComunicadoService.CriarAsync` | `{ "titulo": "Aviso", "conteudo": "Conteúdo", "destaque": true }` | Cria o comunicado e associa o autor. |
+| CT-BE-013 | `TestesComunicadoService.cs` | `ComunicadoService.AtualizarStatusAsync` | ID de comunicado inexistente | Retorna `NotFound`. |
+| CT-BE-014 | `TestesUsuarioController.cs` | `UsuarioController` | Controller sem action específica | Exige autenticação por padrão. |
+| CT-BE-015 | `TestesUsuarioController.cs` | `POST /api/usuarios` | Action `Cadastrar` | Exige perfil `Funcionario` ou `Sindico`. |
+| CT-BE-016 | `TestesUsuarioController.cs` | `GET /api/usuarios` | Action `ObterTodos` | Exige perfil `Funcionario` ou `Sindico`. |
+| CT-BE-017 | `TestesUsuarioController.cs` | `PATCH /api/usuarios/{id}/ativo` | Action `AtualizarStatus` | Exige perfil `Funcionario` ou `Sindico`. |
+| CT-BE-018 | `TestesUsuarioController.cs` | `POST /api/usuarios` | Funcionário tentando cadastrar síndico | Retorna `403 Forbidden` e não chama o service de cadastro. |
+| CT-BE-019 | `TestesUsuarioController.cs` | `POST /api/usuarios` | Funcionário cadastrando morador | Retorna `201 Created`. |
+| CT-BE-020 | `TestesUsuarioController.cs` | `GET /api/usuarios/{id}` | Usuário sem permissão para visualizar cadastro | Retorna `403 Forbidden`. |
+| CT-BE-021 | `TestesUsuarioController.cs` | `GET /api/usuarios/{id}` | Usuário com permissão para visualizar cadastro | Retorna `200 OK`. |
+| CT-BE-022 | `TestesUsuarioController.cs` | `PATCH /api/usuarios/{id}/ativo` | Alteração de status sem permissão | Retorna `403 Forbidden` e não chama o service. |
+| CT-BE-023 | `TestesUsuarioController.cs` | `PATCH /api/usuarios/{id}/ativo` | Alteração de status autorizada | Retorna `200 OK`. |
+| CT-BE-024 | `TestesComunicadoController.cs` | `ComunicadoController` | Controller sem action específica | Exige autenticação por padrão. |
+| CT-BE-025 | `TestesComunicadoController.cs` | `POST /api/comunicados` | Action `Criar` | Exige perfil `Funcionario` ou `Sindico`. |
+| CT-BE-026 | `TestesComunicadoController.cs` | `PATCH /api/comunicados/{id}/ativo` | Action `AtualizarStatus` | Exige perfil `Funcionario` ou `Sindico`. |
+| CT-BE-027 | `TestesComunicadoController.cs` | `POST /api/comunicados` | Token sem identificador de usuário | Retorna `401 Unauthorized`. |
+| CT-BE-028 | `TestesComunicadoController.cs` | `POST /api/comunicados` | Usuário autorizado criando comunicado válido | Retorna `201 Created`. |
+| CT-BE-029 | `TestesComunicadoController.cs` | `PATCH /api/comunicados/{id}/ativo` | Service retorna sucesso na alteração de status | Retorna `200 OK`. |
+| CT-BE-030 | `TestesHandlersAutorizacaoUsuario.cs` | `CadastrarUsuarioAuthorizationHandler` | Funcionário cadastrando morador | Autoriza a operação. |
+| CT-BE-031 | `TestesHandlersAutorizacaoUsuario.cs` | `CadastrarUsuarioAuthorizationHandler` | Funcionário cadastrando síndico | Nega a operação. |
+| CT-BE-032 | `TestesHandlersAutorizacaoUsuario.cs` | `VisualizarUsuarioAuthorizationHandler` | Morador visualizando o próprio cadastro | Autoriza a consulta. |
+| CT-BE-033 | `TestesHandlersAutorizacaoUsuario.cs` | `VisualizarUsuarioAuthorizationHandler` | Morador visualizando outro cadastro | Nega a consulta. |
+| CT-BE-034 | `TestesHandlersAutorizacaoUsuario.cs` | `VisualizarUsuarioAuthorizationHandler` | Funcionário visualizando morador | Autoriza a consulta. |
+| CT-BE-035 | `TestesHandlersAutorizacaoUsuario.cs` | `AtualizarStatusUsuarioAuthorizationHandler` | Funcionário alterando status de morador | Autoriza a operação. |
+| CT-BE-036 | `TestesHandlersAutorizacaoUsuario.cs` | `AtualizarStatusUsuarioAuthorizationHandler` | Funcionário alterando status de funcionário | Autoriza a operação. |
+| CT-BE-037 | `TestesHandlersAutorizacaoUsuario.cs` | `AtualizarStatusUsuarioAuthorizationHandler` | Síndico alterando o próprio status | Autoriza a operação. |
+| CT-BE-038 | `TestesHandlersAutorizacaoUsuario.cs` | `AtualizarStatusUsuarioAuthorizationHandler` | Síndico alterando status de morador | Autoriza a operação. |
+| CT-BE-039 | `TestesIntegracaoApi.cs` | `POST /api/autenticacao/entrar` | `{ "email": "sindico@teste.com", "senha": "123456" }` | Retorna `200 OK` e token JWT. |
+| CT-BE-040 | `TestesIntegracaoApi.cs` | `GET /api/usuarios` | Requisição sem token | Retorna `401 Unauthorized`. |
+| CT-BE-041 | `TestesIntegracaoApi.cs` | `POST /api/usuarios` | Funcionário tentando cadastrar síndico | Retorna `403 Forbidden`. |
+| CT-BE-042 | `TestesIntegracaoApi.cs` | `GET /api/usuarios/{id}` | Morador consultando outro usuário | Retorna `403 Forbidden`. |
+| CT-BE-043 | `TestesIntegracaoApi.cs` | `PATCH /api/usuarios/{id}/ativo` | Funcionário alterando status de morador com `{ "ativo": false }` | Retorna `200 OK` e usuário inativo. |
+| CT-BE-044 | `TestesIntegracaoApi.cs` | `POST /api/comunicados` | Morador tentando criar comunicado | Retorna `403 Forbidden`. |
+
 Os testes do backend do SmartSíndico foram organizados para validar a regra de negócio, a autorização por perfil e o comportamento HTTP da API. A suíte atual está dividida entre testes unitários e testes de integração, usando `xUnit` como framework principal, `Moq` para simulação de dependências nos testes unitários e `WebApplicationFactory` com `Entity Framework Core InMemory` nos testes de integração.
 
 ### 1. Testes unitários
@@ -501,7 +552,7 @@ Os testes unitários verificam unidades isoladas da aplicação, sem acesso a ba
 - Testes implementados:
   - `Controller_DeveExigirAutenticacaoPorPadrao`: verifica que o controller exige autenticação em suas rotas.
   - `Cadastrar_DeveExigirRolesDeFuncionarioOuSindico`: valida a restrição de perfis na rota de cadastro.
-  - `ObterTodos_DeveExigirRoleDeSindico`: confirma que a listagem geral é exclusiva do perfil síndico.
+  - `ObterTodos_DeveExigirRolesDeFuncionarioOuSindico`: confirma que a listagem geral exige perfil funcionário ou síndico.
   - `AtualizarStatus_DeveExigirRolesDeFuncionarioOuSindico`: valida a restrição de perfis na atualização de status.
   - `Cadastrar_QuandoAutorizacaoFalhar_DeveRetornarProibido`: confirma o retorno `403 Forbidden` quando o cadastro não é autorizado.
   - `Cadastrar_QuandoAutorizacaoForPermitida_DeveRetornarCriado`: verifica o retorno `201 Created` quando o cadastro é autorizado.
@@ -521,9 +572,9 @@ Os testes unitários verificam unidades isoladas da aplicação, sem acesso a ba
   - `VisualizarUsuario_QuandoMoradorVisualizarOutroCadastro_DeveNegar`: garante que morador não pode ver outro usuário.
   - `VisualizarUsuario_QuandoFuncionarioVisualizarMorador_DeveAutorizar`: valida o acesso do funcionário ao cadastro de morador.
   - `AtualizarStatusUsuario_QuandoFuncionarioAtualizarMorador_DeveAutorizar`: confirma que funcionário pode alterar o status de morador.
-  - `AtualizarStatusUsuario_QuandoFuncionarioAtualizarFuncionario_DeveNegar`: confirma que funcionário não pode alterar o status de outro funcionário.
+  - `AtualizarStatusUsuario_QuandoFuncionarioAtualizarFuncionario_DeveAutorizar`: confirma que funcionário pode alterar o status de outro funcionário.
   - `AtualizarStatusUsuario_QuandoSindicoAtualizarProprioStatus_DeveAutorizar`: valida a alteração do próprio status pelo síndico.
-  - `AtualizarStatusUsuario_QuandoSindicoAtualizarMorador_DeveNegar`: valida a negação quando o síndico tenta alterar o status de morador.
+  - `AtualizarStatusUsuario_QuandoSindicoAtualizarMorador_DeveAutorizar`: valida que o síndico pode alterar o status de morador.
 
 ### 2. Testes de integração
 
@@ -551,6 +602,16 @@ No estado atual do backend, a suíte automatizada cobre diretamente os fluxos im
 - `RNF-001`: exigência de autenticação e tratamento consistente para falhas de autorização.
 
 Ao todo, a documentação desta etapa registra 38 testes unitários e 6 testes de integração, totalizando 44 cenários automatizados.
+
+Os testes são executados no diretório `src/Back-end` com o comando:
+
+```bash
+dotnet test .\SmartSíndico.slnx
+```
+
+Na execução registrada, a suíte automatizada do backend apresentou o seguinte resultado:
+
+![Execução dos testes do backend](img/testes-back.png)
 
 ### 4. Testes manuais
 

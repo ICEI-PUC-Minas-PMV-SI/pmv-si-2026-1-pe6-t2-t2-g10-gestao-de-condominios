@@ -341,7 +341,8 @@
                   "    pm.response.to.have.status(200);",
                   "});",
                   "",
-                  "var usuarios = pm.response.json();",
+                  "var body = pm.response.json();",
+                  "var usuarios = Array.isArray(body) ? body : (body.items || []);",
                   "function salvarId(email, chave) {",
                   "    var usuario = usuarios.find(function (item) { return item.email === email; });",
                   "    if (usuario) {",
@@ -374,13 +375,33 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/usuarios",
+              "raw": "{{baseUrl}}/api/usuarios?page={{usuariosPage}}&pageSize={{usuariosPageSize}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "usuarios"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{usuariosPage}}"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "{{usuariosPageSize}}"
+                },
+                {
+                  "key": "search",
+                  "value": "{{usuariosSearch}}",
+                  "disabled": true
+                },
+                {
+                  "key": "ativo",
+                  "value": "{{usuariosAtivo}}",
+                  "disabled": true
+                }
               ]
             }
           },
@@ -529,13 +550,28 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/comunicados",
+              "raw": "{{baseUrl}}/api/comunicados?page={{comunicadosPage}}&pageSize={{comunicadosPageSize}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "comunicados"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{comunicadosPage}}"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "{{comunicadosPageSize}}"
+                },
+                {
+                  "key": "ativo",
+                  "value": "{{comunicadosAtivo}}",
+                  "disabled": true
+                }
               ]
             }
           },

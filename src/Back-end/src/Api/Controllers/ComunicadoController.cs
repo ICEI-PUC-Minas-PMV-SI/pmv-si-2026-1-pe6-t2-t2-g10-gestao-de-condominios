@@ -21,9 +21,12 @@ public class ComunicadoController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType<PaginacaoResponse<ComunicadoResponse>>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ObterAtivos([FromQuery] PaginacaoRequest paginacao, CancellationToken cancellationToken)
+    public async Task<IActionResult> ObterAtivos(
+        [FromQuery] PaginacaoRequest paginacao,
+        [FromQuery] bool? ativo,
+        CancellationToken cancellationToken)
     {
-        return FromResult(await _comunicadoService.ObterAtivosAsync(paginacao, cancellationToken));
+        return FromResult(await _comunicadoService.ObterAtivosAsync(paginacao, ativo, cancellationToken));
     }
 
     [HttpGet("{id:int}")]
@@ -41,7 +44,6 @@ public class ComunicadoController : ApiControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    [AllowAnonymous]
     public async Task<IActionResult> Criar([FromBody] CriacaoComunicadoRequest requisicao, CancellationToken cancellationToken)
     {
         if (!TryGetUsuarioAtualId(out var idUsuario))

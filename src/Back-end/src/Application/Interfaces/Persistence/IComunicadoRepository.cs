@@ -5,6 +5,7 @@ namespace SmartSindico.Application.Interfaces.Persistence;
 public interface IComunicadoRepository
 {
     Task<(IReadOnlyList<Comunicado> Items, int TotalItems, int Page)> ObterAtivosPaginadosAsync(
+        bool? ativo,
         int page,
         int pageSize,
         CancellationToken cancellationToken = default);

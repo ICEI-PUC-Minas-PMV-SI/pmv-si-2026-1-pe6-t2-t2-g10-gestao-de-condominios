@@ -52,7 +52,7 @@ public class TestesUsuarioController
     }
 
     [Fact]
-    public void ObterTodos_DeveExigirRoleDeSindico()
+    public void ObterTodos_DeveExigirRolesDeFuncionarioOuSindico()
     {
         // Arrange
         var metodo = typeof(UsuarioController).GetMethod(nameof(UsuarioController.ObterTodos));
@@ -62,7 +62,7 @@ public class TestesUsuarioController
 
         // Assert
         Assert.NotNull(atributo);
-        Assert.Equal(PerfisAutorizacao.Sindico, atributo!.Roles);
+        Assert.Equal(PerfisAutorizacao.FuncionarioOuSindico, atributo!.Roles);
     }
 
     [Fact]

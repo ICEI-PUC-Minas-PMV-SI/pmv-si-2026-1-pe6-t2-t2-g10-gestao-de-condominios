@@ -175,7 +175,9 @@ function handleSubmit() {
         <input
           id="edit-senha"
           v-model="form.senha"
+          name="new-user-password"
           type="password"
+          autocomplete="new-password"
           :disabled="!permissions.canEditSenha"
           class="theme-control"
           placeholder="Preencha apenas se quiser alterar"

@@ -19,6 +19,7 @@ public sealed class UsuarioRepository : IUsuarioRepository
         PerfilUsuario perfilAtual,
         int idUsuarioAtual,
         string? search,
+        bool? ativo,
         int page,
         int pageSize,
         CancellationToken cancellationToken = default)
@@ -32,6 +33,11 @@ public sealed class UsuarioRepository : IUsuarioRepository
                 usuario.Id == idUsuarioAtual || usuario.Perfil != PerfilUsuario.Sindico),
             _ => query.Where(usuario => usuario.Id == idUsuarioAtual)
         };
+
+        if (ativo.HasValue)
+        {
+            query = query.Where(usuario => usuario.Ativo == ativo.Value);
+        }
 
         var orderedQuery = query.OrderBy(usuario => usuario.Nome);
 

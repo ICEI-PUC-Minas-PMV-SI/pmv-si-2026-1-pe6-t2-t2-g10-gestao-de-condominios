@@ -23,3 +23,6 @@ api.get<{ data: ApartamentoResponse[] }>('/Apartamento').then(r => r.data),
 
   reativar: (id: number) => api.patch(`/Apartamento/${id}/Ativar`),
 };
+
+export const fetchApartments = () =>
+  apartmentService.getAll().then(response => Array.isArray(response) ? response : response.data);

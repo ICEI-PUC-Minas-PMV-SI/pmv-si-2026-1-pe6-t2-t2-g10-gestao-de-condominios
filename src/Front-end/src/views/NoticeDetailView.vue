@@ -54,18 +54,18 @@ onMounted(loadNotice)
     <article
       v-else-if="notice"
       class="surface-card p-6 sm:p-8"
-      :class="notice.destaque ? 'border-2 border-amber-300 bg-[linear-gradient(135deg,rgba(254,249,195,0.95),rgba(253,230,138,0.6))] shadow-[0_0_0_2px_rgba(251,191,36,0.18),0_16px_40px_rgba(245,158,11,0.18)] dark:border-amber-500/70 dark:bg-[linear-gradient(135deg,rgba(120,53,15,0.85),rgba(146,64,14,0.68))] dark:shadow-[0_0_0_2px_rgba(251,191,36,0.16),0_18px_44px_rgba(120,53,15,0.42)]' : ''"
+      :class="notice.destaque ? 'border-2 border-indigo-200 bg-[linear-gradient(135deg,rgba(248,250,252,0.98),rgba(219,234,254,0.82))] shadow-[0_0_0_2px_rgba(99,102,241,0.08),0_16px_40px_rgba(37,99,235,0.10)] dark:border-sky-400/35 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.96),rgba(30,41,59,0.9))] dark:shadow-[0_0_0_2px_rgba(56,189,248,0.12),0_18px_44px_rgba(2,6,23,0.48)]' : ''"
     >
       <div class="flex flex-wrap gap-2">
         <span
           class="pill"
-          :class="notice.destaque ? 'border-amber-300 bg-amber-100 text-amber-900 shadow-[0_0_0_1px_rgba(251,191,36,0.35)] dark:border-amber-500/60 dark:bg-amber-400 dark:text-slate-950' : 'border-slate-200 bg-slate-50 text-ink-800 shadow-[0_0_0_1px_rgba(148,163,184,0.14)] dark:!border-sky-200/80 dark:!bg-sky-200 dark:!text-slate-950 dark:shadow-[0_0_0_1px_rgba(186,230,253,0.34)]'"
+          :class="notice.destaque ? 'border-indigo-200 bg-indigo-50 text-indigo-800 shadow-[0_0_0_1px_rgba(99,102,241,0.18)] dark:border-sky-400/50 dark:bg-sky-500/20 dark:text-sky-100' : 'border-slate-200 bg-slate-50 text-ink-800 shadow-[0_0_0_1px_rgba(148,163,184,0.14)] dark:!border-sky-400/60 dark:!bg-sky-500/20 dark:!text-sky-100 dark:shadow-[0_0_0_1px_rgba(56,189,248,0.22)]'"
         >
           {{ notice.destaque ? 'Destaque' : 'Comunicado' }}
         </span>
         <span
           class="pill"
-          :class="notice.destaque ? 'border-amber-200/90 bg-white/65 text-amber-950 shadow-[0_0_0_1px_rgba(251,191,36,0.14)] dark:border-amber-300/25 dark:bg-slate-950/28 dark:text-amber-50' : 'bg-sand-100 text-ink-700'"
+          :class="notice.destaque ? 'border-indigo-200/80 bg-white/70 text-slate-700 shadow-[0_0_0_1px_rgba(99,102,241,0.10)] dark:border-sky-300/25 dark:bg-slate-950/30 dark:text-sky-100' : 'bg-sand-100 text-ink-700'"
         >
           {{ formatDate(notice.dataPublicacao) }}
         </span>
@@ -73,14 +73,14 @@ onMounted(loadNotice)
 
       <h2
         class="mt-5 max-w-4xl font-display text-4xl leading-tight"
-        :class="notice.destaque ? 'text-amber-950 dark:text-amber-50' : 'text-ink-900'"
+        :class="notice.destaque ? 'text-slate-950 dark:text-sky-50' : 'text-ink-900'"
       >
         {{ notice.titulo }}
       </h2>
 
       <p
         class="mt-6 max-w-4xl text-base leading-8"
-        :class="notice.destaque ? 'text-amber-950/90 dark:text-amber-100' : 'text-ink-700'"
+        :class="notice.destaque ? 'text-slate-700 dark:text-slate-200' : 'text-ink-700'"
       >
         {{ notice.conteudo }}
       </p>

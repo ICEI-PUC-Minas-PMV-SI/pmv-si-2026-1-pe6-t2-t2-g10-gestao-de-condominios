@@ -66,8 +66,8 @@ const usersWithStatus = computed(() => props.users)
       </article>
     </div>
 
-    <div class="hidden overflow-hidden rounded-xl border md:block" :style="{ borderColor: 'var(--panel-border-strong)', background: 'var(--panel-bg)' }">
-      <table class="min-w-full divide-y" :style="{ borderColor: 'var(--panel-border-strong)' }">
+    <div class="hidden overflow-x-auto rounded-xl border md:block" :style="{ borderColor: 'var(--panel-border-strong)', background: 'var(--panel-bg)' }">
+      <table class="min-w-[920px] divide-y" :style="{ borderColor: 'var(--panel-border-strong)' }">
         <thead :style="{ background: 'var(--panel-muted-bg)' }">
           <tr>
             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.18em] text-app-tertiary">Nome</th>

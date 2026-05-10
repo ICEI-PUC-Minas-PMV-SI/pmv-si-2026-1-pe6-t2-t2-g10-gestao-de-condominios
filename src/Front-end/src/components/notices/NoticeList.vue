@@ -9,6 +9,7 @@ defineProps<{
 
 const emit = defineEmits<{
   archive: [id: number]
+  activate: [id: number]
   setHighlight: [id: number]
   removeHighlight: [id: number]
 }>()
@@ -22,6 +23,7 @@ const emit = defineEmits<{
       :notice="notice"
       :can-manage="canManage"
       @archive="emit('archive', $event)"
+      @activate="emit('activate', $event)"
       @set-highlight="emit('setHighlight', $event)"
       @remove-highlight="emit('removeHighlight', $event)"
     />

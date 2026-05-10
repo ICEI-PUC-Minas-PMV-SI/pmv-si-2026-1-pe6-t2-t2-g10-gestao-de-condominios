@@ -75,6 +75,7 @@ public class UsuarioService : IUsuarioService
         PerfilUsuario perfilAtual,
         int idUsuarioAtual,
         string? search,
+        bool? ativo,
         PaginacaoRequest paginacao,
         CancellationToken cancellationToken = default)
     {
@@ -84,6 +85,7 @@ public class UsuarioService : IUsuarioService
             perfilAtual,
             idUsuarioAtual,
             search,
+            ativo,
             page,
             pageSize,
             cancellationToken);

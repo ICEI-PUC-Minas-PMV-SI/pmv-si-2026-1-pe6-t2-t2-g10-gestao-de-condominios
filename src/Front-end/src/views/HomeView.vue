@@ -20,8 +20,8 @@ async function loadHighlightedNotices() {
   noticesError.value = ''
 
   try {
-    const response = await fetchNotices({ page: 1, pageSize: 4 })
-    highlightedNotices.value = response.items.filter((notice) => notice.destaque)
+    const response = await fetchNotices({ page: 1, pageSize: 4, ativo: true })
+    highlightedNotices.value = response.items.filter((notice) => notice.ativo && notice.destaque)
   } catch (error) {
     noticesError.value = error instanceof AppError ? error.message : 'Não foi possível carregar os comunicados.'
   } finally {
@@ -77,24 +77,24 @@ onMounted(loadHighlightedNotices)
         <article
           v-for="notice in highlightedNotices"
           :key="notice.id"
-          class="relative overflow-hidden rounded-2xl border-2 border-amber-400/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.98),rgba(254,240,138,0.78))] p-6 shadow-[0_0_0_2px_rgba(251,191,36,0.16),0_18px_42px_rgba(245,158,11,0.18)] dark:border-amber-400/70 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(69,39,8,0.94))] dark:shadow-[0_0_0_2px_rgba(251,191,36,0.14),0_22px_48px_rgba(2,6,23,0.56)]"
+          class="relative overflow-hidden rounded-2xl border-2 border-indigo-200 bg-[linear-gradient(135deg,rgba(248,250,252,0.98),rgba(219,234,254,0.82))] p-6 shadow-[0_0_0_2px_rgba(99,102,241,0.08),0_18px_42px_rgba(37,99,235,0.10)] dark:border-sky-400/35 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.96),rgba(30,41,59,0.9))] dark:shadow-[0_0_0_2px_rgba(56,189,248,0.12),0_22px_48px_rgba(2,6,23,0.56)]"
         >
-          <div class="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,rgba(245,158,11,0.95),rgba(251,191,36,1),rgba(245,158,11,0.95))]" />
+          <div class="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,rgba(14,165,233,0.95),rgba(99,102,241,0.95),rgba(14,165,233,0.95))]" />
 
           <div class="flex flex-wrap items-center gap-2">
             <span
-              class="pill border-amber-300 bg-amber-100 text-amber-950 shadow-[0_0_0_1px_rgba(251,191,36,0.35)] dark:border-amber-300/40 dark:bg-amber-300 dark:text-slate-950"
+              class="pill border-indigo-200 bg-indigo-50 text-indigo-800 shadow-[0_0_0_1px_rgba(99,102,241,0.18)] dark:border-sky-400/50 dark:bg-sky-500/20 dark:text-sky-100"
             >
               Destaque
             </span>
             <span
-              class="pill border-amber-200/90 bg-white/75 text-amber-950 shadow-[0_0_0_1px_rgba(251,191,36,0.14)] dark:border-amber-300/25 dark:bg-slate-950/40 dark:text-amber-50"
+              class="pill border-indigo-200/80 bg-white/70 text-slate-700 shadow-[0_0_0_1px_rgba(99,102,241,0.10)] dark:border-sky-300/25 dark:bg-slate-950/30 dark:text-sky-100"
             >
               {{ formatDate(notice.dataPublicacao) }}
             </span>
           </div>
 
-          <h4 class="mt-5 max-w-3xl font-display text-2xl leading-tight text-slate-950 dark:text-white">
+          <h4 class="mt-5 max-w-3xl font-display text-2xl leading-tight text-slate-950 dark:text-sky-50">
             {{ notice.titulo }}
           </h4>
           <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-800 dark:text-slate-100">
@@ -104,7 +104,7 @@ onMounted(loadHighlightedNotices)
           <div class="mt-4 flex items-center justify-end gap-4">
             <RouterLink
               :to="`/avisos/${notice.id}`"
-              class="inline-flex items-center rounded-lg border border-amber-300/80 bg-white/75 px-4 py-2 text-sm font-semibold text-amber-950 transition hover:bg-white dark:border-amber-300/30 dark:bg-slate-950/35 dark:text-amber-50 dark:hover:bg-slate-950/55"
+              class="inline-flex items-center rounded-lg border border-indigo-200 bg-white/75 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-white dark:border-sky-400/30 dark:bg-slate-950/35 dark:text-sky-100 dark:hover:bg-slate-950/55"
             >
               Ver detalhes
             </RouterLink>

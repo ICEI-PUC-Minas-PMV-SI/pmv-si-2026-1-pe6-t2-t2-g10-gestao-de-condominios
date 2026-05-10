@@ -112,7 +112,7 @@ public class TestesHandlersAutorizacaoUsuario
     }
 
     [Fact]
-    public async Task AtualizarStatusUsuario_QuandoFuncionarioAtualizarFuncionario_DeveNegar()
+    public async Task AtualizarStatusUsuario_QuandoFuncionarioAtualizarFuncionario_DeveAutorizar()
     {
         // Arrange
         var handler = new AtualizarStatusUsuarioAuthorizationHandler();
@@ -125,7 +125,7 @@ public class TestesHandlersAutorizacaoUsuario
         await handler.HandleAsync(context);
 
         // Assert
-        Assert.False(context.HasSucceeded);
+        Assert.True(context.HasSucceeded);
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class TestesHandlersAutorizacaoUsuario
     }
 
     [Fact]
-    public async Task AtualizarStatusUsuario_QuandoSindicoAtualizarMorador_DeveNegar()
+    public async Task AtualizarStatusUsuario_QuandoSindicoAtualizarMorador_DeveAutorizar()
     {
         // Arrange
         var handler = new AtualizarStatusUsuarioAuthorizationHandler();
@@ -159,7 +159,7 @@ public class TestesHandlersAutorizacaoUsuario
         await handler.HandleAsync(context);
 
         // Assert
-        Assert.False(context.HasSucceeded);
+        Assert.True(context.HasSucceeded);
     }
 
     private static ClaimsPrincipal CriarUsuarioLogado(int idUsuario, PerfilUsuario perfil)

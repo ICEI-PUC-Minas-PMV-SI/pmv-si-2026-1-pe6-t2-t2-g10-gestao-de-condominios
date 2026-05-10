@@ -13,6 +13,7 @@ public interface IUsuarioService
         PerfilUsuario perfilAtual,
         int idUsuarioAtual,
         string? search,
+        bool? ativo,
         PaginacaoRequest paginacao,
         CancellationToken cancellationToken = default);
     Task<Result<UsuarioResponse>> ObterPorIdAsync(int id, CancellationToken cancellationToken = default);

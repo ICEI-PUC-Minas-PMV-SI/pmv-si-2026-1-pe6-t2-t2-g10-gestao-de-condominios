@@ -26,11 +26,13 @@ public class ComunicadoService : IComunicadoService
 
     public async Task<Result<PaginacaoResponse<ComunicadoResponse>>> ObterAtivosAsync(
         PaginacaoRequest paginacao,
+        bool? ativo,
         CancellationToken cancellationToken = default)
     {
         var page = paginacao.GetNormalizedPage();
         var pageSize = paginacao.GetNormalizedPageSize();
         var (comunicados, totalItems, currentPage) = await _comunicadoRepository.ObterAtivosPaginadosAsync(
+            ativo,
             page,
             pageSize,
             cancellationToken);

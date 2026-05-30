@@ -14,9 +14,8 @@
 | 06/04 - 12/04 | Recuperação de Informação na Web e Redes Sociais - Unidade 2 | ✅ | Ver todo conteúdo de Recuperação de Informação na Web e Redes Sociais, adicionar testes unitários e de integração ao back-end e montar o esqueleto e preencher o relatório da etapa 2 | Realizada todas as atividades propostas na semana  |
 | 13/04 - 19/04 | |  | Criar esqueleto do projeto front-end e implementar login, perfil, usuários e mural de avisos| Feita toda a atividade prevista 
 | 04/05 - 10/05 | |  | Review do projeto do front-end, inserir melhorias, inserir testes e atualizar os relatórios | Feita toda a atividade prevista 
-| 11/05 - 17/05 | Desenvolvimento de Aplicações Móveis - Unidade 2 | ⬜ |  |  | 
-| 18/05 - 24/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 1 | ⬜ |  |  |
-| 25/05 - 31/05 | Fundamentos de Projeto e Análise de Algoritmos - Unidade 2 | ⬜ |  |  |
+| 18/05 - 24/05 | Computação Ubíqua e Pervasiva e IoT completa| ✅ | Ver todo conteúdo de Computação Ubíqua e Pervasiva e IoT completa | Feita toda a atividade prevista  | 
+| 25/05 - 31/05 | Desenvolvimento de Aplicações Móveis compeleta | ✅ | Ver todo conteúdo de Desenvolvimento de Aplicações Móveis compeleta e criar e implementar o  Aplicativo Móvel |  | 
 | 01/06 - 07/06 |  | ⬜ |  |  |
 | 08/06 - 14/06 |  | ⬜ |  |  |
 

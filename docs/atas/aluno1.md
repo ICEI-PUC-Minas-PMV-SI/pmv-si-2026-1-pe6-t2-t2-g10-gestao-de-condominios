@@ -15,7 +15,7 @@
 | 13/04 - 19/04 | |  | Criar esqueleto do projeto front-end e implementar login, perfil, usuários e mural de avisos| Feita toda a atividade prevista 
 | 04/05 - 10/05 | |  | Review do projeto do front-end, inserir melhorias, inserir testes e atualizar os relatórios | Feita toda a atividade prevista 
 | 18/05 - 24/05 | Computação Ubíqua e Pervasiva e IoT completa| ✅ | Ver todo conteúdo de Computação Ubíqua e Pervasiva e IoT completa | Feita toda a atividade prevista  | 
-| 25/05 - 31/05 | Desenvolvimento de Aplicações Móveis compeleta | ✅ | Ver todo conteúdo de Desenvolvimento de Aplicações Móveis compeleta e criar e implementar o  Aplicativo Móvel |  | 
+| 25/05 - 31/05 | Desenvolvimento de Aplicações Móveis compeleta | ✅ | Ver todo conteúdo de Desenvolvimento de Aplicações Móveis compeleta e criar e implementar o  Aplicativo Móvel | Feita toda a atividade prevista  | 
 | 01/06 - 07/06 |  | ⬜ |  |  |
 | 08/06 - 14/06 |  | ⬜ |  |  |
 

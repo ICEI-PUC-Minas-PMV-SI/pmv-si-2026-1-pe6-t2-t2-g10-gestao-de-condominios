@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "SmartSíndico Mobile",
+    "slug": "smart-sindico-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "smartsindico",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0f766e"
+      }
+    }
+  }
+}

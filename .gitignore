@@ -2,6 +2,12 @@
 tmp-codex-build/
 tmp-codex-logs/
 
+# JavaScript dependencies and generated outputs
+node_modules/
+.expo/
+dist/
+coverage/
+
 # Root-level IDE and OS artifacts
 .vs/
 .vscode/

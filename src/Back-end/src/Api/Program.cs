@@ -108,7 +108,12 @@ public class Program
         }
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
-        app.UseHttpsRedirection();
+
+        if (!app.Environment.IsDevelopment() && !app.Environment.IsEnvironment("Local"))
+        {
+            app.UseHttpsRedirection();
+        }
+
         app.UseCors(CorsPolicyName);
         app.UseAuthentication();
         app.UseAuthorization();

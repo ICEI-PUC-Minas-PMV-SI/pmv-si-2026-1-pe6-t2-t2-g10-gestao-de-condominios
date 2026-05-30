@@ -79,24 +79,6 @@ Nas telas de listagem, os filtros, ações, resultados e paginação ficam dentr
 
 O Tailwind permanece como tecnologia do front-end web. No mobile, as classes CSS do portal foram mapeadas para componentes React Native equivalentes: `surface-card` virou `Card`, `theme-control` virou `TextField`, `theme-primary-button` e `theme-secondary-button` viraram `AppButton`, `pill` virou `Badge` e `theme-filter-group` virou `FilterBar`.
 
-### Evidências visuais
-
-As imagens abaixo registram a execução do aplicativo mobile em dispositivo Android, demonstrando a identidade visual, navegação por abas, tema claro/escuro e os fluxos sob responsabilidade desta entrega.
-
-| Tela | Evidência |
-| --- | --- |
-| Login em tema escuro | ![Login mobile](img/mobile-login.jpg) |
-| Home autenticada em tema claro | ![Home mobile](img/mobile-home.jpg) |
-| Home autenticada em tema escuro | ![Home mobile em tema escuro](img/mobile-home-dark.jpg) |
-| Home com resumos e atalhos | ![Home com resumos mobile](img/mobile-home-resumos.jpg) |
-| Perfil em tema escuro | ![Perfil mobile](img/mobile-perfil.jpg) |
-| Lista de usuários | ![Usuários mobile](img/mobile-usuarios.jpg) |
-| Paginação de usuários | ![Paginação usuários mobile](img/mobile-usuarios-paginacao.jpg) |
-| Mural de avisos | ![Mural mobile](img/mobile-mural.jpg) |
-| Detalhe de aviso destacado | ![Detalhe aviso mobile](img/mobile-aviso-detalhe.jpg) |
-| Aba Mais com módulos futuros | ![Mais mobile](img/mobile-mais.jpg) |
-| Aba Mais com categorias adicionais | ![Mais módulos mobile](img/mobile-mais-modulos.jpg) |
-
 ## Fluxo de Dados
 
 O fluxo de dados segue o padrão cliente-servidor:

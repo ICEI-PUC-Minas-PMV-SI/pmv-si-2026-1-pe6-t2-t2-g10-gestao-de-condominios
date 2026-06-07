@@ -114,6 +114,26 @@ const router = createRouter({
         allowedRoles: [USER_ROLES.Funcionario, USER_ROLES.Sindico],
     },
 },
+
+{
+    path: 'areas-comuns',
+    name: 'areas-comuns',
+    component: () => import('@/views/CommonAreaCreateView.vue'),
+    meta: {
+        title: 'Áreas Comuns',
+        requiresAuth: true,
+    },
+},
+
+{
+    path: 'reserva',
+    name: 'reserva',
+    component: () => import('@/views/ReservaView.vue'),
+    meta: {
+        title: 'Reserva',
+        requiresAuth: true,
+    },
+},
                 {
                     path: 'avisos/novo',
                     redirect: { name: 'notices' },

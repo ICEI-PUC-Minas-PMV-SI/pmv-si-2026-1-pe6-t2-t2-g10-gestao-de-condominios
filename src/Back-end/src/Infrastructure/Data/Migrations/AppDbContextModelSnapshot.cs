@@ -46,12 +46,9 @@ namespace SmartSindico.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("VisitanteId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("VisitanteId");
+                    b.HasIndex("IdVisitante");
 
                     b.ToTable("AcessoVisitantes", (string)null);
                 });
@@ -279,7 +276,9 @@ namespace SmartSindico.Infrastructure.Data.Migrations
                 {
                     b.HasOne("SmartSindico.Domain.Entities.Visitante", "Visitante")
                         .WithMany("Acessos")
-                        .HasForeignKey("VisitanteId");
+                        .HasForeignKey("IdVisitante")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Visitante");
                 });

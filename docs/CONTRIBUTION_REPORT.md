@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 08/06/2026 00:32
+**Última atualização:** 08/06/2026 02:44
 
 ---
 
@@ -9,17 +9,17 @@
 | Aluno                 |   Commits |   Linhas+ |   Linhas- |   Arquivos |   Docs Commits |   Docs Arquivos |
 |-----------------------|-----------|-----------|-----------|------------|----------------|-----------------|
 | Fellipe Rodrigues     |        22 |     37569 |      1027 |        257 |              4 |               3 |
-| Felpa147              |        29 |       758 |       231 |          6 |             25 |               6 |
+| Felpa147              |        30 |       759 |       232 |          6 |             26 |               6 |
 | Gabriela              |         3 |      2579 |       491 |         36 |              0 |               0 |
 | Gabriela Rios         |         6 |        56 |        66 |          3 |              6 |               3 |
 | LeandroAugustoSantos  |        51 |      1476 |       638 |         18 |             37 |               4 |
-| github-actions[bot]   |        69 |       489 |       472 |          3 |             69 |               1 |
+| github-actions[bot]   |        70 |       505 |       488 |          3 |             70 |               1 |
 | github-classroom[bot] |         1 |      2152 |         0 |         45 |              1 |              13 |
 
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-06-01**: LeandroAugustoSantos: 9, github-actions[bot]: 9
+**2026-06-01**: Felpa147: 1, LeandroAugustoSantos: 9, github-actions[bot]: 10
 
 **2026-05-25**: Fellipe Rodrigues: 1, Felpa147: 3, github-actions[bot]: 5
 
@@ -33,9 +33,9 @@
 
 **2026-04-20**: Fellipe Rodrigues: 9, Felpa147: 1, github-actions[bot]: 6
 
-**2026-04-13**: Felpa147: 2, github-actions[bot]: 3
+**2026-04-13**: Felpa147: 1, github-actions[bot]: 2
 
-**2026-04-06**: Fellipe Rodrigues: 6, Felpa147: 9, Gabriela: 1, LeandroAugustoSantos: 18, github-actions[bot]: 26
+**2026-04-06**: Fellipe Rodrigues: 6, Felpa147: 10, Gabriela: 1, LeandroAugustoSantos: 18, github-actions[bot]: 27
 
 **2026-03-30**: LeandroAugustoSantos: 2, github-actions[bot]: 3
 

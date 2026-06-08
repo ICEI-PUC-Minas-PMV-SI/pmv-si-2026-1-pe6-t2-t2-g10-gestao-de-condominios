@@ -4,10 +4,10 @@ import { readPersistedSession } from '@/storage/session-storage'
 
 import { normalizeHttpError } from './errors'
 
-const configuredBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL?.trim()
+const configuredBaseUrl = (globalThis as any).process?.env?.EXPO_PUBLIC_API_BASE_URL?.trim()
 const apiBaseUrls = (configuredBaseUrl?.length ? configuredBaseUrl : 'http://localhost:5053/api')
   .split(',')
-  .map((url) => url.trim())
+  .map((url: string) => url.trim())
   .filter(Boolean)
 
 export const api = axios.create({

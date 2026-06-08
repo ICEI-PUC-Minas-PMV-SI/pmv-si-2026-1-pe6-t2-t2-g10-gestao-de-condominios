@@ -15,6 +15,9 @@ import { UserEditScreen } from '@/screens/UserEditScreen'
 import { UserListScreen } from '@/screens/UserListScreen'
 import { useTheme } from '@/theme/ThemeContext'
 import { canManageUsers } from '@/utils/roles'
+import { AccessControlScreen } from '../screens/AccessControlScreen'
+import { VisitorsScreen } from '../screens/VisitorsScreen'
+import { ApartmentsScreen } from '../screens/ApartmentsScreen'
 
 import type {
   AppTabParamList,
@@ -114,7 +117,6 @@ function ProfileNavigator() {
 
 function MoreNavigator() {
   const { theme } = useTheme()
-
   return (
     <MoreStack.Navigator screenOptions={stackScreenOptions(theme)}>
       <MoreStack.Screen name="MoreHome" component={MoreScreen} options={{ title: 'Mais' }} />
@@ -122,6 +124,21 @@ function MoreNavigator() {
         name="ModulePlaceholder"
         component={ModulePlaceholderScreen}
         options={({ route }) => ({ title: route.params.title })}
+      />
+      <MoreStack.Screen 
+        name="AccessControl" 
+        component={AccessControlScreen} 
+        options={{ title: 'Portaria (Acesso)' }} 
+      />
+      <MoreStack.Screen 
+        name="VisitorsList" 
+        component={VisitorsScreen} 
+        options={{ title: 'Visitantes' }} 
+      />
+      <MoreStack.Screen 
+        name="ApartmentsList" 
+        component={ApartmentsScreen} 
+        options={{ title: 'Apartamentos' }} 
       />
     </MoreStack.Navigator>
   )

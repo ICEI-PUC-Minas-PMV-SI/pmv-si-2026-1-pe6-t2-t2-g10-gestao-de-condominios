@@ -9,6 +9,7 @@ type Props = NativeStackScreenProps<MoreStackParamList, 'MoreHome'>
 
 type ModuleItem = ModulePlaceholderParams & {
   iconComponent: typeof ShieldCheck
+   screen?: 'AccessControl' | 'VisitorsList' | 'ApartmentsList'
 }
 
 const modules: Array<{ section: string; items: ModuleItem[] }> = [
@@ -21,6 +22,7 @@ const modules: Array<{ section: string; items: ModuleItem[] }> = [
         description: 'Registre entradas, saídas e movimentações da portaria.',
         icon: 'access',
         iconComponent: ShieldCheck,
+        screen: 'AccessControl', 
       },
       {
         title: 'Visitantes',
@@ -28,6 +30,7 @@ const modules: Array<{ section: string; items: ModuleItem[] }> = [
         description: 'Cadastre e acompanhe visitantes autorizados.',
         icon: 'visitors',
         iconComponent: DoorOpen,
+        screen: 'VisitorsList', 
       },
     ],
   },
@@ -40,6 +43,7 @@ const modules: Array<{ section: string; items: ModuleItem[] }> = [
         description: 'Consulte unidades, moradores vinculados e ocupação.',
         icon: 'apartments',
         iconComponent: Building2,
+        screen: 'ApartmentsList',
       },
     ],
   },

@@ -5,8 +5,8 @@ import type { ApartamentoResponse } from '@/types/api';
 
 const apartamentos = ref<ApartamentoResponse[]>([]);
 const carregando = ref(true);
-const mostrarFormulario = ref(false);
 const salvando = ref(false);
+const errorMessage = ref('');
 
 const novoApartamento = ref({
   numero: '',
@@ -27,11 +27,12 @@ const salvandoEdicao = ref(false);
 
 const carregar = async () => {
   carregando.value = true;
+  errorMessage.value = '';
   try {
     const res = await apartmentService.getAll();
     apartamentos.value = Array.isArray(res) ? res : (res.data ?? []);
   } catch {
-    alert('Erro ao carregar apartamentos.');
+    errorMessage.value = 'Não foi possível carregar os apartamentos.';
   } finally {
     carregando.value = false;
   }
@@ -43,14 +44,13 @@ const salvarApartamento = async () => {
     return;
   }
   salvando.value = true;
+  errorMessage.value = '';
   try {
     await apartmentService.create(novoApartamento.value);
-    alert('Apartamento cadastrado com sucesso!');
-    mostrarFormulario.value = false;
     novoApartamento.value = { numero: '', bloco: '', andar: 1, tipo: '' };
     await carregar();
   } catch {
-    alert('Erro ao cadastrar apartamento.');
+    errorMessage.value = 'Não foi possível cadastrar o apartamento.';
   } finally {
     salvando.value = false;
   }
@@ -77,13 +77,13 @@ const salvarEdicao = async () => {
     return;
   }
   salvandoEdicao.value = true;
+  errorMessage.value = '';
   try {
     await apartmentService.update(apartamentoEditando.value.id, dadosEdicao.value);
-    alert('Apartamento atualizado com sucesso!');
     fecharEdicao();
     await carregar();
   } catch {
-    alert('Erro ao atualizar apartamento.');
+    errorMessage.value = 'Não foi possível atualizar o apartamento.';
   } finally {
     salvandoEdicao.value = false;
   }
@@ -91,21 +91,23 @@ const salvarEdicao = async () => {
 
 const inativar = async (id: number) => {
   if (!confirm('Deseja realmente inativar este apartamento?')) return;
+  errorMessage.value = '';
   try {
     await apartmentService.desativar(id);
     await carregar();
   } catch {
-    alert('Erro ao inativar apartamento.');
+    errorMessage.value = 'Não foi possível inativar o apartamento.';
   }
 };
 
 const reativar = async (id: number) => {
   if (!confirm('Deseja reativar este apartamento?')) return;
+  errorMessage.value = '';
   try {
     await apartmentService.reativar(id);
     await carregar();
   } catch {
-    alert('Erro ao reativar apartamento.');
+    errorMessage.value = 'Não foi possível reativar o apartamento.';
   }
 };
 
@@ -113,127 +115,146 @@ onMounted(carregar);
 </script>
 
 <template>
-  <div class="p-6 max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Gestão de Apartamentos</h1>
-      <button
-        @click="mostrarFormulario = !mostrarFormulario"
-        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-      >
-        {{ mostrarFormulario ? 'Cancelar' : 'Novo Apartamento' }}
-      </button>
+  <section class="space-y-6">
+    <div class="space-y-2">
+      <h2 class="font-display text-3xl text-ink-950">Gestão de Apartamentos</h2>
     </div>
 
-    <!-- Formulário de Cadastro -->
-    <div v-if="mostrarFormulario" class="bg-gray-50 p-6 rounded-lg mb-8 border border-gray-200 shadow-sm">
-      <h2 class="text-lg font-semibold mb-4">Cadastrar Novo Apartamento</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input v-model="novoApartamento.numero" placeholder="Número (ex: 101)" class="p-2 border rounded" />
-        <input v-model="novoApartamento.bloco" placeholder="Bloco (ex: A)" class="p-2 border rounded" />
-        <input v-model.number="novoApartamento.andar" type="number" min="1" placeholder="Andar" class="p-2 border rounded" />
-        <input v-model="novoApartamento.tipo" placeholder="Tipo (ex: 2 quartos)" class="p-2 border rounded" />
-      </div>
-      <button
-        @click="salvarApartamento"
-        :disabled="salvando"
-        class="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:opacity-50"
-      >
-        {{ salvando ? 'Salvando...' : 'Salvar' }}
-      </button>
+    <!-- Alerta de Erro Padronizado -->
+    <div v-if="errorMessage" class="surface-card border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+      {{ errorMessage }}
     </div>
 
-    <!-- Tabela -->
-    <div class="bg-white shadow rounded-lg overflow-hidden">
-      <table class="w-full text-left">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="p-4 border-b">Número</th>
-            <th class="p-4 border-b">Bloco</th>
-            <th class="p-4 border-b">Andar</th>
-            <th class="p-4 border-b">Tipo</th>
-            <th class="p-4 border-b">Status</th>
-            <th class="p-4 border-b">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="carregando">
-            <td colspan="6" class="p-4 text-center text-blue-500">Carregando...</td>
-          </tr>
-          <tr v-else-if="apartamentos.length === 0">
-            <td colspan="6" class="p-4 text-center text-gray-500">Nenhum apartamento cadastrado.</td>
-          </tr>
-          <tr v-for="ap in apartamentos" :key="ap.id" class="border-b hover:bg-gray-50">
-            <td class="p-4">{{ ap.numero }}</td>
-            <td class="p-4">{{ ap.bloco }}</td>
-            <td class="p-4">{{ ap.andar }}º</td>
-            <td class="p-4">{{ ap.tipo }}</td>
-            <td class="p-4">
-              <span
-                :class="ap.ativo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
-                class="px-2 py-1 rounded-full text-xs font-bold"
-              >
-                {{ ap.ativo ? 'ATIVO' : 'INATIVO' }}
-              </span>
-            </td>
-            <td class="p-4">
-              <div class="flex gap-3">
-                <button @click="abrirEdicao(ap)" class="text-blue-600 hover:underline text-sm">
-                  Editar
-                </button>
-                <button v-if="ap.ativo" @click="inativar(ap.id)" class="text-red-600 hover:underline text-sm">
-                  Inativar
-                </button>
-                <button v-else @click="reativar(ap.id)" class="text-green-600 hover:underline text-sm">
-                  Reativar
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
+      
+      <!-- Seção da Tabela (Esquerda) -->
+      <section class="surface-card p-6">
+        <h3 class="font-display text-2xl text-ink-950 mb-6">Unidades Cadastradas</h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-slate-100 text-ink-700">
+                <th class="pb-3 font-semibold">Número</th>
+                <th class="pb-3 font-semibold">Bloco</th>
+                <th class="pb-3 font-semibold">Andar</th>
+                <th class="pb-3 font-semibold">Tipo</th>
+                <th class="pb-3 font-semibold">Status</th>
+                <th class="pb-3 font-semibold text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="carregando">
+                <td colspan="6" class="py-4 text-center text-ink-700">Carregando apartamentos...</td>
+              </tr>
+              <tr v-else-if="apartamentos.length === 0">
+                <td colspan="6" class="py-6 text-center text-ink-700 rounded-xl border border-dashed border-slate-300">
+                  Nenhum apartamento cadastrado.
+                </td>
+              </tr>
+              <tr v-for="ap in apartamentos" :key="ap.id" v-else class="border-b border-slate-100 hover:bg-slate-500/5 transition">
+                <td class="py-4 text-ink-950 font-medium">{{ ap.numero }}</td>
+                <td class="py-4 text-ink-700">{{ ap.bloco }}</td>
+                <td class="py-4 text-ink-700">{{ ap.andar }}º</td>
+                <td class="py-4 text-ink-700">{{ ap.tipo }}</td>
+                <td class="py-4">
+                  <span
+                    :class="ap.ativo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                    class="px-2.5 py-1 rounded-full text-xs font-bold"
+                  >
+                    {{ ap.ativo ? 'ATIVO' : 'INATIVO' }}
+                  </span>
+                </td>
+                <td class="py-4 text-right">
+                  <div class="flex gap-3 justify-end">
+                    <button @click="abrirEdicao(ap)" class="text-blue-600 hover:underline font-semibold">
+                      Editar
+                    </button>
+                    <button v-if="ap.ativo" @click="inativar(ap.id)" class="text-red-600 hover:underline font-semibold">
+                      Inativar
+                    </button>
+                    <button v-else @click="reativar(ap.id)" class="text-green-600 hover:underline font-semibold">
+                      Reativar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Formulário de Cadastro (Direita) -->
+      <aside class="surface-card p-6">
+        <h3 class="font-display text-2xl text-ink-950 mb-6">Novo Apartamento</h3>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-ink-700 mb-1">Número</label>
+            <input v-model="novoApartamento.numero" placeholder="ex: 101" class="theme-control w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-ink-700 mb-1">Bloco</label>
+            <input v-model="novoApartamento.bloco" placeholder="ex: A" class="theme-control w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-ink-700 mb-1">Andar</label>
+            <input v-model.number="novoApartamento.andar" type="number" min="1" class="theme-control w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-ink-700 mb-1">Tipo</label>
+            <input v-model="novoApartamento.tipo" placeholder="ex: 2 quartos" class="theme-control w-full" />
+          </div>
+
+          <button
+            @click="salvarApartamento"
+            :disabled="salvando"
+            class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 mt-2"
+          >
+            {{ salvando ? 'Salvando...' : 'Salvar' }}
+          </button>
+        </div>
+      </aside>
     </div>
 
-    <!-- Modal de Edição -->
-    <div
-      v-if="apartamentoEditando"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    >
-      <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4">
-        <div class="flex justify-between items-center p-6 border-b">
-          <h2 class="text-lg font-bold">Editar Apartamento</h2>
-          <button @click="fecharEdicao" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">×</button>
+    <!-- Modal de Edição Padronizad -->
+    <div v-if="apartamentoEditando" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+      <div class="surface-card rounded-2xl shadow-xl w-full max-w-lg mx-4 overflow-hidden border border-slate-200/50">
+        <div class="flex justify-between items-center p-6 border-b border-slate-100">
+          <h2 class="font-display text-2xl text-ink-950">Editar Apartamento</h2>
+          <button @click="fecharEdicao" class="text-ink-700 hover:text-ink-950 text-2xl font-bold">×</button>
         </div>
         <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium mb-1">Número</label>
-            <input v-model="dadosEdicao.numero" class="w-full p-2 border rounded" />
+            <label class="block text-xs font-bold uppercase tracking-wider text-ink-700 mb-1">Número</label>
+            <input v-model="dadosEdicao.numero" class="theme-control w-full" />
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1">Bloco</label>
-            <input v-model="dadosEdicao.bloco" class="w-full p-2 border rounded" />
+            <label class="block text-xs font-bold uppercase tracking-wider text-ink-700 mb-1">Bloco</label>
+            <input v-model="dadosEdicao.bloco" class="theme-control w-full" />
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1">Andar</label>
-            <input v-model.number="dadosEdicao.andar" type="number" min="1" class="w-full p-2 border rounded" />
+            <label class="block text-xs font-bold uppercase tracking-wider text-ink-700 mb-1">Andar</label>
+            <input v-model.number="dadosEdicao.andar" type="number" min="1" class="theme-control w-full" />
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1">Tipo</label>
-            <input v-model="dadosEdicao.tipo" class="w-full p-2 border rounded" />
+            <label class="block text-xs font-bold uppercase tracking-wider text-ink-700 mb-1">Tipo</label>
+            <input v-model="dadosEdicao.tipo" class="theme-control w-full" />
           </div>
         </div>
-        <div class="p-4 border-t flex justify-end gap-3">
-          <button @click="fecharEdicao" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+        <div class="p-4 border-t border-slate-200/50 flex justify-end gap-3">
+          <button @click="fecharEdicao" class="border border-slate-200/80 text-ink-700 px-4 py-2 rounded-lg hover:bg-slate-500/10 transition font-semibold">
             Cancelar
           </button>
           <button
             @click="salvarEdicao"
             :disabled="salvandoEdicao"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-bold"
           >
             {{ salvandoEdicao ? 'Salvando...' : 'Salvar' }}
           </button>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>

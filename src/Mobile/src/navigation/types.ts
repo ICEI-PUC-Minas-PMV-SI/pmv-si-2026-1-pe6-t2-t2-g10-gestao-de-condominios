@@ -19,6 +19,9 @@ export type ModulePlaceholderParams = {
 export type MoreStackParamList = {
   MoreHome: undefined
   ModulePlaceholder: ModulePlaceholderParams
+  AccessControl: undefined
+  VisitorsList: undefined
+  ApartmentsList: undefined
 }
 
 export type UserStackParamList = {

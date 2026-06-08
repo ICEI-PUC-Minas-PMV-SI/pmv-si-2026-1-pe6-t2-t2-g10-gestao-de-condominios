@@ -1,5 +1,5 @@
 import { type NavigationProp, useNavigation } from '@react-navigation/native'
-import { Bell, CalendarCheck, Megaphone, ShieldCheck, User } from 'lucide-react-native'
+import { Bell, CalendarCheck, Megaphone, ShieldCheck, User, DoorOpen } from 'lucide-react-native'
 import { ScrollView, View } from 'react-native'
 
 import { useAuth } from '@/auth/AuthContext'
@@ -47,6 +47,22 @@ export function HomeScreen() {
           description="Consulte seus dados e encerre a sessão quando precisar."
           icon={User}
           onPress={() => navigation.navigate('Perfil', { screen: 'Profile' })}
+        />
+
+         <OptionCard
+          eyebrow="Operação"
+          title="Controle de Portaria"
+          description="Registre entradas, saídas e movimentações de acesso em tempo real."
+          icon={ShieldCheck}
+          onPress={() => navigation.navigate('Mais', { screen: 'AccessControl' })}
+        />
+
+        <OptionCard
+          eyebrow="Operação"
+          title="Cadastro de Visitantes"
+          description="Cadastre novos visitantes, consulte autorizações e o histórico."
+          icon={DoorOpen}
+          onPress={() => navigation.navigate('Mais', { screen: 'VisitorsList' })}
         />
 
         <Card>

@@ -17,6 +17,6 @@
 | 18/05 - 24/05 | Computação Ubíqua e Pervasiva e IoT completa| ✅ | Ver todo conteúdo de Computação Ubíqua e Pervasiva e IoT completa | Feita toda a atividade prevista  | 
 | 25/05 - 31/05 | Desenvolvimento de Aplicações Móveis compeleta | ✅ | Ver todo conteúdo de Desenvolvimento de Aplicações Móveis compeleta e criar e implementar o  Aplicativo Móvel | Feita toda a atividade prevista  | 
 | 01/06 - 07/06 || ✅ |  Preencher relatório mobile  | Feita toda a atividade prevista  |
-| 08/06 - 14/06 |  | ⬜ |  |  |
+| 08/06 - 14/06 | Fundamentos de Projeto e Análise de Algoritmos | ✅ |  | Feita toda a atividade prevista  |
 
 **Legenda:** ✅ Estudou | ⬜ Não estudou

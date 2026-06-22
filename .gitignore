@@ -17,3 +17,6 @@ coverage/
 *.rsuser
 Thumbs.db
 .DS_Store
+
+# Presentation videos exported locally
+presentation/*.mp4

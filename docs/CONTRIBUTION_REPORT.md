@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 22/06/2026 00:33
+**Última atualização:** 22/06/2026 02:04
 
 ---
 
@@ -11,17 +11,17 @@
 | Fellipe Rodrigues     |        24 |     37703 |      1030 |        260 |              4 |               3 |
 | Felpa147              |        33 |       762 |       234 |          7 |             28 |               6 |
 | Gabriela              |         4 |      4088 |      1487 |         50 |              0 |               0 |
-| Gabriela Rios         |         6 |        56 |        66 |          3 |              6 |               3 |
+| Gabriela Rios         |         7 |        65 |        75 |          3 |              7 |               3 |
 | LeandroAugustoSantos  |        51 |      1476 |       638 |         18 |             37 |               4 |
-| github-actions[bot]   |        76 |       564 |       543 |          3 |             76 |               1 |
+| github-actions[bot]   |        77 |       571 |       550 |          3 |             77 |               1 |
 | github-classroom[bot] |         1 |      2152 |         0 |         45 |              1 |              13 |
 
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-06-15**: Fellipe Rodrigues: 2, Felpa147: 2, github-actions[bot]: 3
+**2026-06-15**: Fellipe Rodrigues: 2, Felpa147: 2, Gabriela Rios: 1, github-actions[bot]: 3
 
-**2026-06-08**: Felpa147: 2, Gabriela: 1, github-actions[bot]: 3
+**2026-06-08**: Felpa147: 2, Gabriela: 1, github-actions[bot]: 4
 
 **2026-06-01**: LeandroAugustoSantos: 9, github-actions[bot]: 10
 
@@ -37,9 +37,9 @@
 
 **2026-04-20**: Fellipe Rodrigues: 9, Felpa147: 1, github-actions[bot]: 6
 
-**2026-04-13**: Felpa147: 2, github-actions[bot]: 3
+**2026-04-13**: Felpa147: 1, github-actions[bot]: 2
 
-**2026-04-06**: Fellipe Rodrigues: 6, Felpa147: 9, Gabriela: 1, LeandroAugustoSantos: 18, github-actions[bot]: 26
+**2026-04-06**: Fellipe Rodrigues: 6, Felpa147: 10, Gabriela: 1, LeandroAugustoSantos: 18, github-actions[bot]: 27
 
 **2026-03-30**: LeandroAugustoSantos: 2, github-actions[bot]: 3
 

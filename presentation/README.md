@@ -115,6 +115,7 @@ Usuários de teste documentados para a aplicação:
 | --- | --- | --- |
 | Morador | `morador@smartsindico.local` | `123456` |
 | Síndico | `sindico@smartsindico.local` | `123456` |
+| Funcionário | `portaria@teste.com` | `123456` |
 
 ## Demonstração em Vídeo
 

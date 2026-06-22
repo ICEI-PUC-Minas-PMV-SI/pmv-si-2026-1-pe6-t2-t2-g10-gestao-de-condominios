@@ -123,7 +123,7 @@ O vídeo de apresentação deve demonstrar o funcionamento do recorte desenvolvi
 
 Link do vídeo:
 
-> Inserir aqui o link de acesso ao vídeo publicado.
+[Vídeo de apresentação da Etapa 5](https://drive.google.com/file/d/1GRZaH1CPehZ_2lLRQbcUT3kpqmHTvB7Q/view?usp=sharing)
 
 ## Considerações Finais
 

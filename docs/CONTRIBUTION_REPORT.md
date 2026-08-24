@@ -1,6 +1,6 @@
 # 📊 Relatório de Contribuições do Projeto
 
-**Última atualização:** 17/08/2026 00:05
+**Última atualização:** 24/08/2026 00:05
 
 ---
 
@@ -13,13 +13,13 @@
 | Gabriela              |         4 |      4088 |      1487 |         50 |              0 |               0 |
 | Gabriela Rios         |         8 |        66 |        75 |          4 |              7 |               3 |
 | LeandroAugustoSantos  |        51 |      1476 |       638 |         18 |             37 |               4 |
-| github-actions[bot]   |        85 |       623 |       590 |          3 |             85 |               1 |
+| github-actions[bot]   |        86 |       627 |       592 |          3 |             86 |               1 |
 | github-classroom[bot] |         1 |      2152 |         0 |         45 |              1 |              13 |
 
 
 ## 📅 Contribuições Semanais (Todo o Semestre)
 
-**2026-08-10**: github-actions[bot]: 1
+**2026-08-10**: github-actions[bot]: 2
 
 **2026-08-03**: github-actions[bot]: 1
 
@@ -62,8 +62,6 @@
 **2026-03-23**: Fellipe Rodrigues: 3, Felpa147: 4, LeandroAugustoSantos: 1, github-actions[bot]: 3
 
 **2026-03-09**: Felpa147: 5, LeandroAugustoSantos: 8
-
-**2026-03-02**: Felpa147: 4, Gabriela Rios: 5, LeandroAugustoSantos: 10
 
 
 
